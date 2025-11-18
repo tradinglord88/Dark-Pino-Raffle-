@@ -1907,3 +1907,174 @@ html {
     height: 300px;
   }
 }
+
+
+/* ===========================
+   DARK PINO — CONVENTIONAL CART
+   =========================== */
+
+.cart-container {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 0 20px;
+  color: white;
+}
+
+.cart-item {
+  display: flex;
+  gap: 20px;
+  background: #131313;
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 204, 0, 0.08);
+  transition: 0.25s ease;
+}
+
+.cart-item:hover {
+  border-color: #ffcc00;
+  box-shadow: 0 0 14px rgba(255, 204, 0, 0.18);
+}
+
+.cart-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.cart-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cart-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.cart-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffcc00;
+}
+
+/* Quantity buttons */
+.cart-qty {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.cart-qty button {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  background: #222;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.cart-qty button:hover {
+  background: #ffcc00;
+  color: #000;
+}
+
+
+
+/* Totals section */
+.cart-summary {
+  margin-top: 40px;
+  padding: 20px;
+  background: #111;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 204, 0, 0.15);
+}
+
+.cart-summary h2 {
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  background: #ffcc00;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.checkout-btn:hover {
+  background: #ffe27c;
+  box-shadow: 0 0 16px rgba(255, 204, 0, 0.35);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .cart-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cart-item img {
+    width: 100%;
+    height: 200px;
+  }
+
+  .cart-details {
+    align-items: center;
+  }
+}
+
+
+.remove-btn {
+  all: unset;
+  /* HARD RESET: remove ALL inherited styles */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(180deg, #ff4d4d, #c40000);
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  padding: 2px 20px;
+  border-radius: 12px;
+
+  font-size: 0.9rem !important;
+  /* FORCED font size */
+  font-family: inherit;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 1 !important;
+  /* forces perfect vertical centering */
+
+  min-height: 40px;
+  box-shadow:
+    0 3px 10px rgba(255, 0, 0, 0.25),
+    inset 0 0 6px rgba(255, 255, 255, 0.1);
+
+  transition: all 0.25s ease-in-out;
+}
+
+.remove-btn:hover {
+  background: linear-gradient(180deg, #ff6666, #ff1a1a);
+  border-color: rgba(255, 50, 50, 0.7);
+  box-shadow:
+    0 4px 14px rgba(255, 0, 0, 0.4),
+    inset 0 0 10px rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}

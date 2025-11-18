@@ -68,7 +68,35 @@ export default function ProductDetail({ params }) {
 
                     <div className="buttons">
                         <button>Check Out</button>
-                        <button>Add To Cart</button>
+                        <button
+                            onClick={() => {
+                                // Get existing cart
+                                let cart = JSON.parse(localStorage.getItem("dpino-cart")) || [];
+
+                                // Check if item already exists
+                                const existing = cart.find(item => item.id === product.id);
+
+                                if (existing) {
+                                    existing.qty += 1;   // increase quantity
+                                } else {
+                                    cart.push({
+                                        id: product.id,
+                                        name: product.name,
+                                        price: product.price,
+                                        image: product.image,
+                                        qty: 1
+                                    });
+                                }
+
+                                // Save back into storage
+                                localStorage.setItem("dpino-cart", JSON.stringify(cart));
+
+                                alert("Added to cart!");
+                            }}
+                        >
+                            Add To Cart
+                        </button>
+
                     </div>
 
                     <div className="description">{product.description}</div>
@@ -76,20 +104,24 @@ export default function ProductDetail({ params }) {
             </div>
 
             <div className="title">Similar product</div>
+
             <div className="listProduct">
                 {similar.map((prod) => (
-                    <a key={prod.id} href={`/detail/${prod.id}`} className="item">
+                    <a key={prod.id} href={`/detail/${prod.id}`} className="dp-card">
                         <img src={prod.image} alt={prod.name} />
-                        <h2>{prod.name}</h2>
-                        <div className="price-line">
-                            <div className="price">{formatUSD(prod.price)}</div>
-                            <div className="tickets">
+
+                        <div className="dp-title">{prod.name}</div>
+
+                        <div className="dp-info">
+                            <div className="dp-price">{formatUSD(prod.price)}</div>
+                            <div className="dp-tickets">
                                 🎟 {calcTickets(prod.price)} Tickets
                             </div>
                         </div>
                     </a>
                 ))}
             </div>
+
         </div>
     );
 }
