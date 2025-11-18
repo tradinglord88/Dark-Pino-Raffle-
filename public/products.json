@@ -1,0 +1,149 @@
+[
+    {
+        "id": 1,
+        "name": "1 of 1 Commissioned Custom 24x36 inch Dark Pino Canvas Painting",
+        "price": 2500,
+        "image": "/img/1.jpeg",
+        "description": "A hand-painted 24x36 inch Dark Pino original canvas — blending abstract luxury and street artistry. A true collector’s piece."
+    },
+    {
+        "id": 2,
+        "name": "1 of 1 Nike SB Dunk Low x Supreme 'Black Stars' 'DPINO' Custom Sneakers",
+        "price": 1900,
+        "image": "/img/2.jpg",
+        "description": "Custom Nike SB Dunk Low x Supreme sneakers re-imagined in Dark Pino style with black stars, luxury tones, and signature detailing."
+    },
+    {
+        "id": 3,
+        "name": "1 of 1 Nike Blazer Mid 'KAWS x sacai' 'DPINO' Custom Sneakers",
+        "price": 1400,
+        "image": "/img/3.jpg",
+        "description": "A fusion of Nike, KAWS, and sacai design — reworked by Dark Pino with hand-painted layers and street-luxury aesthetics."
+    },
+    {
+        "id": 4,
+        "name": "1 of 1 Nike Dunk Air Jordan Youth 'DPINO' Custom Sneakers",
+        "price": 900,
+        "image": "/img/4.jpg",
+        "description": "A unique youth-sized Nike Dunk x Air Jordan hybrid customized with the signature Dpino art flair — limited and exclusive."
+    },
+    {
+        "id": 5,
+        "name": "1 Of 1 Nike Dunk Air Jordan 'DPINO' Custom Sneakers",
+        "price": 1200,
+        "image": "/img/5.jpeg",
+        "description": "An adult version of the iconic Dpino-customized Nike Dunk Air Jordan — hand-finished with premium paintwork and texture."
+    },
+    {
+        "id": 6,
+        "name": "1 of 1 Chanel $DPINO Custom Boots",
+        "price": 4000,
+        "image": "/img/6.jpg",
+        "description": "High-fashion Chanel boots redesigned with Dpino’s luxury graffiti styling and embossed gold '$DPINO' emblem."
+    },
+    {
+        "id": 7,
+        "name": "1 of 1 Alexander Wang '$DPINO' Custom Boots",
+        "price": 1200,
+        "image": "/img/7.jpg",
+        "description": "Alexander Wang boots given a rebellious Dpino twist — blending dark tones, metallic textures, and hand-painted luxury art."
+    },
+    {
+        "id": 8,
+        "name": "1 of 1 Louis Vuitton LV '$DPINO' Custom Trainer Sneakers",
+        "price": 2770,
+        "image": "/img/8.jpg",
+        "description": "Louis Vuitton trainers hand-customized with Dpino’s monogram art, giving classic LV luxury a street-art transformation."
+    },
+    {
+        "id": 9,
+        "name": "1 Of 1 Mens Gold Balmain Pino Inspired Hand Painted Jeans",
+        "price": 1000,
+        "image": "/img/9.jpeg",
+        "description": "Balmain gold jeans with one-of-one Pino-inspired paint design — merging luxury denim with avant-garde art."
+    },
+    {
+        "id": 10,
+        "name": "1 Of 1 Gucci Side Striped Jacket",
+        "price": 750,
+        "image": "/img/10.jpeg",
+        "description": "A customized Gucci jacket with signature side stripes and Dpino’s refined artistic touch — crafted for statement wear."
+    },
+    {
+        "id": 11,
+        "name": "Gucci Side-Stripe Technical Green Shorts",
+        "price": 600,
+        "image": "/img/11.jpg",
+        "description": "Luxury meets sport in these Gucci side-stripe green shorts — enhanced with minimalist Dark Pino finishing."
+    },
+    {
+        "id": 12,
+        "name": "1 of 1 Hand-Painted Gucci Jacket 'Give Jeet Nothing'",
+        "price": 2600,
+        "image": "/img/12.jpeg",
+        "description": "An exclusive Gucci jacket hand-painted with Dpino’s 'Give Jeet Nothing' design — one of one in the world."
+    },
+    {
+        "id": 13,
+        "name": "1 Of 1 Louis Vuitton Blouse Unisex Size Large 'Give Jeets Nothing'",
+        "price": 1800,
+        "image": "/img/13.jpeg",
+        "description": "A unisex Louis Vuitton blouse featuring the 'Give Jeets Nothing' hand-art message in true Dark Pino fashion."
+    },
+    {
+        "id": 14,
+        "name": "1 Of 1 Nike Dunk Low 'Pino' Custom Sneakers",
+        "price": 900,
+        "image": "/img/14.jpeg",
+        "description": "Dark Pino custom Nike Dunk Lows, re-crafted with precision, texture, and artistic intensity."
+    },
+    {
+        "id": 15,
+        "name": "1 Of 1 Supreme Washed Hooded Work Jacket 'Pino Art'",
+        "price": 900,
+        "image": "/img/15.jpeg",
+        "description": "Supreme’s iconic washed work jacket hand-painted with Pino’s abstract motifs — a perfect blend of grit and class."
+    },
+    {
+        "id": 16,
+        "name": "1 Of 1 Louis Vuitton FW23 Black Yellow Baseball Jacket XXL",
+        "price": 4000,
+        "image": "/img/16.jpeg",
+        "description": "Louis Vuitton’s FW23 baseball jacket customized with yellow-black contrasts and Pino’s artistic insignia."
+    },
+    {
+        "id": 17,
+        "name": "1 Of 1 Custom Hand-Painted Louis Vuitton Clutch Pino-Inspired",
+        "price": 2800,
+        "image": "/img/17.jpeg",
+        "description": "A luxury Louis Vuitton clutch transformed into an art collectible — hand-painted by Dark Pino in rich tonal layers."
+    },
+    {
+        "id": 18,
+        "name": "1 of 1 Custom Hand-Painted Gucci Bag Bold Dark Pino Art & Luxury Fusion",
+        "price": 3500,
+        "image": "/img/18.jpeg",
+        "description": "Gucci handbag redefined by Dark Pino — combining fine luxury craftsmanship with bold, abstract expression."
+    },
+    {
+        "id": 19,
+        "name": "1 of 1 Alexander McQueen 'Dark Pino' Custom Sneakers",
+        "price": 1600,
+        "image": "/img/19.jpeg",
+        "description": "Alexander McQueen sneakers with a signature Dark Pino hand-painted aesthetic — modern, luxurious, and expressive."
+    },
+    {
+        "id": 20,
+        "name": "1 of 1 Valentino 'Dark Pino' Custom Sneakers",
+        "price": 1600,
+        "image": "/img/20.jpeg",
+        "description": "Valentino sneakers turned into bespoke artwork — a one-of-one creation from the Dark Pino collection."
+    },
+    {
+        "id": 21,
+        "name": "1 of 1 Custom Hand-Painted Louis Vuitton Bag - Bold Dark Pino Art & Luxury Fusion",
+        "price": 15000,
+        "image": "/img/21.jpeg",
+        "description": "A museum-grade Louis Vuitton bag completely hand-painted by Dark Pino. The centerpiece of art, fashion, and luxury."
+    }
+]

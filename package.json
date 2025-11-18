@@ -1,0 +1,25 @@
+{
+  "name": "darkpino",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.35.1",
+    "@prisma/client": "^6.19.0",
+    "dotenv": "^17.2.3",
+    "next": "16.0.3",
+    "prisma": "^6.19.0",
+    "react": "19.2.0",
+    "react-countdown": "^2.3.6",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^9",
+    "eslint-config-next": "16.0.3"
+  }
+}

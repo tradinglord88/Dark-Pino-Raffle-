@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  clerkId   String     @unique
+  winners   Winner[]   // This is the reverse relation to 'Winner'
+  purchases Purchase[] // Reverse relation to 'Purchase'
+  raffleEntries RaffleEntry[] // Reverse relation to 'RaffleEntry'
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Int
+  image       String
+  description String
+  createdAt   DateTime @default(now())
+
+  purchases Purchase[]
+}
+
+model Prize {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Int
+  image       String
+  description String
+  drawDate    DateTime?
+  status      String   @default("open") // open, closed, drawn
+
+  raffleEntries RaffleEntry[]
+  winner        Winner?
+}
+
+model Purchase {
+  id            Int      @id @default(autoincrement())
+  userId        String
+  productId     Int
+  amount        Int
+  ticketsAwarded Int
+  createdAt     DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [clerkId])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model RaffleEntry {
+  id            Int      @id @default(autoincrement())
+  userId        String
+  prizeId       Int
+  ticketsUsed   Int
+  createdAt     DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [clerkId])
+  prize Prize @relation(fields: [prizeId], references: [id])
+}
+
+model Winner {
+  id       Int      @id @default(autoincrement())
+  prizeId  Int      @unique
+  userId   String
+  tickets  Int
+  createdAt DateTime @default(now())
+
+  prize Prize @relation(fields: [prizeId], references: [id])
+  user  User  @relation(fields: [userId], references: [clerkId])
+}
