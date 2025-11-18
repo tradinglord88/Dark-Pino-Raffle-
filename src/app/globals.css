@@ -1904,6 +1904,6 @@ html {
 /* Mobile */
 @media (max-width: 768px) {
   .dp-card img {
-    height: 200px;
+    height: 300px;
   }
 }
