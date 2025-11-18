@@ -252,18 +252,18 @@ export default function ContestPage() {
                                 <a
                                     key={prize.id}
                                     href={`/prize-detail/${prize.id}`}
-                                    className="item"
+                                    className="dp-card"
                                 >
                                     <img src={imgSrc} alt={prize.name} />
-                                    <h2>{prize.name}</h2>
 
-                                    <div className="price-line">
-                                        <div className="price">{formatUSD(price)}</div>
-                                        <div className="tickets">
-                                            🎟 {tickets} {tickets === 1 ? "Ticket" : "Tickets"}
-                                        </div>
+                                    <div className="dp-title">{prize.name}</div>
+
+                                    <div className="dp-info">
+                                        <div className="dp-price">{formatUSD(price)}</div>
+                                        <div className="dp-tickets">🎟 {tickets} Tickets</div>
                                     </div>
                                 </a>
+
                             );
                         })}
                     </div>
