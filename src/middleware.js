@@ -1,12 +1,10 @@
-import { authMiddleware } from "@clerk/nextjs";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-export default authMiddleware({});
+export default clerkMiddleware();
 
+// IMPORTANT: This makes Clerk run only on routes that need auth
 export const config = {
     matcher: [
-        // Protect these routes
-        "/contest",
-        "/prize-detail/:id*",
-        "/dashboard/:path*",
+        "/((?!_next|.*\\..*).*)",
     ],
 };

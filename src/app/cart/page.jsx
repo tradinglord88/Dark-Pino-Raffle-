@@ -3,6 +3,12 @@
 import { useEffect, useState } from "react";
 
 export default function CartPage() {
+
+    console.log("SUPABASE URL =", process.env.NEXT_PUBLIC_SUPABASE_URL);
+
+
+
+
     const [cart, setCart] = useState([]);
 
     useEffect(() => {
@@ -78,9 +84,26 @@ export default function CartPage() {
                         <h2>Total: ${total}</h2>
                         <h3>Tickets Earned: 🎟 {tickets}</h3>
 
-                        <button className="checkout-btn">
+                        <button
+                            className="checkout-btn"
+                            onClick={async () => {
+                                const res = await fetch("/api/checkout", {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ cart }),
+                                });
+
+                                const data = await res.json();
+                                if (data.url) {
+                                    window.location.href = data.url;
+                                } else {
+                                    alert("Checkout failed");
+                                }
+                            }}
+                        >
                             Proceed to Checkout
                         </button>
+
                     </div>
                 </>
             )}

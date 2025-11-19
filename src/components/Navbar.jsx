@@ -1,9 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
+import { useEffect } from "react";
 
 export default function Navbar() {
+    const { isSignedIn } = useUser();
+
+    // Run sync after login
+    useEffect(() => {
+        if (isSignedIn) {
+            fetch("/api/sync-user", {
+                method: "POST",
+                credentials: "include",
+            }).catch(() => { });
+        }
+    }, [isSignedIn]);
+
     return (
         <nav>
             <ul className="nav-links">
@@ -32,10 +45,13 @@ export default function Navbar() {
                 </SignedOut>
             </div>
 
-            <div className="hamburger" onClick={() => {
-                document.querySelector(".nav-links")?.classList.toggle("open");
-                document.querySelector(".hamburger")?.classList.toggle("active");
-            }}>
+            <div
+                className="hamburger"
+                onClick={() => {
+                    document.querySelector(".nav-links")?.classList.toggle("open");
+                    document.querySelector(".hamburger")?.classList.toggle("active");
+                }}
+            >
                 <span></span>
                 <span></span>
                 <span></span>

@@ -4,6 +4,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function PrizeDetailPage({ params }) {
     const [id, setId] = useState(null);
@@ -13,9 +15,11 @@ export default function PrizeDetailPage({ params }) {
     const [entryTickets, setEntryTickets] = useState(1);
     const [confirmMsg, setConfirmMsg] = useState("");
 
-    const USER_TICKETS = 25;
+    const [userTickets, setUserTickets] = useState(null); // REAL ticket balance
 
-    // Unwrap params (fixes Promise problem)
+    const { user, isLoaded } = useUser(); // Clerk user
+
+    // --- UNWRAP PARAMS ---
     useEffect(() => {
         async function unwrap() {
             const resolved = await params;
@@ -24,7 +28,7 @@ export default function PrizeDetailPage({ params }) {
         unwrap();
     }, [params]);
 
-    // Load prize
+    // --- LOAD PRIZE + SIMILAR ---
     useEffect(() => {
         if (!id) return;
 
@@ -43,6 +47,29 @@ export default function PrizeDetailPage({ params }) {
             });
     }, [id]);
 
+    // --- LOAD USER TICKETS FROM SUPABASE ---
+    useEffect(() => {
+        async function loadTickets() {
+            if (!isLoaded) return;      // Clerk not ready
+            if (!user) return;          // User not logged in yet
+
+            const { data, error } = await supabase
+                .from("users")
+                .select("tickets")
+                .eq("clerk_id", user.id)
+                .single();
+
+            if (error) {
+                console.error("Error fetching ticket balance:", error);
+                return;
+            }
+
+            setUserTickets(data?.tickets ?? 0);
+        }
+
+        loadTickets();
+    }, [user, isLoaded]);
+
     if (!prize) {
         return (
             <main style={{ padding: 50, color: "#fff", textAlign: "center" }}>
@@ -52,10 +79,16 @@ export default function PrizeDetailPage({ params }) {
     }
 
     const submitTickets = () => {
-        if (entryTickets > USER_TICKETS) {
+        if (!user) {
+            setConfirmMsg("❌ Please sign in to enter this contest.");
+            return;
+        }
+
+        if (entryTickets > userTickets) {
             setConfirmMsg("❌ Not enough tickets.");
             return;
         }
+
         setConfirmMsg(`🎉 You entered ${entryTickets} ticket(s)!`);
     };
 
@@ -81,16 +114,29 @@ export default function PrizeDetailPage({ params }) {
                     <h1 className="name">{prize.name}</h1>
                     <p className="description">{prize.description}</p>
 
-                    <div className="ticket-wallet">
-                        You currently have <strong>{USER_TICKETS}</strong> tickets
-                    </div>
+                    {/* --- TICKET BALANCE --- */}
+                    {user ? (
+                        <div className="ticket-wallet">
+                            You currently have{" "}
+                            <strong>
+                                {userTickets === null ? "Loading..." : userTickets}
+                                {" "}tickets
+                            </strong>
+                        </div>
+                    ) : (
+                        <div className="ticket-wallet">
+                            <strong>Sign in to see your ticket balance</strong>
+                        </div>
+                    )}
 
+                    {/* --- TICKET ENTRY INPUT --- */}
                     <div className="ticket-entry">
                         <label>Enter Tickets:</label>
                         <input
                             type="number"
                             min="1"
-                            max={USER_TICKETS}
+                            disabled={!userTickets && user}
+                            max={userTickets ?? 1}
                             value={entryTickets}
                             onChange={e => setEntryTickets(Number(e.target.value))}
                         />
@@ -108,14 +154,15 @@ export default function PrizeDetailPage({ params }) {
 
             <div className="title">Similar Prizes</div>
 
-            <div className="listProduct">
+            <div className="similar-prizes-grid">
                 {similar.map(item => (
-                    <a key={item.id} href={`/prize-detail/${item.id}`} className="item">
+                    <a key={item.id} href={`/prize-detail/${item.id}`}>
                         <img src={item.image} alt={item.name} />
                         <h2>{item.name}</h2>
                     </a>
                 ))}
             </div>
+
         </main>
     );
 }
