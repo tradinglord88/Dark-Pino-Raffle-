@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from '@clerk/themes'
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
@@ -11,7 +12,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <ClerkProvider>
+      <ClerkProvider
+
+        appearance={{
+          theme: dark,
+        }}
+
+      >
         <body>
           <Navbar />
           {children}

@@ -2127,3 +2127,33 @@ html {
   font-weight: 700;
   margin-top: 5px;
 }
+
+
+/* MOBILE AUTH BUTTONS INSIDE HAMBURGER MENU */
+.mobile-auth {
+  display: none;
+  width: 100%;
+  padding: 10px 0 20px;
+  text-align: center;
+}
+
+.mobile-btn {
+  width: 80%;
+  margin: 8px auto;
+  display: block;
+  background: #F8C200;
+  color: #000;
+  font-weight: 700;
+}
+
+/* Show inside menu only on mobile */
+@media (max-width: 768px) {
+  .mobile-auth {
+    display: block;
+  }
+
+  /* Hide desktop auth buttons */
+  .btns {
+    display: none !important;
+  }
+}

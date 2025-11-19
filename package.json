@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.35.1",
+    "@clerk/themes": "^2.4.37",
     "@prisma/client": "^6.19.0",
     "@solana/pay": "^0.2.6",
     "@solana/web3.js": "^1.98.4",
