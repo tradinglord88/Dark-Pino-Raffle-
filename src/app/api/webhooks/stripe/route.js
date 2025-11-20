@@ -1,8 +1,7 @@
 import Stripe from "stripe";
-import { supabase } from "@/lib/supabaseClient";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
-export const runtime = "nodejs";
-
+export const runtime = "nodejs"; // ensures raw body support in Next.js 16
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -23,38 +22,50 @@ export async function POST(req) {
         return new Response("Webhook Error", { status: 400 });
     }
 
-    // 🎯 ONLY process successful checkouts
+    // 🎯 Process successful checkouts only
     if (event.type === "checkout.session.completed") {
         const session = event.data.object;
 
-        const clerkId = session.metadata.clerk_id;
-        const amountTotal = session.amount_total / 100; // Convert to USD
+        const clerkId = session?.metadata?.clerk_id;
+        const amountTotal = session.amount_total / 100; // Convert cents → USD
 
-        // 🎟️ CALCULATE TICKETS
+        if (!clerkId) {
+            console.error("❌ Missing clerk_id in metadata");
+            return new Response("Missing clerk_id", { status: 400 });
+        }
+
+        // 🎟️ CALCULATE AWARD TICKETS
+        // Example: $100 = 1 ticket
         const ticketsToAdd = Math.floor(amountTotal / 100);
 
-        console.log("Awarding tickets:", ticketsToAdd);
+        console.log("Awarding tickets:", ticketsToAdd, "to", clerkId);
 
-        // 🟩 UPDATE SUPABASE
-        const { data: user } = await supabase
+        // 🟩 FETCH USER FROM SUPABASE
+        const { data: user, error: userErr } = await supabaseAdmin
             .from("users")
             .select("tickets")
             .eq("clerk_id", clerkId)
             .single();
 
-        if (!user) {
-            console.error("User not found for clerk_id:", clerkId);
+        if (userErr || !user) {
+            console.error("❌ User not found in Supabase:", clerkId);
             return new Response("User not found", { status: 404 });
         }
 
         const newTicketCount = user.tickets + ticketsToAdd;
 
-        await supabase
+        // 🟦 UPDATE USER TICKET COUNT
+        const { error: updateErr } = await supabaseAdmin
             .from("users")
             .update({ tickets: newTicketCount })
             .eq("clerk_id", clerkId);
 
-        console.log("User updated:", clerkId, "tickets:", newTicketCount);
+        if (updateErr) {
+            console.error("❌ Failed to update tickets:", updateErr);
+            return new Response("Ticket update failed", { status: 500 });
+        }
+
+        console.log("✅ User updated successfully:", clerkId, "new tickets:", newTicketCount);
     }
 
     return new Response("Success", { status: 200 });
