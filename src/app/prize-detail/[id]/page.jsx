@@ -77,9 +77,9 @@ export default function PrizeDetailPage({ params }) {
 
 
     // --- HANDLE ENTRY SUBMISSION ---
-    const submitTickets = () => {
+    const submitTickets = async () => {
         if (!user) {
-            setConfirmMsg("❌ Please sign in to enter this contest.");
+            setConfirmMsg("❌ Please sign in to enter.");
             return;
         }
 
@@ -89,10 +89,30 @@ export default function PrizeDetailPage({ params }) {
         }
 
         if (entryTickets > userTickets) {
-            setConfirmMsg("❌ You do not have enough tickets.");
+            setConfirmMsg("❌ Not enough tickets.");
             return;
         }
 
+        // Call API
+        const res = await fetch("/api/enter", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                clerkId: user.id,
+                prizeId: Number(id),
+                tickets: entryTickets,
+            }),
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            setConfirmMsg("❌ " + data.error);
+            return;
+        }
+
+        // Update UI instantly
+        setUserTickets(data.newBalance);
         setConfirmMsg(`🎉 Successfully entered ${entryTickets} ticket(s)!`);
     };
 
