@@ -1,4 +1,4 @@
-import { ClerkProvider } from "@clerk/nextjs";
+import { lerkProvider } from "@clerk/nextjs";
 import { dark } from '@clerk/themes'
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";

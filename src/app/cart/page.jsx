@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 
 export default function CartPage() {
+    const { userId } = useAuth(); // <-- THIS WAS MISSING
 
     console.log("SUPABASE URL =", process.env.NEXT_PUBLIC_SUPABASE_URL);
-
-
-
 
     const [cart, setCart] = useState([]);
 
@@ -22,28 +21,41 @@ export default function CartPage() {
     };
 
     const increaseQty = (id) => {
-        const updated = cart.map(item =>
+        updateCart(cart.map(item =>
             item.id === id ? { ...item, qty: item.qty + 1 } : item
-        );
-        updateCart(updated);
+        ));
     };
 
     const decreaseQty = (id) => {
-        const updated = cart.map(item =>
-            item.id === id
-                ? { ...item, qty: Math.max(1, item.qty - 1) }
-                : item
-        );
-        updateCart(updated);
+        updateCart(cart.map(item =>
+            item.id === id ? { ...item, qty: Math.max(1, item.qty - 1) } : item
+        ));
     };
 
     const removeItem = (id) => {
-        const updated = cart.filter(item => item.id !== id);
-        updateCart(updated);
+        updateCart(cart.filter(item => item.id !== id));
     };
 
     const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
     const tickets = Math.floor(total / 100);
+
+    const handleCheckout = async () => {
+        if (!userId) {
+            alert("You must be signed in to checkout.");
+            return;
+        }
+
+        const res = await fetch("/api/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cart, userId }), // now userId is REAL
+        });
+
+        const data = await res.json();
+
+        if (data.url) window.location.href = data.url;
+        else alert("Checkout failed");
+    };
 
     return (
         <div className="cart-container">
@@ -84,26 +96,9 @@ export default function CartPage() {
                         <h2>Total: ${total}</h2>
                         <h3>Tickets Earned: 🎟 {tickets}</h3>
 
-                        <button
-                            className="checkout-btn"
-                            onClick={async () => {
-                                const res = await fetch("/api/checkout", {
-                                    method: "POST",
-                                    headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({ cart }),
-                                });
-
-                                const data = await res.json();
-                                if (data.url) {
-                                    window.location.href = data.url;
-                                } else {
-                                    alert("Checkout failed");
-                                }
-                            }}
-                        >
+                        <button className="checkout-btn" onClick={handleCheckout}>
                             Proceed to Checkout
                         </button>
-
                     </div>
                 </>
             )}
