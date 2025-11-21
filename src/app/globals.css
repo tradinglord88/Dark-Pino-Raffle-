@@ -2185,3 +2185,226 @@ html {
 .entry-info p {
   margin: 5px 0;
 }
+
+
+/* ==========================
+   MY ENTRIES PAGE STYLES
+   ========================== */
+
+.entries-container {
+  padding: 50px 20px;
+  color: white;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.entries-title {
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.empty-msg {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+.entries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+.entry-card-ui {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 15px;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  transition: 0.25s ease;
+}
+
+.entry-card-ui:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.entry-image-box {
+  width: 100%;
+  height: 190px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.entry-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.entry-details {
+  padding: 15px 5px;
+}
+
+.entry-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.entry-meta,
+.entry-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+
+.entry-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px 0;
+  background: #ffffff;
+  color: black;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.entry-btn:hover {
+  background: #d7d7d7;
+}
+
+
+/* =========================================
+   ANIMATIONS
+   ========================================= */
+
+.fade-in {
+  animation: fadeIn 0.7s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.pop-in {
+  opacity: 0;
+  transform: translateY(15px) scale(0.97);
+  animation: popIn 0.45s ease forwards;
+  animation-delay: calc(var(--i) * 0.08s);
+}
+
+@keyframes popIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
+   SUMMARY BOX
+   ========================================= */
+
+.entry-summary-box {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 15px 20px;
+  border-radius: 14px;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* =========================================
+   FILTER BUTTONS
+   ========================================= */
+
+.entry-filter-box {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.entry-filter-box button {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  margin: 0 6px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.entry-filter-box button.active,
+.entry-filter-box button:hover {
+  background: white;
+  color: black;
+}
+
+/* =========================================
+   BADGES
+   ========================================= */
+
+.badge-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ticket-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-gold {
+  background: linear-gradient(45deg, #f7d978, #f0b429);
+  color: black;
+}
+
+.badge-silver {
+  background: linear-gradient(45deg, #d7d7d7, #bfbfbf);
+  color: black;
+}
+
+.badge-bronze {
+  background: linear-gradient(45deg, #d1a681, #b47b43);
+  color: black;
+}
+
+.date-badge {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+/* Meta text fixes */
+.entry-meta {
+  margin-bottom: 10px;
+}

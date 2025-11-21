@@ -8,97 +8,122 @@ import Link from "next/link";
 export default function MyEntriesPage() {
     const { user, isLoaded } = useUser();
     const [entries, setEntries] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [prizes, setPrizes] = useState([]);
+    const [filter, setFilter] = useState("latest");
 
     useEffect(() => {
-        if (!isLoaded) return;
-        if (!user) return;
+        async function loadEverything() {
+            if (!isLoaded || !user) return;
 
-        async function loadEntries() {
-            // 1. Fetch user entries
-            const { data: entryRows, error: entryError } = await supabase
+            const prizeRes = await fetch("/prizes.json");
+            const prizeData = await prizeRes.json();
+            setPrizes(prizeData);
+
+            const { data } = await supabase
                 .from("entries")
                 .select("*")
                 .eq("clerk_id", user.id)
                 .order("created_at", { ascending: false });
 
-            if (entryError) {
-                console.error("Error loading entries:", entryError);
-                return;
-            }
+            if (!data) return;
 
-            // 2. Load all prizes from prizes.json
-            const res = await fetch("/prizes.json");
-            const prizes = await res.json();
-
-            // 3. Merge entries with prize info
-            const merged = entryRows.map((entry) => {
-                const prize = prizes.find((p) => Number(p.id) === Number(entry.prize_id));
-
-                return {
-                    ...entry,
-                    prize_name: prize?.name ?? "Unknown Prize",
-                    prize_image: prize?.image ?? "/placeholder.png",
-                };
+            const merged = data.map(entry => {
+                const prize = prizeData.find(p => p.id == entry.prize_id);
+                return { ...entry, prize };
             });
 
             setEntries(merged);
-            setLoading(false);
         }
 
-
-
-        loadEntries();
+        loadEverything();
     }, [user, isLoaded]);
 
-    if (!user) {
-        return (
-            <main style={{ padding: 50, color: "#fff", textAlign: "center" }}>
-                <h2>Please sign in to view your entries.</h2>
-                <Link href="/sign-in">
-                    <button className="btn">Sign In</button>
-                </Link>
-            </main>
-        );
+    // TICKET BADGE COLOR
+    function getBadge(tickets) {
+        if (tickets >= 5) return { label: "Gold", class: "badge-gold" };
+        if (tickets >= 2) return { label: "Silver", class: "badge-silver" };
+        return { label: "Bronze", class: "badge-bronze" };
     }
 
-    if (loading) {
-        return (
-            <main style={{ padding: 50, color: "#fff", textAlign: "center" }}>
-                <h2>Loading your entries...</h2>
-            </main>
-        );
-    }
+    // APPLY FILTERS
+    const filteredEntries = [...entries].sort((a, b) => {
+        if (filter === "latest") return new Date(b.created_at) - new Date(a.created_at);
+        if (filter === "oldest") return new Date(a.created_at) - new Date(b.created_at);
+        if (filter === "high") return b.tickets_used - a.tickets_used;
+        if (filter === "low") return a.tickets_used - b.tickets_used;
+        return 0;
+    });
+
+    const totalTickets = entries.reduce((sum, e) => sum + e.tickets_used, 0);
 
     return (
-        <main className="container" style={{ padding: "40px", color: "#fff" }}>
-            <h1 className="title">My Entries</h1>
+        <main className="entries-container fade-in">
 
-            {entries.length === 0 ? (
-                <p>You have not entered any contests yet.</p>
+            <h1 className="entries-title">MY ENTRIES</h1>
+
+            <div className="entry-summary-box">
+                <span>🔥 Total Tickets Spent:</span>
+                <strong>{totalTickets}</strong>
+            </div>
+
+            {/* FILTERS */}
+            <div className="entry-filter-box">
+                <button className={filter === "latest" ? "active" : ""} onClick={() => setFilter("latest")}>Latest</button>
+                <button className={filter === "oldest" ? "active" : ""} onClick={() => setFilter("oldest")}>Oldest</button>
+                <button className={filter === "high" ? "active" : ""} onClick={() => setFilter("high")}>Highest Tickets</button>
+                <button className={filter === "low" ? "active" : ""} onClick={() => setFilter("low")}>Lowest Tickets</button>
+            </div>
+
+            {filteredEntries.length === 0 ? (
+                <p className="empty-msg">No entries yet.</p>
             ) : (
-                <div className="entries-list">
-                    {entries.map((entry) => (
-                        <div key={entry.id} className="entry-card">
-                            <img
-                                src={entry.prizes?.image}
-                                alt={entry.prizes?.name}
-                                className="entry-img"
-                            />
+                <div className="entries-grid">
+                    {filteredEntries.map((entry, i) => {
+                        const badge = getBadge(entry.tickets_used);
 
-                            <div className="entry-info">
-                                <h2>{entry.prizes?.name}</h2>
-                                <p>🎟 Tickets Used: {entry.tickets_used}</p>
-                                <p>📅 {new Date(entry.created_at).toLocaleString()}</p>
+                        return (
+                            <div className="entry-card-ui pop-in" key={entry.id} style={{ "--i": i }}>
 
-                                <Link href={`/prize-detail/${entry.prize_id}`}>
-                                    <button className="btn">View Prize</button>
-                                </Link>
+                                {/* IMAGE */}
+                                <div className="entry-image-box">
+                                    <img
+                                        src={entry.prize?.image || "/placeholder.png"}
+                                        alt={entry.prize?.name}
+                                        className="entry-image"
+                                    />
+                                </div>
+
+                                {/* DETAILS */}
+                                <div className="entry-details">
+
+                                    <h3 className="entry-title">{entry.prize?.name}</h3>
+
+                                    {/* BADGES */}
+                                    <div className="badge-row">
+                                        <span className={`ticket-badge ${badge.class}`}>
+                                            {badge.label}
+                                        </span>
+
+                                        <span className="date-badge">
+                                            📅 {new Date(entry.created_at).toLocaleDateString()}
+                                        </span>
+                                    </div>
+
+                                    {/* META INFO */}
+                                    <p className="entry-meta">
+                                        🎟 {entry.tickets_used} ticket(s)
+                                    </p>
+
+                                    <Link href={`/prize-detail/${entry.prize_id}`}>
+                                        <button className="entry-btn">View Prize</button>
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
+
         </main>
     );
 }
