@@ -5,50 +5,49 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Navbar() {
     return (
-        <nav>
+        <nav className="dp-nav">
+
+            {/* LEFT SIDE MENU */}
             <ul className="nav-links">
                 <li><Link href="/">Home</Link></li>
                 <li><Link href="/prod">Dark Pino 1 of 1s</Link></li>
                 <li><Link href="/contest">Contests</Link></li>
                 <li><Link href="/cart">Cart</Link></li>
 
-                {/* 🌟 NEW: My Entries link (Mobile) */}
+                {/* ⭐ Mobile-only My Entries */}
                 <SignedIn>
-                    <li><Link href="/my-entries">My Entries</Link></li>
+                    <li className="mobile-only">
+                        <Link href="/my-entries">My Entries</Link>
+                    </li>
                 </SignedIn>
 
-                {/* MOBILE AUTH BUTTONS */}
+                {/* Mobile-only Auth */}
                 <SignedOut>
-                    <div className="mobile-auth">
-                        <Link href="/sign-in">
-                            <button className="btn mobile-btn">Sign In</button>
-                        </Link>
-                        <Link href="/sign-up">
-                            <button className="btn mobile-btn">Sign Up</button>
-                        </Link>
-                    </div>
+                    <li className="mobile-only">
+                        <Link href="/sign-in">Sign In</Link>
+                    </li>
+                    <li className="mobile-only">
+                        <Link href="/sign-up">Sign Up</Link>
+                    </li>
                 </SignedOut>
 
                 <SignedIn>
-                    <div className="mobile-auth">
+                    <li className="mobile-only">
                         <UserButton afterSignOutUrl="/" />
-                    </div>
+                    </li>
                 </SignedIn>
             </ul>
 
+            {/* CENTER LOGO */}
             <div className="logo">DPino Contests</div>
 
-            {/* DESKTOP BUTTONS */}
-            <div className="btns">
+            {/* RIGHT BUTTONS (DESKTOP) */}
+            <div className="btns desktop-only">
 
-                {/* 🌟 NEW: My Entries link (Desktop) */}
                 <SignedIn>
                     <Link href="/my-entries">
-                        <button className="btn">My Entries</button>
+                        <button className="btn entries-btn">My Entries</button>
                     </Link>
-                </SignedIn>
-
-                <SignedIn>
                     <UserButton afterSignOutUrl="/" />
                 </SignedIn>
 
@@ -60,22 +59,22 @@ export default function Navbar() {
                         <button className="btn">Sign Up</button>
                     </Link>
                 </SignedOut>
+
             </div>
 
+            {/* HAMBURGER MENU */}
             <div
                 className="hamburger"
                 onClick={() => {
-                    document
-                        .querySelector(".nav-links")
-                        ?.classList.toggle("open");
-                    document
-                        .querySelector(".hamburger")
-                        ?.classList.toggle("active");
-                }}>
+                    document.querySelector(".nav-links")?.classList.toggle("open");
+                    document.querySelector(".hamburger")?.classList.toggle("active");
+                }}
+            >
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
+
         </nav>
     );
 }

@@ -3,11 +3,14 @@
 
 import { useEffect, useState } from "react";
 import Countdown from "react-countdown";
+import Link from "next/link";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function ContestPage() {
     const [prizes, setPrizes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [winnersMap, setWinnersMap] = useState({}); // prize_id -> true if winner exists
 
     const formatUSD = (n) =>
         Number(n || 0).toLocaleString("en-US", {
@@ -31,6 +34,34 @@ export default function ContestPage() {
                 setError("Unable to load prizes right now.");
                 setLoading(false);
             });
+    }, []);
+
+    // Load winners from Supabase and map by prize_id
+    useEffect(() => {
+        async function loadWinners() {
+            try {
+                const { data, error } = await supabase
+                    .from("winners")
+                    .select("prize_id");
+
+                if (error) {
+                    console.error("Error loading winners:", error);
+                    return;
+                }
+
+                if (data && data.length > 0) {
+                    const map = {};
+                    data.forEach((w) => {
+                        map[w.prize_id] = true;
+                    });
+                    setWinnersMap(map);
+                }
+            } catch (err) {
+                console.error("Unexpected error loading winners:", err);
+            }
+        }
+
+        loadWinners();
     }, []);
 
     // ONE reusable Apple-style flip renderer
@@ -248,22 +279,40 @@ export default function ContestPage() {
                                 ? prize.image
                                 : `/${prize.image.trim()}`;
 
+                            const hasWinner = !!winnersMap[prize.id];
+
                             return (
-                                <a
-                                    key={prize.id}
-                                    href={`/prize-detail/${prize.id}`}
-                                    className="dp-card"
-                                >
-                                    <img src={imgSrc} alt={prize.name} />
+                                <div key={prize.id} className="dp-card">
+                                    <Link
+                                        href={`/prize-detail/${prize.id}`}
+                                        className="dp-card-main"
+                                    >
+                                        <img src={imgSrc} alt={prize.name} />
 
-                                    <div className="dp-title">{prize.name}</div>
+                                        <div className="dp-title">{prize.name}</div>
 
-                                    <div className="dp-info">
-                                        <div className="dp-price">{formatUSD(price)}</div>
-                                        <div className="dp-tickets">🎟 {tickets} Tickets</div>
-                                    </div>
-                                </a>
+                                        <div className="dp-info">
+                                            <div className="dp-price">{formatUSD(price)}</div>
+                                            <div className="dp-tickets">
+                                                🎟 {tickets} Tickets
+                                            </div>
+                                        </div>
+                                    </Link>
 
+                                    {hasWinner && (
+                                        <>
+                                            <div className="winner-badge">
+                                                🏆 Winner Announced
+                                            </div>
+                                            <Link
+                                                href={`/winners/${prize.id}`}
+                                                className="winner-link"
+                                            >
+                                                View Winner →
+                                            </Link>
+                                        </>
+                                    )}
+                                </div>
                             );
                         })}
                     </div>

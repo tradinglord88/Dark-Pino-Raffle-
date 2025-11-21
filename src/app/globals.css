@@ -2408,3 +2408,777 @@ html {
 .entry-meta {
   margin-bottom: 10px;
 }
+
+
+/* ==========================
+   WINNER REVEAL PAGE
+   ========================== */
+
+.winner-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 20px 80px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.winner-title {
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.winner-sub {
+  text-align: center;
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-bottom: 35px;
+}
+
+.winner-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr);
+  gap: 30px;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 55%),
+    rgba(0, 0, 0, 0.85);
+  border-radius: 24px;
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(14px);
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 800px) {
+  .winner-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+.winner-image-box {
+  border-radius: 18px;
+  overflow: hidden;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.winner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.winner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.winner-prize-name {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.winner-prize-desc {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin-bottom: 10px;
+}
+
+.winner-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f7d978, #f0b429);
+  color: #000;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 6px 0 10px;
+}
+
+.winner-details-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.winner-label {
+  opacity: 0.7;
+}
+
+.winner-value {
+  font-weight: 600;
+}
+
+.winner-pending {
+  margin: 15px 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.winner-actions {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.winner-btn {
+  border: none;
+  outline: none;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fff;
+  color: #000;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.winner-btn.secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.winner-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+}
+
+/* Confetti-ish overlay */
+
+.confetti-layer {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.25) 0, transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(255, 0, 120, 0.18) 0, transparent 55%),
+    radial-gradient(circle at 0% 100%, rgba(0, 200, 255, 0.2) 0, transparent 50%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: confettiFade 1.4s ease-out forwards;
+}
+
+@keyframes confettiFade {
+  0% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+
+/* ==========================
+   ADMIN DASHBOARD STYLING
+========================== */
+
+.dashboard-page {
+  padding: 60px 20px;
+  color: #fff;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.dash-title {
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.dash-sub {
+  text-align: center;
+  opacity: 0.7;
+  margin-bottom: 40px;
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.dash-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform .2s ease;
+}
+
+.dash-card:hover {
+  transform: translateY(-4px);
+}
+
+.dash-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.dash-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 12px 0 4px;
+}
+
+.dash-desc {
+  opacity: 0.75;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.dash-count {
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+.dash-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dash-btn {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity .2s ease;
+}
+
+.dash-btn:hover {
+  opacity: 0.8;
+}
+
+.dash-btn.secondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.dash-btn.draw {
+  background: linear-gradient(135deg, #f7d978, #f0b429);
+  color: #000;
+}
+
+/* ==========================
+   SLOT MACHINE WINNER ANIMATION
+   ========================== */
+
+.slot-wrapper {
+  margin: 18px 0 16px;
+}
+
+.slot-machine {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.16), rgba(0, 0, 0, 0.9));
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+.slot-reel {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 6px;
+}
+
+.slot-window {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.slot-window span {
+  font-family: monospace;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+/* highlight final reel when revealed */
+.slot-winner {
+  box-shadow: 0 0 18px rgba(247, 217, 120, 0.8);
+  border-color: rgba(247, 217, 120, 0.9);
+}
+
+/* ==========================
+   CONTEST PAGE (LUXURY STYLE)
+   ========================== */
+
+.contest-container {
+  padding: 60px 20px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.contest-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contest-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.contest-sub {
+  font-size: 1rem;
+  opacity: 0.75;
+}
+
+.prize-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.prize-card-lux {
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.95));
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.7);
+}
+
+.prize-image-box {
+  height: 210px;
+  background: #050505;
+  overflow: hidden;
+}
+
+.prize-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.03);
+  transition: transform 0.3s ease;
+}
+
+.prize-card-lux:hover .prize-image {
+  transform: scale(1.08);
+}
+
+.prize-content {
+  padding: 16px 16px 18px;
+}
+
+.prize-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.prize-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.prize-desc {
+  font-size: 0.95rem;
+  opacity: 0.82;
+  margin-bottom: 10px;
+}
+
+.prize-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.prize-tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.prize-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.prize-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 9px 0;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.prize-btn.primary {
+  background: #fff;
+  color: #000;
+}
+
+.prize-btn.outline {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.prize-btn:hover {
+  opacity: 0.85;
+}
+
+/* Winner pill reused across pages */
+.winner-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f7d978, #f0b429);
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.winner-pill.small {
+  font-size: 0.7rem;
+}
+
+/* Small row in My Entries for prize + winner buttons */
+.entry-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Secondary button variant for My Entries */
+.entry-btn.secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.winner-badge {
+  margin-top: 8px;
+  background: linear-gradient(135deg, #f7d978, #f0b429);
+  color: #000;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.winner-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.winner-link:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+
+/* GENERAL NAV LAYOUT */
+.dp-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: #111;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 2000;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+  transition: 0.3s ease;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* CENTER LOGO */
+.logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: white;
+}
+
+/* RIGHT BUTTONS */
+.btns {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.entries-btn {
+  background: #f8d54a;
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+/* MOBILE ONLY */
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: flex;
+}
+
+/* HAMBURGER */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  border-radius: 3px;
+}
+
+/* MOBILE STYLES */
+@media (max-width: 768px) {
+
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    background: #111;
+    width: 100%;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    display: none;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links li {
+    text-align: center;
+    width: 100%;
+  }
+}
+
+
+/* ==========================
+   WINNER PAGE — MOBILE STYLES
+   ========================== */
+
+@media (max-width: 768px) {
+
+  .winner-title {
+    font-size: 1.8rem;
+    line-height: 2.1rem;
+    margin-bottom: 6px;
+  }
+
+  .winner-sub {
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+    padding: 0 10px;
+  }
+
+  /* Winner Card */
+  .winner-card {
+    padding: 18px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    border-radius: 18px;
+  }
+
+  .winner-image-box {
+    height: 220px;
+    border-radius: 14px;
+  }
+
+  .winner-image {
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+
+  /* Prize Info */
+  .winner-prize-name {
+    font-size: 1.35rem;
+    text-align: center;
+  }
+
+  .winner-prize-desc {
+    font-size: 0.88rem;
+    text-align: center;
+    line-height: 1.45rem;
+    margin-bottom: 8px;
+  }
+
+  .winner-badge {
+    align-self: center;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    margin-bottom: 10px;
+  }
+
+  /* Slot Machine */
+  .slot-machine {
+    gap: 6px;
+    padding: 8px;
+    border-radius: 12px;
+  }
+
+  .slot-window {
+    height: 38px;
+  }
+
+  .slot-window span {
+    font-size: 0.8rem;
+  }
+
+  /* Winner Details */
+  .winner-details-row {
+    flex-direction: column;
+    gap: 2px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .winner-label {
+    opacity: 0.7;
+    font-size: 0.85rem;
+  }
+
+  .winner-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  /* Pending section */
+  .winner-pending {
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 12px;
+  }
+
+  /* Buttons */
+  .winner-actions {
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .winner-btn {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 0.95rem;
+  }
+}
+
+/* Even smaller phones (iPhone SE / Android mini) */
+@media (max-width: 480px) {
+
+  .winner-title {
+    font-size: 1.6rem;
+  }
+
+  .winner-image-box {
+    height: 180px;
+  }
+
+  .winner-prize-name {
+    font-size: 1.2rem;
+  }
+
+  .winner-prize-desc {
+    font-size: 0.8rem;
+  }
+
+  .slot-window {
+    height: 34px;
+  }
+
+  .winner-value {
+    font-size: 0.9rem;
+  }
+
+  .winner-btn {
+    font-size: 0.9rem;
+    padding: 10px 0;
+  }
+}

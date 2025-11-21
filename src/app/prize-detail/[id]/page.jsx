@@ -186,6 +186,29 @@ export default function PrizeDetailPage({ params }) {
                     {confirmMsg && (
                         <p className="confirm-msg">{confirmMsg}</p>
                     )}
+
+                    {/* --- VIEW WINNER BUTTON AFTER CONTEST ENDS --- */}
+                    {prize.endDate && Date.now() > new Date(prize.endDate).getTime() && (
+                        <a
+                            href={`/winners/${prize.id}`}
+                            className="winner-btn"
+                            style={{
+                                display: "inline-block",
+                                marginTop: "1.5rem",
+                                padding: "12px 26px",
+                                background: "#F8C200",
+                                color: "black",
+                                borderRadius: "30px",
+                                fontWeight: "700",
+                                textAlign: "center",
+                                fontSize: "1rem",
+                                transition: "0.2s",
+                            }}
+                        >
+                            🎉 View Winner
+                        </a>
+                    )}
+
                 </div>
 
             </div>
