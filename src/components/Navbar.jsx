@@ -12,6 +12,11 @@ export default function Navbar() {
                 <li><Link href="/contest">Contests</Link></li>
                 <li><Link href="/cart">Cart</Link></li>
 
+                {/* 🌟 NEW: My Entries link (Mobile) */}
+                <SignedIn>
+                    <li><Link href="/my-entries">My Entries</Link></li>
+                </SignedIn>
+
                 {/* MOBILE AUTH BUTTONS */}
                 <SignedOut>
                     <div className="mobile-auth">
@@ -35,6 +40,14 @@ export default function Navbar() {
 
             {/* DESKTOP BUTTONS */}
             <div className="btns">
+
+                {/* 🌟 NEW: My Entries link (Desktop) */}
+                <SignedIn>
+                    <Link href="/my-entries">
+                        <button className="btn">My Entries</button>
+                    </Link>
+                </SignedIn>
+
                 <SignedIn>
                     <UserButton afterSignOutUrl="/" />
                 </SignedIn>

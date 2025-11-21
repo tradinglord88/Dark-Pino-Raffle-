@@ -2157,3 +2157,31 @@ html {
     display: none !important;
   }
 }
+
+.entries-list {
+  display: grid;
+  gap: 20px;
+}
+
+.entry-card {
+  display: flex;
+  gap: 20px;
+  background: #111;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.entry-img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.entry-info h2 {
+  margin: 0 0 10px;
+}
+
+.entry-info p {
+  margin: 5px 0;
+}
