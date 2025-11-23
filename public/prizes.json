@@ -5,7 +5,7 @@
         "price": 3000,
         "image": "/img1/1.png",
         "description": "The Louis Vuitton x NBA collaboration brings this iconic Keepall 55 travel bag. Crafted with monogram canvas and featuring the NBA logo, it's designed for basketball fans and fashion enthusiasts alike.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2025-01-01T23:59:59Z"
     },
     {
         "id": 2,
@@ -13,7 +13,7 @@
         "price": 3000,
         "image": "/img1/2.png",
         "description": "A stylish windbreaker parka jacket from Louis Vuitton x NBA, featuring a monogram black pattern. The jacket combines comfort and high fashion, perfect for cold weather and sports enthusiasts.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 3,
@@ -21,7 +21,7 @@
         "price": 3000,
         "image": "/img1/3.png",
         "description": "These Timberland ankle boots by Louis Vuitton are crafted from black monogram nubuck calf leather. They combine rugged durability with luxury, making them a unique fashion statement.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 4,
@@ -29,7 +29,7 @@
         "price": 600,
         "image": "/img1/4.png",
         "description": "A Burberry classic: the Check folding umbrella. Known for its iconic check pattern and high-quality craftsmanship, it's a stylish and functional accessory for any rainy day.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 5,
@@ -37,7 +37,7 @@
         "price": 2500,
         "image": "/img1/5.png",
         "description": "The Louis Vuitton Nano Noé is a miniature version of the iconic Noé handbag, crafted with monogram canvas. A perfect blend of luxury and practicality for carrying your essentials.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 6,
@@ -45,7 +45,7 @@
         "price": 2000,
         "image": "/img1/6.png",
         "description": "The Louis Vuitton Damier Infini Campus backpack is crafted from white leather, offering a sleek and luxurious look. This versatile bag is perfect for both everyday use and travel.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2024-01-31T23:59:59Z"
     },
     {
         "id": 7,
@@ -53,7 +53,7 @@
         "price": 2500,
         "image": "/img1/7.png",
         "description": "An elegant Louis Vuitton Home Mirror Trunk that combines the brand's craftsmanship with luxurious design. Perfect as a decorative centerpiece or collectible statement piece.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 8,
@@ -69,7 +69,7 @@
         "price": 500,
         "image": "/img1/9.png",
         "description": "The Louis Vuitton Ombre Nomade Eau de Parfum is a luxurious fragrance with rich, woody, and smoky tones. A deep and mysterious scent that captures the essence of exploration.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 10,
@@ -77,7 +77,7 @@
         "price": 1000,
         "image": "/img1/10.png",
         "description": "The Gucci Script Nylon Jacket offers a blend of sporty comfort and high-end style, featuring the iconic Gucci logo. Perfect for layering during transitional seasons.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 11,
@@ -85,7 +85,7 @@
         "price": 1000,
         "image": "/img1/11.png",
         "description": "These Louis Vuitton shorts feature a minimal yet luxurious design with premium materials, perfect for casual summer wear with a touch of elegance.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 12,
@@ -93,7 +93,7 @@
         "price": 2500,
         "image": "/img1/12.png",
         "description": "A unique art-meets-fashion collaboration sneaker commissioned by Six Hundred Four Shoes, titled 'Let Us Run'. Designed for collectors who value creativity and craftsmanship.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 13,
@@ -101,15 +101,15 @@
         "price": 1200,
         "image": "/img1/13.png",
         "description": "The Louis Vuitton Monogram Shine Shawl combines softness with subtle shine, made from a blend of silk and wool. A timeless accessory for every luxury wardrobe.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 14,
         "name": "Robosen Elite Optimus Prime Auto-Converting Robot",
         "price": 900,
         "image": "/img1/14.png",
-        "description": "An advanced Robosen Elite Optimus Prime robot that auto-converts between modes with voice commands. A collector’s dream for fans of Transformers and tech enthusiasts.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "description": "An advanced Robosen Elite Optimus Prime robot that auto-converts between modes with voice commands. A collector's dream for fans of Transformers and tech enthusiasts.",
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 15,
@@ -117,7 +117,7 @@
         "price": 200,
         "image": "/img1/15.png",
         "description": "A collectible Squid Game 'Young-hee' doll inspired by the hit series. A striking display piece for fans and pop culture collectors.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 16,
@@ -125,7 +125,7 @@
         "price": 1000,
         "image": "/img1/16.png",
         "description": "Louis Vuitton Millionaires Joystorm sunglasses with bold design and signature detailing. A luxury eyewear statement that blends modern edge with classic LV craftsmanship.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     },
     {
         "id": 17,
@@ -133,6 +133,6 @@
         "price": 14000,
         "image": "/img1/17.jpg",
         "description": "A full breast implant surgery, performed by a licensed and professional surgeon. A premium, life-changing experience for those looking to enhance their body.",
-        "drawTime": "2025-01-31T23:59:59Z"
+        "drawTime": "2026-01-31T23:59:59Z"
     }
 ]

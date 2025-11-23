@@ -3182,3 +3182,296 @@ html {
     padding: 10px 0;
   }
 }
+
+/* ==========================
+   SCREENS 636px AND BELOW - COMPACT STACKED LAYOUT
+   ========================== */
+@media screen and (max-width: 636px) {
+  .winner-page {
+    padding: 25px 12px 40px !important;
+  }
+
+  .winner-title {
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 6px !important;
+    letter-spacing: 1px !important;
+  }
+
+  .winner-sub {
+    font-size: 0.8rem !important;
+    margin-bottom: 20px !important;
+    padding: 0 8px !important;
+    line-height: 1.4 !important;
+  }
+
+  .winner-card {
+    padding: 15px !important;
+    gap: 16px !important;
+    border-radius: 16px !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .winner-image-box {
+    height: 180px !important;
+    border-radius: 12px !important;
+  }
+
+  .winner-prize-name {
+    font-size: 1.1rem !important;
+    text-align: center !important;
+    line-height: 1.3 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .winner-prize-desc {
+    font-size: 0.75rem !important;
+    text-align: center !important;
+    line-height: 1.3 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .winner-badge {
+    font-size: 0.7rem !important;
+    padding: 5px 10px !important;
+    margin: 0 auto 8px !important;
+  }
+
+  /* Slot machine - compact like 300px */
+  .slot-wrapper {
+    margin: 12px 0 10px !important;
+  }
+
+  .slot-machine {
+    padding: 6px !important;
+    gap: 4px !important;
+    border-radius: 10px !important;
+  }
+
+  .slot-reel {
+    border-radius: 8px !important;
+  }
+
+  .slot-window {
+    height: 32px !important;
+    padding: 4px !important;
+  }
+
+  .slot-window span {
+    font-size: 0.7rem !important;
+    letter-spacing: 0.3px !important;
+  }
+
+  .slot-winner {
+    box-shadow: 0 0 12px rgba(247, 217, 120, 0.8) !important;
+  }
+
+  /* Winner details - stacked and compact */
+  .winner-details-row {
+    margin-bottom: 6px !important;
+    gap: 2px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .winner-label {
+    font-size: 0.75rem !important;
+    opacity: 0.8 !important;
+  }
+
+  .winner-value {
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+  }
+
+  .winner-email {
+    font-size: 0.7rem !important;
+    padding: 6px 8px !important;
+  }
+
+  /* Pending section */
+  .winner-pending {
+    padding: 8px 10px !important;
+    font-size: 0.75rem !important;
+    margin: 10px 0 !important;
+    text-align: center !important;
+  }
+
+  /* Buttons - full width stacked */
+  .winner-actions {
+    gap: 8px !important;
+    margin-top: 16px !important;
+    flex-direction: column !important;
+  }
+
+  .winner-btn {
+    padding: 10px 14px !important;
+    font-size: 0.8rem !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+  }
+
+  /* Confetti adjustment */
+  .confetti-layer {
+    background-image:
+      radial-gradient(circle at 5% 15%, rgba(255, 255, 255, 0.25) 0, transparent 40%),
+      radial-gradient(circle at 85% 0%, rgba(255, 0, 120, 0.18) 0, transparent 45%),
+      radial-gradient(circle at 0% 95%, rgba(0, 200, 255, 0.2) 0, transparent 40%) !important;
+  }
+}
+
+/* ==========================
+   PROGRESSIVE SCALING - SMOOTH TRANSITION TO 300px STYLE
+   ========================== */
+@media screen and (max-width: 530px) {
+  .winner-page {
+    padding: 20px 10px 35px !important;
+  }
+
+  .winner-title {
+    font-size: 1.4rem !important;
+  }
+
+  .winner-image-box {
+    height: 160px !important;
+  }
+
+  .winner-prize-name {
+    font-size: 1rem !important;
+  }
+
+  .slot-machine {
+    padding: 5px !important;
+    gap: 3px !important;
+  }
+
+  .slot-window {
+    height: 30px !important;
+  }
+
+  .slot-window span {
+    font-size: 0.65rem !important;
+  }
+}
+
+/* ==========================
+   EXTRA SMALL MOBILE SCREENS (400px and below)
+   ========================== */
+@media screen and (max-width: 400px) {
+  .winner-page {
+    padding: 18px 8px 30px !important;
+  }
+
+  .winner-title {
+    font-size: 1.3rem !important;
+  }
+
+  .winner-image-box {
+    height: 150px !important;
+  }
+
+  .winner-prize-name {
+    font-size: 0.95rem !important;
+  }
+
+  .slot-machine {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .slot-reel {
+    min-height: 36px !important;
+  }
+
+  .slot-window {
+    height: 28px !important;
+  }
+}
+
+/* ==========================
+   SUPER SMALL SCREENS (350px and below) - FINAL COMPACT STYLE
+   ========================== */
+@media screen and (max-width: 350px) {
+  .winner-page {
+    padding: 15px 8px 25px !important;
+  }
+
+  .winner-title {
+    font-size: 1.2rem !important;
+  }
+
+  .winner-image-box {
+    height: 140px !important;
+  }
+
+  .winner-prize-name {
+    font-size: 0.9rem !important;
+  }
+
+  .winner-btn {
+    padding: 8px 12px !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* ==========================
+   LANDSCAPE ORIENTATION FIXES
+   ========================== */
+@media screen and (max-width: 636px) and (orientation: landscape) {
+  .winner-page {
+    padding: 15px 10px 25px !important;
+  }
+
+  .winner-card {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+
+  .winner-image-box {
+    height: 120px !important;
+  }
+
+  .winner-prize-name {
+    font-size: 0.9rem !important;
+  }
+
+  .winner-prize-desc {
+    font-size: 0.7rem !important;
+  }
+
+  .slot-machine {
+    padding: 4px !important;
+    flex-direction: row !important;
+  }
+
+  .slot-window {
+    height: 26px !important;
+  }
+
+  .slot-window span {
+    font-size: 0.65rem !important;
+  }
+
+  .winner-actions {
+    flex-direction: row !important;
+    gap: 6px !important;
+  }
+
+  .winner-btn {
+    font-size: 0.7rem !important;
+    padding: 6px 10px !important;
+  }
+}
+
+.winner-prize-value {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.draw-time {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #888;
+}
