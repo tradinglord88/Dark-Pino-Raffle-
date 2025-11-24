@@ -44,7 +44,7 @@ export default function Footer() {
                 {/* BRAND COLUMN */}
                 <div className="col">
                     <h3>DPino Contests</h3>
-
+                    <p>Premium raffles, luxury 1 of 1 drops, and life changing prizes.</p>
                 </div>
 
                 {/* NAVIGATION ICONS */}
