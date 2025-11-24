@@ -3537,3 +3537,30 @@ html {
 .footer p {
   font-weight: 600;
 }
+
+
+
+/* MOBILE — SLOT EMAILS STACK VERTICALLY */
+@media (max-width: 768px) {
+  .slot-machine {
+    display: flex;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .slot-reel {
+    width: 100% !important;
+  }
+
+  .slot-window {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .slot-window span {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 0.88rem !important;
+  }
+}
