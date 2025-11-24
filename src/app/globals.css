@@ -208,72 +208,6 @@ span {
 
 
 
-.footer .bubbles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1rem;
-  filter: url("#blob");
-  /* no background here, each bubble has its own color */
-}
-
-.footer .bubbles .bubble {
-  position: absolute;
-  left: var(--position, 50%);
-  bottom: -20rem;
-  /* start below footer */
-  background: #F8C200;
-  /* bright yellow bubbles */
-  border-radius: 100%;
-  animation: bubble-size var(--time, 4s) ease-in infinite var(--delay, 0s),
-    bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s);
-  transform: translateX(-50%);
-  overflow: hidden;
-}
-
-.footer {
-  position: relative;
-
-  overflow-y: visible;
-  /* overflow-y: visible; */
-  z-index: 1;
-  background: #F8C200;
-  display: grid;
-  grid-area: footer;
-  min-height: 12rem;
-  margin-top: 200px;
-  border-top-right-radius: 20px;
-  border-top-left-radius: 20px;
-}
-
-
-
-@keyframes bubble-size {
-
-  0%,
-  75% {
-    width: var(--size, 4rem);
-    height: var(--size, 4rem);
-  }
-
-  100% {
-    width: 0rem;
-    height: 0rem;
-  }
-}
-
-@keyframes bubble-move {
-  0% {
-    bottom: -4rem;
-  }
-
-  100% {
-    bottom: var(--distance, 10rem);
-  }
-}
-
-
 
 
 .desc {
@@ -996,32 +930,6 @@ img {
 
 
 
-/* copy start  */
-
-.footer .bubbles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1rem;
-  filter: url("#blob");
-  /* no background here, each bubble has its own color */
-}
-
-.footer .bubbles .bubble {
-  position: absolute;
-  left: var(--position, 50%);
-  bottom: -20rem;
-  /* start below footer */
-  background: #F8C200;
-  /* bright yellow bubbles */
-  border-radius: 100%;
-  animation: bubble-size var(--time, 4s) ease-in infinite var(--delay, 0s),
-    bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s);
-  transform: translateX(-50%);
-  overflow: hidden;
-}
-
 .footer {
   position: relative;
 
@@ -1038,30 +946,6 @@ img {
 }
 
 
-
-@keyframes bubble-size {
-
-  0%,
-  75% {
-    width: var(--size, 4rem);
-    height: var(--size, 4rem);
-  }
-
-  100% {
-    width: 0rem;
-    height: 0rem;
-  }
-}
-
-@keyframes bubble-move {
-  0% {
-    bottom: -4rem;
-  }
-
-  100% {
-    bottom: var(--distance, 10rem);
-  }
-}
 
 .pagep {
   color: white;
@@ -3151,7 +3035,7 @@ html {
 }
 
 /* Even smaller phones (iPhone SE / Android mini) */
-@media (max-width: 480px) {
+@media (max-width: 400px) {
 
   .winner-title {
     font-size: 1.6rem;
@@ -3474,4 +3358,77 @@ html {
   margin-top: 0.5rem;
   font-size: 0.9rem;
   color: #888;
+}
+
+/* =========================================
+   DPINO — CLEAN SYSTEM 2 BUBBLE FOOTER
+   ========================================= */
+
+.footer {
+  position: relative;
+  background: #F8C200;
+  /* Yellow footer */
+  color: black;
+  padding: 80px 0 50px;
+  padding-bottom: 150px;
+  border-radius: 30px 30px 0 0;
+  overflow: visible;
+  isolation: isolate;
+  /* Ensures no transparency glitch */
+}
+
+/* === BUBBLE CONTAINER === */
+.footer .bubbles {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* === INDIVIDUAL BUBBLE === */
+.footer .bubbles .bubble {
+  position: absolute;
+  left: var(--position);
+  bottom: -4rem;
+  /* Start below footer */
+  width: var(--size);
+  height: var(--size);
+  background: #F8C200;
+  border-radius: 50%;
+  opacity: 0.75;
+
+  animation:
+    bubble-size var(--time) ease-in-out infinite var(--delay),
+    bubble-move var(--time) linear infinite var(--delay);
+}
+
+/* === BUBBLE SIZE PULSE === */
+@keyframes bubble-size {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* === BUBBLE UPWARD MOTION === */
+@keyframes bubble-move {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(calc(-1 * var(--distance)));
+  }
+}
+
+.bubbles {
+  filter: url(#goo);
 }
