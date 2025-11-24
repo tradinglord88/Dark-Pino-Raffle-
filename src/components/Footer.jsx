@@ -73,7 +73,7 @@ export default function Footer() {
             </div>
 
             <div className="footer-copy">
-                © {new Date().getFullYear()} DPino Contests — All Rights Reserved
+                © {new Date().getFullYear()} DPino Contests All Rights Reserved
             </div>
 
         </footer>

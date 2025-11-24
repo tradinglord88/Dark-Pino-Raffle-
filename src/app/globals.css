@@ -3360,65 +3360,24 @@ html {
   color: #888;
 }
 
-/* =========================================
-   DPINO — CLEAN SYSTEM 2 BUBBLE FOOTER
-   ========================================= */
-
-.footer {
-  position: relative;
-  background: #F8C200;
-  /* Yellow footer */
-  color: black;
-  padding: 10px 0 1px;
-  padding-bottom: 100px;
-  border-radius: 30px 30px 0 0;
-  overflow: visible;
-  isolation: isolate;
-  /* Ensures no transparency glitch */
-}
-
-/* === BUBBLE CONTAINER === */
-.footer .bubbles {
-  position: absolute;
-  inset: 0;
-  overflow: visible;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* === INDIVIDUAL BUBBLE === */
 .footer .bubbles .bubble {
   position: absolute;
   left: var(--position);
-  bottom: -4rem;
-  /* Start below footer */
+  bottom: -3rem;
   width: var(--size);
   height: var(--size);
-  background: #F8C200;
+
+  /* Lightweight soft glow bubble */
+  background: radial-gradient(circle, rgba(241, 139, 5, 0.55), rgba(255, 255, 255, 0.12));
   border-radius: 50%;
-  opacity: 0.75;
+  opacity: 0.6;
 
   animation:
-    bubble-size var(--time) ease-in-out infinite var(--delay),
-    bubble-move var(--time) linear infinite var(--delay);
+    bubble-move var(--time) linear infinite,
+    bubble-fade var(--time) ease-in-out infinite;
 }
 
-/* === BUBBLE SIZE PULSE === */
-@keyframes bubble-size {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.15);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* === BUBBLE UPWARD MOTION === */
+/* Move upward */
 @keyframes bubble-move {
   0% {
     transform: translateY(0);
@@ -3426,6 +3385,19 @@ html {
 
   100% {
     transform: translateY(calc(-1 * var(--distance)));
+  }
+}
+
+/* Soft fade-in/out */
+@keyframes bubble-fade {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.6;
   }
 }
 
@@ -3447,13 +3419,11 @@ html {
 .footer-grid .col h3 {
   font-size: 18px;
   font-weight: 700;
-  margin-bottom: 10px;
 }
 
 .footer-grid .col p,
 .footer-grid .col a {
   display: block;
-  margin-bottom: 8px;
   font-size: 14px;
   color: #000;
   text-decoration: none;
@@ -3513,7 +3483,7 @@ html {
 .icon-links a {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  border-radius: 25%;
   background: #000;
   /* BLACK SOLID CIRCLE */
   display: flex;
@@ -3560,6 +3530,7 @@ html {
     margin-top: 30px;
     text-align: center;
     font-size: 14px;
+    color: black;
   }
 }
 
