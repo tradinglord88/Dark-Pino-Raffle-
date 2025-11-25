@@ -3622,7 +3622,7 @@ html {
   width: var(--size);
   height: var(--size);
 
-  background: rgba(238, 195, 5, 0.966);
+  background: rgba(248, 194, 0, 0.75);
   border-radius: 50%;
 
   animation: bubble-up var(--time) linear infinite var(--delay);
