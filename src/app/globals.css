@@ -936,7 +936,7 @@ img {
   overflow-y: visible;
   /* overflow-y: visible; */
   z-index: 1;
-  background: #F8C200;
+  background: #b39625;
   display: grid;
   grid-area: footer;
   min-height: 12rem;
@@ -3360,22 +3360,7 @@ html {
   color: #888;
 }
 
-.footer .bubbles .bubble {
-  position: absolute;
-  left: var(--position);
-  bottom: -3rem;
-  width: var(--size);
-  height: var(--size);
 
-  /* Lightweight soft glow bubble */
-  background: radial-gradient(circle, rgba(241, 139, 5, 0.55), rgba(255, 255, 255, 0.12));
-  border-radius: 50%;
-  opacity: 0.6;
-
-  animation:
-    bubble-move var(--time) linear infinite,
-    bubble-fade var(--time) ease-in-out infinite;
-}
 
 /* Move upward */
 @keyframes bubble-move {
@@ -3563,4 +3548,150 @@ html {
     text-align: center !important;
     font-size: 0.88rem !important;
   }
+}
+
+/* SHOW FULL IMAGE ON WINNER PAGE WITHOUT CROPPING */
+.winner-image-box {
+  width: 100%;
+  height: auto !important;
+  max-height: 400px;
+  /* prevents it from becoming too tall */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  /* prevents any overflow */
+  background: #111;
+}
+
+.winner-image {
+  width: 100%;
+  height: auto !important;
+  object-fit: contain !important;
+  /* full picture, no cropping */
+  border-radius: 14px;
+}
+
+
+/* might try i have my result now */
+
+
+@media (max-width: 768px) {
+  .winner-image-box {
+    max-height: 300px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .winner-image-box {
+    max-height: 240px !important;
+  }
+}
+
+
+/* =========================================
+   DPINO — BUBBLE FOOTER (V3 OPTIMIZED)
+   ========================================= */
+
+/* MAIN FOOTER SHELL */
+.footer {
+  background: #facd29;
+  /* Clean yellow */
+  color: #000;
+  padding: 50px 0 25px;
+  border-radius: 30px 30px 0 0;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* === ULTRA-LIGHT BUBBLES (NO LAG) === */
+.bubbles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -3rem;
+  left: var(--position);
+
+  width: var(--size);
+  height: var(--size);
+
+  background: rgba(238, 195, 5, 0.966);
+  border-radius: 50%;
+
+  animation: bubble-up var(--time) linear infinite var(--delay);
+}
+
+/* Bubble animation */
+@keyframes bubble-up {
+  from {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+
+  to {
+    transform: translateY(calc(-1 * var(--distance)));
+    opacity: 0.1;
+  }
+}
+
+/* Reduce bubble intensity on mobile */
+@media (max-width: 768px) {
+  .bubble {
+    animation-duration: calc(var(--time) * 1.3);
+  }
+}
+
+
+
+.footer-grid .col a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* === ICON LINKS (Navigation + Social) === */
+.icon-links {
+  display: flex;
+  gap: 20px;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+.icon-links a {
+  width: 48px;
+  height: 48px;
+  border-radius: 25%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F8C200;
+  font-size: 22px;
+  transition: 0.25s ease;
+}
+
+.icon-links a:hover {
+  background: #333;
+  transform: translateY(-3px);
+}
+
+/* === COPYRIGHT === */
+.footer-copy {
+  position: relative;
+  z-index: 5;
+  margin-top: 35px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+.footer {
+  overflow: visible;
 }
