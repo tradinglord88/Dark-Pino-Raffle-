@@ -1,23 +1,8 @@
 export default function Footer() {
     return (
         <footer className="footer">
+            <div id="bubble-anchor"></div>
 
-            {/* === ULTRA-LIGHT BUBBLES (Zero Lag) === */}
-            <div className="bubbles">
-                {Array.from({ length: 14 }).map((_, i) => (
-                    <div
-                        key={i}
-                        className="bubble"
-                        style={{
-                            "--size": `${1.5 + Math.random() * 2.5}rem`,
-                            "--distance": `${12 + Math.random() * 60}rem`,
-                            "--position": `${Math.random() * 100}%`,
-                            "--time": `${4 + Math.random() * 3}s`,
-                            "--delay": `${Math.random() * 3}s`,
-                        }}
-                    />
-                ))}
-            </div>
 
             {/* === GRID CONTENT === */}
             <div className="footer-grid">

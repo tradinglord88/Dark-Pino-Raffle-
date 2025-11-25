@@ -27,54 +27,23 @@ export default function WinnerRevealPage({ params }) {
     const [winnerMasked, setWinnerMasked] = useState("");
     const [isRevealed, setIsRevealed] = useState(false);
 
-    // Debug authentication state
-    console.log("🔐 AUTH STATE:", {
-        isLoaded,
-        user: user ? {
-            id: user.id,
-            email: user.email,
-            primaryEmailAddress: user.primaryEmailAddress?.emailAddress
-        } : "No user",
-        prizeId
-    });
-
     // Load prize from JSON + winner from database entries
     useEffect(() => {
-        if (!prizeId || !isLoaded) {
-            console.log("⏳ Waiting for prizeId or user to load...", { prizeId, isLoaded });
-            return;
-        }
+        if (!prizeId || !isLoaded) return;
 
         async function loadData() {
             try {
-                console.log("🎯 WINNER PAGE DEBUG: Starting data load for prize:", prizeId);
-                console.log("👤 Current user state:", {
-                    isLoaded,
-                    userEmail: user?.email,
-                    userId: user?.id
-                });
-
                 // Load prize details from prizes.json
-                console.log("📦 Loading prize details from JSON...");
                 const prizesResponse = await fetch('/prizes.json');
                 const prizes = await prizesResponse.json();
-                console.log("📊 Total prizes available:", prizes.length);
-
                 const foundPrize = prizes.find(p => String(p.id) === String(prizeId));
 
                 if (!foundPrize) {
-                    console.log("❌ Prize not found in JSON for ID:", prizeId);
                     setPrize(null);
                     setLoading(false);
                     return;
                 }
 
-                console.log("✅ Prize found:", {
-                    id: foundPrize.id,
-                    name: foundPrize.name,
-                    drawTime: foundPrize.drawTime,
-                    currentTime: new Date().toISOString()
-                });
                 setPrize(foundPrize);
 
                 // Check if draw time has passed to determine if we should show winner
@@ -82,18 +51,8 @@ export default function WinnerRevealPage({ params }) {
                 const now = new Date();
                 const drawTimePassed = drawTime <= now;
 
-                console.log("⏰ DRAW TIME ANALYSIS:", {
-                    drawTime: drawTime.toISOString(),
-                    now: now.toISOString(),
-                    drawTimePassed,
-                    timeDifference: now.getTime() - drawTime.getTime()
-                });
-
                 if (drawTimePassed) {
-                    console.log("🎲 Draw time passed - loading entries and picking winner");
-
-                    // Load ALL entries for this prize with detailed logging
-                    console.log(`🔍 Querying entries for prize ID: ${prizeId}`);
+                    // Load ALL entries for this prize
                     const { data: entries, error: entriesError } = await supabase
                         .from("entries")
                         .select(`
@@ -104,38 +63,10 @@ export default function WinnerRevealPage({ params }) {
                         `)
                         .eq("prize_id", Number(prizeId));
 
-                    if (entriesError) {
-                        console.error("❌ Entries load error:", entriesError);
-                        setWinner(null);
-                    } else if (entries && entries.length > 0) {
-                        console.log("📊 ENTRIES FOUND:", {
-                            totalEntries: entries.length,
-                            entries: entries.map((e, index) => ({
-                                index,
-                                clerk_id: e.clerk_id,
-                                email: e.users.email,
-                                tickets: e.tickets_used,
-                                created_at: e.created_at
-                            }))
-                        });
-
-                        console.log("✅ Found entries, picking random winner");
-
+                    if (!entriesError && entries && entries.length > 0) {
                         // Pick random winner from entries
                         const randomIndex = Math.floor(Math.random() * entries.length);
                         const randomWinner = entries[randomIndex];
-
-                        console.log("🏆 WINNER SELECTION PROCESS:", {
-                            totalEntries: entries.length,
-                            selectedIndex: randomIndex,
-                            winnerDetails: {
-                                clerk_id: randomWinner.clerk_id,
-                                email: randomWinner.users.email,
-                                tickets_used: randomWinner.tickets_used,
-                                created_at: randomWinner.created_at
-                            },
-                            allPossibleEmails: entries.map(e => e.users.email)
-                        });
 
                         setWinner({
                             clerk_id: randomWinner.clerk_id,
@@ -147,10 +78,6 @@ export default function WinnerRevealPage({ params }) {
                         // Setup slot animation
                         const masked = obfuscateEmail(randomWinner.users.email);
                         setWinnerMasked(masked);
-                        console.log("🎭 Email obfuscation:", {
-                            original: randomWinner.users.email,
-                            obfuscated: masked
-                        });
 
                         const base = [
                             masked,
@@ -167,20 +94,12 @@ export default function WinnerRevealPage({ params }) {
                         setReel2(base[2]);
                         setReel3(base[3]);
                     } else {
-                        console.log("❌ No entries found for this prize");
                         setWinner(null);
                     }
-                } else {
-                    console.log("⏳ Draw time hasn't passed yet - no winner to show");
                 }
 
                 // Load user's entry for this prize if signed in
                 if (user && isLoaded) {
-                    console.log("👤 Loading user's entry data for user:", {
-                        userId: user.id,
-                        userEmail: user.email
-                    });
-
                     const { data: entryData, error: entryError } = await supabase
                         .from("entries")
                         .select("tickets_used, created_at")
@@ -189,20 +108,12 @@ export default function WinnerRevealPage({ params }) {
                         .maybeSingle();
 
                     if (!entryError && entryData) {
-                        console.log("✅ User entry found:", entryData);
                         setUserEntry(entryData);
-                    } else if (entryError) {
-                        console.error("❌ User entry query error:", entryError);
-                    } else {
-                        console.log("ℹ️ User has no entry for this prize");
                     }
-                } else {
-                    console.log("👤 No user or user not loaded - skipping user entry check");
                 }
             } catch (error) {
-                console.error("💥 Load data error:", error);
+                console.error("Error loading data:", error);
             } finally {
-                console.log("🏁 Data loading complete, setting loading to false");
                 setLoading(false);
             }
         }
@@ -213,12 +124,6 @@ export default function WinnerRevealPage({ params }) {
     // Slot animation
     useEffect(() => {
         if (!winner || !winnerMasked || slotItems.length === 0) return;
-
-        console.log("🎰 Starting slot animation for winner:", {
-            winnerEmail: winner.winner_email,
-            obfuscated: winnerMasked,
-            slotItemsCount: slotItems.length
-        });
 
         setIsRevealed(false);
 
@@ -241,21 +146,17 @@ export default function WinnerRevealPage({ params }) {
         }, speed);
 
         const t1 = setTimeout(() => {
-            console.log("⏹️ Stopping reel 1");
             clearInterval(spin1);
         }, 1200);
 
         const t2 = setTimeout(() => {
-            console.log("⏹️ Stopping reel 2");
             clearInterval(spin2);
         }, 1800);
 
         const t3 = setTimeout(() => {
-            console.log("⏹️ Stopping reel 3 and revealing winner");
             clearInterval(spin3);
             setReel3(winnerMasked);
             setIsRevealed(true);
-            console.log("🎉 Winner fully revealed:", winner.winner_email);
         }, 2500);
 
         return () => {
@@ -271,37 +172,12 @@ export default function WinnerRevealPage({ params }) {
     // Check if current user is the winner
     const isCurrentUserWinner = user && winner && winner.clerk_id === user.id;
 
-    console.log("🔍 WINNER VERIFICATION CHECK:", {
-        currentUser: {
-            email: user?.email,
-            id: user?.id
-        },
-        winner: {
-            email: winner?.winner_email,
-            id: winner?.clerk_id
-        },
-        isCurrentUserWinner,
-        matchType: isCurrentUserWinner ? "MATCH 🎉" : "NO MATCH ❌"
-    });
-
     // Check if draw time has passed
     const drawTimePassed = prize && new Date(prize.drawTime) <= new Date();
     const hasWinner = drawTimePassed && winner;
 
-    console.log("🔄 COMPONENT STATE SUMMARY:", {
-        loading,
-        prize: prize?.name,
-        drawTimePassed,
-        hasWinner,
-        winnerEmail: winner?.winner_email,
-        isCurrentUserWinner,
-        isRevealed,
-        userEntry: userEntry ? `Has entry (${userEntry.tickets_used} tickets)` : "No entry"
-    });
-
     // Show loading state while waiting for authentication
     if (!isLoaded || loading) {
-        console.log("⏳ Component rendering: Loading state (auth or data loading)");
         return (
             <main className="winner-page">
                 <h1 className="winner-title">Loading Prize...</h1>
@@ -311,7 +187,6 @@ export default function WinnerRevealPage({ params }) {
     }
 
     if (!prize) {
-        console.log("❌ Component rendering: Prize not found");
         return (
             <main className="winner-page">
                 <h1 className="winner-title">Prize Not Found</h1>
@@ -323,7 +198,6 @@ export default function WinnerRevealPage({ params }) {
         );
     }
 
-    console.log("🎨 Component rendering: Final render with data");
     return (
         <main className="winner-page">
             {hasWinner && isRevealed && <div className="confetti-layer" />}
@@ -429,21 +303,6 @@ export default function WinnerRevealPage({ params }) {
                                     <p>Please check your spam folder if you don't see it.</p>
                                 </div>
                             )}
-
-                            {/* DEBUG INFO - Remove in production */}
-                            <div style={{
-                                background: '#f0f0f0',
-                                padding: '10px',
-                                borderRadius: '5px',
-                                marginTop: '20px',
-                                fontSize: '12px',
-                                color: '#666'
-                            }}>
-                                <strong>Debug Info:</strong><br />
-                                Winner Email: {winner?.winner_email}<br />
-                                Current User: {user?.email}<br />
-                                Match: {isCurrentUserWinner ? 'YES 🎉' : 'NO'}
-                            </div>
                         </>
                     ) : (
                         <div className="winner-pending">

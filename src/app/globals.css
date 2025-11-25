@@ -3695,3 +3695,169 @@ html {
 .footer {
   overflow: visible;
 }
+
+
+#global-bubbles .bubble {
+  position: absolute;
+  left: var(--position);
+  bottom: -4rem;
+  width: var(--size);
+  height: var(--size);
+
+  background: radial-gradient(circle, rgba(248, 194, 0, 0.55), rgba(255, 255, 255, 0.15));
+  border-radius: 50%;
+  opacity: 0.6;
+
+  animation:
+    bubble-move var(--time) linear infinite,
+    bubble-fade var(--time) ease-in-out infinite;
+}
+
+@keyframes bubble-move {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-110vh);
+  }
+
+  /* move through whole view */
+}
+
+@keyframes bubble-fade {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+
+
+#bubble-anchor {
+  position: relative;
+  width: 100%;
+  height: 0px;
+  /* invisible */
+  overflow: visible;
+}
+
+/* Global bubble container */
+#global-bubbles {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+}
+
+/* Bubble styling */
+#global-bubbles .bubble {
+  position: absolute;
+  bottom: 0;
+  left: var(--position);
+  width: var(--size);
+  height: var(--size);
+
+  background: radial-gradient(circle, rgba(241, 139, 5, 0.5), rgba(255, 255, 255, 0.1));
+  border-radius: 50%;
+  opacity: 0.7;
+
+  animation:
+    bubbleMove var(--time) linear infinite var(--delay),
+    bubbleFade var(--time) ease-in-out infinite var(--delay);
+}
+
+@keyframes bubbleMove {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(calc(-1 * var(--distance)));
+  }
+}
+
+@keyframes bubbleFade {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+
+/* ======================================================
+   GLOBAL GOOEY BUBBLES — SYSTEM B (Clean Version)
+   ====================================================== */
+#bubble-anchor {
+  position: relative;
+  width: 100%;
+  height: 0px;
+  overflow: visible;
+}
+
+#global-bubbles {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  overflow: visible;
+  filter: url(#goo);
+  /* Gooey merge effect */
+  z-index: 0;
+}
+
+/* Individual bubbles */
+#global-bubbles .bubble {
+  position: absolute;
+  bottom: -4rem;
+  left: var(--position);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+
+  background: radial-gradient(circle,
+      rgba(255, 200, 0, 0.55),
+      rgba(255, 255, 255, 0.15));
+
+  animation:
+    bubble-rise var(--time) linear infinite var(--delay),
+    bubble-fade var(--time) ease-in-out infinite var(--delay);
+}
+
+/* Upward motion across entire page */
+@keyframes bubble-rise {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(calc(-1 * var(--distance)));
+  }
+}
+
+/* Soft fade-in and fade-out */
+@keyframes bubble-fade {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}

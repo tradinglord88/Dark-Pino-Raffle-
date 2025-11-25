@@ -174,7 +174,27 @@ export default function PrizeDetailPage({ params }) {
                             disabled={userTickets === null}
                             max={userTickets || 1}
                             value={entryTickets}
-                            onChange={(e) => setEntryTickets(Number(e.target.value))}
+                            placeholder="1"
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                // Handle empty input or non-numeric values
+                                if (value === "" || isNaN(Number(value))) {
+                                    setEntryTickets(1);
+                                } else {
+                                    setEntryTickets(Number(value));
+                                }
+                            }}
+                            onFocus={(e) => {
+                                // On mobile, when user focuses on the input, select all text
+                                // This makes it easier to replace the initial value
+                                e.target.select();
+                            }}
+                            onKeyDown={(e) => {
+                                // Prevent the 'e' character in scientific notation
+                                if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                                    e.preventDefault();
+                                }
+                            }}
                         />
                     </div>
 
