@@ -936,7 +936,7 @@ img {
   overflow-y: visible;
   /* overflow-y: visible; */
   z-index: 1;
-  background: #b39625;
+  background: rgba(255, 255, 255, 0.18);
   display: grid;
   grid-area: footer;
   min-height: 12rem;
@@ -3404,13 +3404,14 @@ html {
 .footer-grid .col h3 {
   font-size: 18px;
   font-weight: 700;
+  color: rgba(252, 198, 3, 0.719);
 }
 
 .footer-grid .col p,
 .footer-grid .col a {
   display: block;
   font-size: 14px;
-  color: #000;
+  color: rgba(252, 198, 3, 0.719);
   text-decoration: none;
   opacity: 0.85;
 }
@@ -3428,6 +3429,7 @@ html {
   text-align: center;
   font-size: 14px;
   font-weight: 600;
+
 }
 
 /* ICON LINKS (Navigation + Social) */
@@ -3515,7 +3517,7 @@ html {
     margin-top: 30px;
     text-align: center;
     font-size: 14px;
-    color: black;
+    color: rgba(252, 198, 3, 0.719);
   }
 }
 
@@ -3860,4 +3862,9 @@ html {
   50% {
     opacity: 0.85;
   }
+}
+
+
+.footer {
+  background-color: rgba(73, 70, 70, 0.3);
 }
