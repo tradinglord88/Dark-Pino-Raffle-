@@ -49,6 +49,31 @@ export default function ProductDetail({ params }) {
 
     const calcTickets = (price) => Math.floor((Number(price) || 0) / 100);
 
+    const addToCart = () => {
+        // Get existing cart
+        let cart = JSON.parse(localStorage.getItem("dpino-cart")) || [];
+
+        // Check if item already exists
+        const existing = cart.find(item => item.id === product.id);
+
+        if (existing) {
+            existing.qty += 1;   // increase quantity
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                qty: 1
+            });
+        }
+
+        // Save back into storage
+        localStorage.setItem("dpino-cart", JSON.stringify(cart));
+
+        alert("Added to cart!");
+    };
+
     return (
         <div className="container">
             <div className="detail">
@@ -67,36 +92,9 @@ export default function ProductDetail({ params }) {
                     </div>
 
                     <div className="buttons">
-                        <button>Check Out</button>
-                        <button
-                            onClick={() => {
-                                // Get existing cart
-                                let cart = JSON.parse(localStorage.getItem("dpino-cart")) || [];
-
-                                // Check if item already exists
-                                const existing = cart.find(item => item.id === product.id);
-
-                                if (existing) {
-                                    existing.qty += 1;   // increase quantity
-                                } else {
-                                    cart.push({
-                                        id: product.id,
-                                        name: product.name,
-                                        price: product.price,
-                                        image: product.image,
-                                        qty: 1
-                                    });
-                                }
-
-                                // Save back into storage
-                                localStorage.setItem("dpino-cart", JSON.stringify(cart));
-
-                                alert("Added to cart!");
-                            }}
-                        >
+                        <button onClick={addToCart}>
                             Add To Cart
                         </button>
-
                     </div>
 
                     <div className="description">{product.description}</div>
