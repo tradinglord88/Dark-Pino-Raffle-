@@ -3887,6 +3887,14 @@ html {
     width: 20%;
     /* smaller on mobile */
   }
+
+  .description {
+    margin-top: 10px;
+    font-size: 12px;
+    margin-bottom: 8px;
+    font-weight: 300;
+  }
+
 }
 
 .footer-copy {
