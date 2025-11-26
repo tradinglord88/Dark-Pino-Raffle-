@@ -35,7 +35,7 @@
         "id": 5,
         "name": "Louis Vuitton Nano Noé Handbag",
         "price": 2500,
-        "image": "/img1/5.png",
+        "image": "/img1/5.jpg",
         "description": "The Louis Vuitton Nano Noé is a miniature version of the iconic Noé handbag, crafted with monogram canvas. A perfect blend of luxury and practicality for carrying your essentials.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
@@ -43,7 +43,7 @@
         "id": 6,
         "name": "Louis Vuitton Damier Infini Campus Backpack in White Leather",
         "price": 2000,
-        "image": "/img1/6.png",
+        "image": "/img1/6.jpg",
         "description": "The Louis Vuitton Damier Infini Campus backpack is crafted from white leather, offering a sleek and luxurious look. This versatile bag is perfect for both everyday use and travel.",
         "drawTime": "2024-01-31T23:59:59Z"
     },
@@ -51,7 +51,7 @@
         "id": 7,
         "name": "Louis Vuitton Home Mirror Trunk",
         "price": 2500,
-        "image": "/img1/7.png",
+        "image": "/img1/7.jpg",
         "description": "An elegant Louis Vuitton Home Mirror Trunk that combines the brand's craftsmanship with luxurious design. Perfect as a decorative centerpiece or collectible statement piece.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
@@ -75,7 +75,7 @@
         "id": 10,
         "name": "Gucci Script Nylon Jacket",
         "price": 1000,
-        "image": "/img1/10.png",
+        "image": "/img1/10.jpg",
         "description": "The Gucci Script Nylon Jacket offers a blend of sporty comfort and high-end style, featuring the iconic Gucci logo. Perfect for layering during transitional seasons.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
@@ -83,7 +83,7 @@
         "id": 11,
         "name": "Louis Vuitton Shorts",
         "price": 1000,
-        "image": "/img1/11.png",
+        "image": "/img1/11.jpg",
         "description": "These Louis Vuitton shorts feature a minimal yet luxurious design with premium materials, perfect for casual summer wear with a touch of elegance.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
@@ -91,7 +91,7 @@
         "id": 12,
         "name": "'Let Us Run' Sneaker Design Commission for Six Hundred Four Shoes",
         "price": 2500,
-        "image": "/img1/12.png",
+        "image": "/img1/12.jpg",
         "description": "A unique art-meets-fashion collaboration sneaker commissioned by Six Hundred Four Shoes, titled 'Let Us Run'. Designed for collectors who value creativity and craftsmanship.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
@@ -99,7 +99,7 @@
         "id": 13,
         "name": "Louis Vuitton Monogram Shine Shawl",
         "price": 1200,
-        "image": "/img1/13.png",
+        "image": "/img1/13.jpg",
         "description": "The Louis Vuitton Monogram Shine Shawl combines softness with subtle shine, made from a blend of silk and wool. A timeless accessory for every luxury wardrobe.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
@@ -107,7 +107,7 @@
         "id": 14,
         "name": "Robosen Elite Optimus Prime Auto-Converting Robot",
         "price": 900,
-        "image": "/img1/14.png",
+        "image": "/img1/14.jpg",
         "description": "An advanced Robosen Elite Optimus Prime robot that auto-converts between modes with voice commands. A collector's dream for fans of Transformers and tech enthusiasts.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
@@ -115,7 +115,7 @@
         "id": 15,
         "name": "Squid Game 'Young-hee' Doll",
         "price": 200,
-        "image": "/img1/15.png",
+        "image": "/img1/15.jpg",
         "description": "A collectible Squid Game 'Young-hee' doll inspired by the hit series. A striking display piece for fans and pop culture collectors.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
@@ -123,7 +123,7 @@
         "id": 16,
         "name": "Louis Vuitton Millionaires Joystorm Sunglasses",
         "price": 1000,
-        "image": "/img1/16.png",
+        "image": "/img1/16.jpg",
         "description": "Louis Vuitton Millionaires Joystorm sunglasses with bold design and signature detailing. A luxury eyewear statement that blends modern edge with classic LV craftsmanship.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
