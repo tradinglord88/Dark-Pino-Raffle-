@@ -3888,3 +3888,7 @@ html {
     /* smaller on mobile */
   }
 }
+
+.footer-copy {
+  color: rgba(255, 180, 40, 1);
+}

@@ -3,7 +3,7 @@
         "id": 1,
         "name": "Louis Vuitton x NBA Basketball Keepall 55 Travel Bag",
         "price": 3000,
-        "image": "/img1/1.png",
+        "image": "/img1/1.jpg",
         "description": "The Louis Vuitton x NBA collaboration brings this iconic Keepall 55 travel bag. Crafted with monogram canvas and featuring the NBA logo, it's designed for basketball fans and fashion enthusiasts alike.",
         "drawTime": "2025-01-01T23:59:59Z"
     },
@@ -11,7 +11,7 @@
         "id": 2,
         "name": "Louis Vuitton x NBA Monogram Black Windbreaker Parka Jacket",
         "price": 3000,
-        "image": "/img1/2.png",
+        "image": "/img1/2.jpg",
         "description": "A stylish windbreaker parka jacket from Louis Vuitton x NBA, featuring a monogram black pattern. The jacket combines comfort and high fashion, perfect for cold weather and sports enthusiasts.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
@@ -19,7 +19,7 @@
         "id": 3,
         "name": "Louis Vuitton Timberland 6\" Ankle Boot in Black Monogram Nubuck Calf Leather",
         "price": 3000,
-        "image": "/img1/3.png",
+        "image": "/img1/3.jpg",
         "description": "These Timberland ankle boots by Louis Vuitton are crafted from black monogram nubuck calf leather. They combine rugged durability with luxury, making them a unique fashion statement.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
@@ -27,7 +27,7 @@
         "id": 4,
         "name": "Burberry Check Folding Umbrella",
         "price": 600,
-        "image": "/img1/4.png",
+        "image": "/img1/4.jpg",
         "description": "A Burberry classic: the Check folding umbrella. Known for its iconic check pattern and high-quality craftsmanship, it's a stylish and functional accessory for any rainy day.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
