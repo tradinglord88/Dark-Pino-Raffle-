@@ -3868,3 +3868,24 @@ html {
 .footer {
   background-color: rgba(73, 70, 70, 0.3);
 }
+
+/* Footer Logo Styling */
+.footer-brand {
+  text-align: center;
+}
+
+.footer-logo {
+  width: 80px;
+  /* Adjust size here */
+  height: auto;
+  margin: 0 auto 12px;
+  /* centers + adds spacing below */
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .footer-logo {
+    width: 65px;
+    /* smaller on mobile */
+  }
+}

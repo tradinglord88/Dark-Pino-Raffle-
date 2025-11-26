@@ -3,11 +3,16 @@ export default function Footer() {
         <footer className="footer">
             <div id="bubble-anchor"></div>
 
-
             {/* === GRID CONTENT === */}
             <div className="footer-grid">
 
-                <div className="col">
+                <div className="col footer-brand">
+                    <img
+                        src="/Image/logo.png"   // ⬅️ replace with your actual logo path
+                        alt="DPino Logo"
+                        className="footer-logo"
+                    />
+
                     <h3>DPino Contests</h3>
                     <p>Premium raffles, luxury 1 of 1 drops, and life-changing prizes.</p>
                 </div>
