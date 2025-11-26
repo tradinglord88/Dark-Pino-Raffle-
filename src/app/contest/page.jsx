@@ -255,6 +255,7 @@ export default function ContestPage() {
             </section>
 
             {/* ========================= MONTHLY PRIZES (FROM prizes.json) ========================= */}
+
             <section className="how-to-enter">
                 <div className="container">
                     <h2 className="title">Monthly Prize Pool</h2>
@@ -292,10 +293,8 @@ export default function ContestPage() {
                                         <div className="dp-title">{prize.name}</div>
 
                                         <div className="dp-info">
-                                            <div className="dp-price">{formatUSD(price)}</div>
-                                            <div className="dp-tickets">
-                                                🎟 {tickets} Tickets
-                                            </div>
+                                            <div className="dp-price">Worth: {formatUSD(price)}</div>
+
                                         </div>
                                     </Link>
 

@@ -145,5 +145,32 @@
         "price": 15000,
         "image": "/img/21.jpeg",
         "description": "A museum-grade Louis Vuitton bag completely hand-painted by Dark Pino. The centerpiece of art, fashion, and luxury."
+    },
+    {
+        "id": 22,
+        "name": "Dark Pino Lighter",
+        "price": 100,
+        "image": "/img/lighter.jpg",
+        "description": "Limited edition Dark Pino custom lighter with unique artwork.",
+        "specialOffer": true,
+        "offerType": "buy10get2"
+    },
+    {
+        "id": 23,
+        "name": "Give Jeets Nothing Shirt",
+        "price": 200,
+        "image": "/img/shirt.jpg",
+        "description": "Exclusive 'Give Jeets Nothing' t-shirt with Dark Pino design.",
+        "specialOffer": true,
+        "offerType": "buy10get2"
+    },
+    {
+        "id": 24,
+        "name": "Give Jeets Nothing Hoodie",
+        "price": 300,
+        "image": "/img/hoodie.jpg",
+        "description": "Premium 'Give Jeets Nothing' hoodie with custom Dark Pino artwork.",
+        "specialOffer": true,
+        "offerType": "buy10get2"
     }
 ]

@@ -3900,3 +3900,148 @@ html {
 .footer-copy {
   color: rgba(255, 180, 40, 1);
 }
+
+.worth-label {
+  font-weight: bold;
+  color: #F8C200;
+  /* or whatever matches your theme */
+}
+
+.worth {
+  color: #F8C200;
+  margin-bottom: 10px;
+
+  font-size: 20px;
+}
+
+/* Special Offers Section Styles */
+.sp-section {
+  padding: 3rem 0;
+  background: black;
+}
+
+.sp-desc {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sp-desc h1 {
+  font-size: 2.5rem;
+  color: rgba(255, 180, 40, 1);
+  margin-bottom: 1rem;
+}
+
+.sp-desc p {
+  font-size: 1.2rem;
+  color: rgba(255, 180, 40, 1);
+}
+
+.sp-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sp-card {
+  background: black;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #F8C200;
+}
+
+.sp-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.sp-card img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+}
+
+.sp-card-content {
+  padding: 1.5rem;
+}
+
+.sp-card-text h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 180, 40, 1);
+}
+
+.sp-card-text .sp-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #F8C200;
+  margin-bottom: 0.5rem;
+}
+
+.sp-card-text .sp-tickets {
+  color: rgba(255, 180, 40, 1);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.sp-badge {
+  background: rgba(255, 180, 40, 1);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.sp-offer-details {
+  background: rgba(73, 70, 70, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.sp-offer-details p {
+  margin: 0.3rem 0;
+  color: #555;
+}
+
+.sp-add-to-cart-btn {
+  width: 100%;
+  padding: 12px 24px;
+  background: #F8C200;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.sp-add-to-cart-btn:hover {
+  background: #e6b800;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sp-container {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+
+  .sp-desc h1 {
+    font-size: 2rem;
+  }
+
+  .sp-desc p {
+    font-size: 1rem;
+  }
+}

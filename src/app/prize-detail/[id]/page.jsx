@@ -14,9 +14,19 @@ export default function PrizeDetailPage({ params }) {
     const [entryTickets, setEntryTickets] = useState(1);
     const [confirmMsg, setConfirmMsg] = useState("");
 
-    const [userTickets, setUserTickets] = useState(null); // Real balance or null
+    const [userTickets, setUserTickets] = useState(null);
     const { user, isLoaded } = useUser();
 
+    // Format currency function (same as contest page)
+    const formatUSD = (n) =>
+        Number(n || 0).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0,
+        });
+
+    // Calculate tickets function (same as contest page)
+    const calcTickets = (price) => Math.floor((Number(price) || 0) / 100);
 
     // --- UNWRAP PARAMS ---
     useEffect(() => {
@@ -26,7 +36,6 @@ export default function PrizeDetailPage({ params }) {
         }
         unwrapParams();
     }, [params]);
-
 
     // --- LOAD PRIZE & SIMILAR PRIZES ---
     useEffect(() => {
@@ -47,11 +56,10 @@ export default function PrizeDetailPage({ params }) {
             });
     }, [id]);
 
-
     // --- LOAD USER TICKET BALANCE ---
     useEffect(() => {
         async function loadTickets() {
-            if (!isLoaded) return; // Wait for Clerk
+            if (!isLoaded) return;
             if (!user) {
                 setUserTickets(null);
                 return;
@@ -75,7 +83,6 @@ export default function PrizeDetailPage({ params }) {
         loadTickets();
     }, [isLoaded, user]);
 
-
     // --- HANDLE ENTRY SUBMISSION ---
     const submitTickets = async () => {
         if (!user) {
@@ -93,7 +100,6 @@ export default function PrizeDetailPage({ params }) {
             return;
         }
 
-        // Call API
         const res = await fetch("/api/enter", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -111,11 +117,9 @@ export default function PrizeDetailPage({ params }) {
             return;
         }
 
-        // Update UI instantly
         setUserTickets(data.newBalance);
         setConfirmMsg(`🎉 Successfully entered ${entryTickets} ticket(s)!`);
     };
-
 
     if (!prize) {
         return (
@@ -125,14 +129,11 @@ export default function PrizeDetailPage({ params }) {
         );
     }
 
-
     return (
         <main className="container">
-
             <Link href="/contest" className="back-link">← Back to Contest</Link>
 
             <div className="detail">
-
                 {/* IMAGE */}
                 <div className="image">
                     <Image
@@ -147,6 +148,13 @@ export default function PrizeDetailPage({ params }) {
                 {/* CONTENT */}
                 <div className="content">
                     <h1 className="name">{prize.name}</h1>
+
+                    {/* ADDED: Worth and Tickets info (like contest page) */}
+                    <div className="prize-value-info">
+                        <div className="worth">Worth: {formatUSD(prize.price)}</div>
+                        <div className="tickets-earned">🎟 {calcTickets(prize.price)} Tickets when purchased</div>
+                    </div>
+
                     <p className="description">{prize.description}</p>
 
                     {/* --- TICKET BALANCE --- */}
@@ -177,20 +185,14 @@ export default function PrizeDetailPage({ params }) {
                             placeholder="1"
                             onChange={(e) => {
                                 const value = e.target.value;
-                                // Handle empty input or non-numeric values
                                 if (value === "" || isNaN(Number(value))) {
                                     setEntryTickets(1);
                                 } else {
                                     setEntryTickets(Number(value));
                                 }
                             }}
-                            onFocus={(e) => {
-                                // On mobile, when user focuses on the input, select all text
-                                // This makes it easier to replace the initial value
-                                e.target.select();
-                            }}
+                            onFocus={(e) => e.target.select()}
                             onKeyDown={(e) => {
-                                // Prevent the 'e' character in scientific notation
                                 if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
                                     e.preventDefault();
                                 }
@@ -208,8 +210,8 @@ export default function PrizeDetailPage({ params }) {
                     )}
 
                     {/* --- VIEW WINNER BUTTON AFTER CONTEST ENDS --- */}
-                    {prize.endDate && Date.now() > new Date(prize.endDate).getTime() && (
-                        <a
+                    {prize.drawTime && Date.now() > new Date(prize.drawTime).getTime() && (
+                        <Link
                             href={`/winners/${prize.id}`}
                             className="winner-btn"
                             style={{
@@ -226,24 +228,25 @@ export default function PrizeDetailPage({ params }) {
                             }}
                         >
                             🎉 View Winner
-                        </a>
+                        </Link>
                     )}
-
                 </div>
-
             </div>
 
             <div className="title">Similar Prizes</div>
 
-            <div className="similar-prizes-grid">
+            {/* UPDATED: Use same styling as contest page */}
+            <div className="listProduct">
                 {similar.map((item) => (
-                    <a key={item.id} href={`/prize-detail/${item.id}`}>
+                    <Link key={item.id} href={`/detail/${item.id}`} className="dp-card">
                         <img src={item.image} alt={item.name} />
-                        <h2>{item.name}</h2>
-                    </a>
+                        <div className="dp-title">{item.name}</div>
+                        <div className="dp-info">
+                            <div className="dp-price">Worth: {formatUSD(item.price)}</div>
+                        </div>
+                    </Link>
                 ))}
             </div>
-
         </main>
     );
 }
