@@ -3404,14 +3404,14 @@ html {
 .footer-grid .col h3 {
   font-size: 18px;
   font-weight: 700;
-  color: rgba(252, 198, 3, 0.719);
+  color: rgba(255, 180, 40, 1);
 }
 
 .footer-grid .col p,
 .footer-grid .col a {
   display: block;
   font-size: 14px;
-  color: rgba(252, 198, 3, 0.719);
+  color: rgba(255, 180, 40, 1);
   text-decoration: none;
   opacity: 0.85;
 }
@@ -3517,7 +3517,7 @@ html {
     margin-top: 30px;
     text-align: center;
     font-size: 14px;
-    color: rgba(252, 198, 3, 0.719);
+    color: rgba(255, 180, 40, 1);
   }
 }
 
@@ -3878,14 +3878,14 @@ html {
   width: 80px;
   /* Adjust size here */
   height: auto;
-  margin: 0 auto 12px;
+  margin: 0 auto;
   /* centers + adds spacing below */
   display: block;
 }
 
 @media (max-width: 600px) {
   .footer-logo {
-    width: 65px;
+    width: 20%;
     /* smaller on mobile */
   }
 }
