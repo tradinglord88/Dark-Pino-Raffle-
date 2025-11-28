@@ -274,7 +274,7 @@ export default function PrizeDetailPage({ params }) {
             {/* UPDATED: Use same styling as contest page */}
             <div className="listProduct">
                 {similar.map((item) => (
-                    <Link key={item.id} href={`/detail/${item.id}`} className="dp-card">
+                    <Link key={item.id} href={`/prize-detail/${item.id}`} className="dp-card">
                         <img src={item.image} alt={item.name} />
                         <div className="dp-title">{item.name}</div>
                         <div className="dp-info">
