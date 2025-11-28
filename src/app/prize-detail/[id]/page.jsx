@@ -95,7 +95,10 @@ export default function PrizeDetailPage({ params }) {
             return;
         }
 
-        if (entryTickets > userTickets) {
+        // Ensure we have a valid number (handle empty/cleared input)
+        const ticketsToEnter = entryTickets || 1;
+
+        if (ticketsToEnter > userTickets) {
             setConfirmMsg("❌ Not enough tickets.");
             return;
         }
@@ -106,7 +109,7 @@ export default function PrizeDetailPage({ params }) {
             body: JSON.stringify({
                 clerkId: user.id,
                 prizeId: Number(id),
-                tickets: entryTickets,
+                tickets: ticketsToEnter,
             }),
         });
 
@@ -118,7 +121,46 @@ export default function PrizeDetailPage({ params }) {
         }
 
         setUserTickets(data.newBalance);
-        setConfirmMsg(`🎉 Successfully entered ${entryTickets} ticket(s)!`);
+        setConfirmMsg(`🎉 Successfully entered ${ticketsToEnter} ticket(s)!`);
+    };
+
+    // Handle input changes with better mobile support
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+
+        // If input is empty (user cleared it), set to empty string temporarily
+        // This allows mobile users to type freely without the "1" interfering
+        if (value === "") {
+            setEntryTickets("");
+            return;
+        }
+
+        // Parse the number
+        const numValue = Number(value);
+
+        // If it's a valid positive number, use it
+        if (!isNaN(numValue) && numValue > 0) {
+            setEntryTickets(numValue);
+        }
+        // If invalid (like negative or zero), default to 1
+        else {
+            setEntryTickets(1);
+        }
+    };
+
+    // Handle blur event - when user leaves the field, ensure we have a valid value
+    const handleInputBlur = (e) => {
+        const value = e.target.value;
+
+        // If field is empty or invalid, set to 1
+        if (value === "" || isNaN(Number(value)) || Number(value) < 1) {
+            setEntryTickets(1);
+        }
+
+        // If value exceeds user's ticket balance, set to max available
+        if (userTickets !== null && Number(value) > userTickets) {
+            setEntryTickets(userTickets);
+        }
     };
 
     if (!prize) {
@@ -183,14 +225,8 @@ export default function PrizeDetailPage({ params }) {
                             max={userTickets || 1}
                             value={entryTickets}
                             placeholder="1"
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                if (value === "" || isNaN(Number(value))) {
-                                    setEntryTickets(1);
-                                } else {
-                                    setEntryTickets(Number(value));
-                                }
-                            }}
+                            onChange={handleInputChange}
+                            onBlur={handleInputBlur}
                             onFocus={(e) => e.target.select()}
                             onKeyDown={(e) => {
                                 if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
