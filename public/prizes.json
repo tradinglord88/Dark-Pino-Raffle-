@@ -164,7 +164,7 @@
         "name": "Chanel Blue Quilted Lambskin Mini Rectangular Flap",
         "price": 4500,
         "image": "/img1/21.jpg",
-        "description": "A luxurious Chanel Mini Rectangular Flap bag crafted from blue quilted lambskin. A timeless fashion statement and collector’s favorite.",
+        "description": "A luxurious Chanel Mini Rectangular Flap bag crafted from blue quilted lambskin. A timeless fashion statement and collector's favorite.",
         "drawTime": "2026-01-31T23:59:59Z"
     },
     {
@@ -189,6 +189,14 @@
         "price": 800,
         "image": "/img1/24.jpg",
         "description": "A Louis Vuitton Monogram Wool Carry On Cap featuring luxury craftsmanship and signature monogram styling. A perfect fashion accessory for any season.",
+        "drawTime": "2026-01-31T23:59:59Z"
+    },
+    {
+        "id": 25,
+        "name": "Samsung 7.5 cu. ft. Smart Gas Dryer with Steam Sanitize+",
+        "price": 899,
+        "image": "/img1/25.jpg",
+        "description": "A premium Samsung smart gas dryer featuring Steam Sanitize+ technology, Wi-Fi connectivity, and sensor drying. Offers 10 preset drying cycles and optimal fabric care with 7.5 cubic feet capacity.",
         "drawTime": "2026-01-31T23:59:59Z"
     }
 ]

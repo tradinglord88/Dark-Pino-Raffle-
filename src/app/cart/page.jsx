@@ -6,47 +6,60 @@ import { calculateSpecialOfferPricing } from "@/utils/specialOffers";
 
 export default function CartPage() {
     const { userId } = useAuth();
-
-    console.log("SUPABASE URL =", process.env.NEXT_PUBLIC_SUPABASE_URL);
-
     const [cart, setCart] = useState([]);
     const [calculatedCart, setCalculatedCart] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         const saved = localStorage.getItem("dpino-cart");
         if (saved) {
-            const cartData = JSON.parse(saved);
-            setCart(cartData);
+            try {
+                const cartData = JSON.parse(saved);
+                setCart(cartData);
 
-            // Apply special offer pricing
-            const calculated = calculateSpecialOfferPricing(cartData);
-            setCalculatedCart(calculated);
+                // Apply special offer pricing
+                const calculated = calculateSpecialOfferPricing(cartData);
+                setCalculatedCart(calculated);
+            } catch (err) {
+                console.error("Error loading cart:", err);
+                setError("Failed to load cart data");
+            }
         }
     }, []);
 
     const updateCart = (newCart) => {
-        setCart(newCart);
-        localStorage.setItem("dpino-cart", JSON.stringify(newCart));
+        try {
+            setCart(newCart);
+            localStorage.setItem("dpino-cart", JSON.stringify(newCart));
 
-        // Recalculate special offers
-        const calculated = calculateSpecialOfferPricing(newCart);
-        setCalculatedCart(calculated);
+            // Recalculate special offers
+            const calculated = calculateSpecialOfferPricing(newCart);
+            setCalculatedCart(calculated);
+            setError(""); // Clear any previous errors
+        } catch (err) {
+            console.error("Error updating cart:", err);
+            setError("Failed to update cart");
+        }
     };
 
     const increaseQty = (id) => {
-        updateCart(cart.map(item =>
+        const newCart = cart.map(item =>
             item.id === id ? { ...item, qty: item.qty + 1 } : item
-        ));
+        );
+        updateCart(newCart);
     };
 
     const decreaseQty = (id) => {
-        updateCart(cart.map(item =>
+        const newCart = cart.map(item =>
             item.id === id ? { ...item, qty: Math.max(1, item.qty - 1) } : item
-        ));
+        );
+        updateCart(newCart);
     };
 
     const removeItem = (id) => {
-        updateCart(cart.filter(item => item.id !== id));
+        const newCart = cart.filter(item => item.id !== id);
+        updateCart(newCart);
     };
 
     const handleCheckout = async () => {
@@ -55,24 +68,46 @@ export default function CartPage() {
             return;
         }
 
-        // Use the calculated cart for checkout (with proper pricing)
-        const checkoutCart = calculatedCart ? calculatedCart.cart : cart;
+        if (!calculatedCart || calculatedCart.cart.length === 0) {
+            alert("Your cart is empty.");
+            return;
+        }
 
-        const res = await fetch("/api/checkout", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                cart: checkoutCart,
-                userId,
-                calculatedTotal: calculatedCart?.total,
-                calculatedTickets: calculatedCart?.totalTickets
-            }),
-        });
+        setIsLoading(true);
+        setError("");
 
-        const data = await res.json();
+        try {
+            // Use the calculated cart for checkout (with proper pricing)
+            const checkoutCart = calculatedCart.cart;
 
-        if (data.url) window.location.href = data.url;
-        else alert("Checkout failed");
+            const res = await fetch("/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    cart: checkoutCart,
+                    userId,
+                    calculatedTotal: calculatedCart.total,
+                    calculatedTickets: calculatedCart.totalTickets
+                }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Checkout failed");
+            }
+
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                throw new Error("No checkout URL received");
+            }
+        } catch (err) {
+            console.error("Checkout error:", err);
+            setError(err.message || "Checkout failed. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     if (!calculatedCart) {
@@ -87,6 +122,12 @@ export default function CartPage() {
     return (
         <div className="cart-container">
             <h1 className="title">Your Cart</h1>
+
+            {error && (
+                <div className="error-message">
+                    {error}
+                </div>
+            )}
 
             {calculatedCart.cart.length === 0 ? (
                 <p>Your cart is empty.</p>
@@ -123,12 +164,23 @@ export default function CartPage() {
                                 </div>
 
                                 <div className="cart-qty">
-                                    <button onClick={() => decreaseQty(item.id)}>-</button>
+                                    <button
+                                        onClick={() => decreaseQty(item.id)}
+                                        disabled={isLoading}
+                                    >
+                                        -
+                                    </button>
                                     <span>{item.originalQuantity}</span>
-                                    <button onClick={() => increaseQty(item.id)}>+</button>
+                                    <button
+                                        onClick={() => increaseQty(item.id)}
+                                        disabled={isLoading}
+                                    >
+                                        +
+                                    </button>
                                     <button
                                         className="remove-btn"
                                         onClick={() => removeItem(item.id)}
+                                        disabled={isLoading}
                                     >
                                         Remove
                                     </button>
@@ -141,8 +193,12 @@ export default function CartPage() {
                         <h2>Total: ${calculatedCart.total.toLocaleString()}</h2>
                         <h3>Tickets Earned: 🎟 {calculatedCart.totalTickets}</h3>
 
-                        <button className="checkout-btn" onClick={handleCheckout}>
-                            Proceed to Checkout
+                        <button
+                            className="checkout-btn"
+                            onClick={handleCheckout}
+                            disabled={isLoading || calculatedCart.cart.length === 0}
+                        >
+                            {isLoading ? "Processing..." : "Proceed to Checkout"}
                         </button>
                     </div>
                 </>

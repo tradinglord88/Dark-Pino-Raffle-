@@ -32,29 +32,70 @@ export async function POST(req) {
             return new Response("Missing metadata", { status: 400 });
         }
 
+        // Use the calculated tickets from your cart system (more accurate)
+        const metadataTickets = parseInt(session.metadata.total_tickets) || 0;
         const amountTotal = session.amount_total / 100;
-        const ticketsToAdd = Math.floor(amountTotal / 100);
-        console.log("🎟 Tickets to add:", ticketsToAdd);
 
-        const { data: user, error } = await supabaseAdmin
-            .from("users")
-            .select("tickets")
-            .eq("clerk_id", clerkId)
-            .single();
+        // Fallback calculation if metadata is missing
+        const fallbackTickets = Math.floor(amountTotal / 100);
+        const ticketsToAdd = metadataTickets > 0 ? metadataTickets : fallbackTickets;
 
-        if (!user) {
-            console.error("❌ Supabase user missing:", clerkId);
-            return new Response("User not found", { status: 200 });
+        console.log("🎟 Tickets calculation:", {
+            fromMetadata: metadataTickets,
+            fromAmount: fallbackTickets,
+            finalTickets: ticketsToAdd,
+            amountTotal: amountTotal
+        });
+
+        try {
+            // Get current user data
+            const { data: user, error: userError } = await supabaseAdmin
+                .from("users")
+                .select("tickets")
+                .eq("clerk_id", clerkId)
+                .single();
+
+            if (userError || !user) {
+                console.error("❌ Supabase user missing:", clerkId, userError);
+                return new Response("User not found", { status: 200 });
+            }
+
+            const newTickets = user.tickets + ticketsToAdd;
+
+            // Update user tickets
+            const { error: updateError } = await supabaseAdmin
+                .from("users")
+                .update({ tickets: newTickets })
+                .eq("clerk_id", clerkId);
+
+            if (updateError) {
+                console.error("❌ Failed to update tickets:", updateError);
+                return new Response("Database error", { status: 500 });
+            }
+
+            // ✅ NEW: Store purchase history
+            const { error: purchaseError } = await supabaseAdmin
+                .from("purchases")
+                .insert({
+                    clerk_id: clerkId,
+                    stripe_session_id: session.id,
+                    amount_total: amountTotal,
+                    tickets_earned: ticketsToAdd,
+                    metadata: session.metadata,
+                    purchased_at: new Date().toISOString()
+                });
+
+            if (purchaseError) {
+                console.error("❌ Failed to save purchase history:", purchaseError);
+                // Don't fail the whole webhook for this
+            }
+
+            console.log(`✅ Updated tickets for ${clerkId}: ${user.tickets} → ${newTickets} (added ${ticketsToAdd})`);
+
+        } catch (dbError) {
+            console.error("❌ Database operation failed:", dbError);
+            return new Response("Database error", { status: 500 });
         }
-
-        const newTickets = user.tickets + ticketsToAdd;
-
-        await supabaseAdmin
-            .from("users")
-            .update({ tickets: newTickets })
-            .eq("clerk_id", clerkId);
-
-        console.log(`✅ Updated tickets for ${clerkId}: ${newTickets}`);
     }
 
     return new Response("OK", { status: 200 });
