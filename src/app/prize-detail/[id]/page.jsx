@@ -194,7 +194,6 @@ export default function PrizeDetailPage({ params }) {
                     {/* ADDED: Worth and Tickets info (like contest page) */}
                     <div className="prize-value-info">
                         <div className="worth">Worth: {formatUSD(prize.price)}</div>
-                        <div className="tickets-earned">🎟 {calcTickets(prize.price)} Tickets when purchased</div>
                     </div>
 
                     <p className="description">{prize.description}</p>
