@@ -9,7 +9,10 @@ export default function CartPage() {
     const [cart, setCart] = useState([]);
     const [calculatedCart, setCalculatedCart] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
     const [error, setError] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState("stripe"); // "stripe" or "etransfer"
+    const [userEmail, setUserEmail] = useState("");
 
     useEffect(() => {
         const saved = localStorage.getItem("dpino-cart");
@@ -26,6 +29,12 @@ export default function CartPage() {
                 setError("Failed to load cart data");
             }
         }
+
+        // Get user email from localStorage or Clerk if available
+        const storedEmail = localStorage.getItem("dpino-user-email");
+        if (storedEmail) {
+            setUserEmail(storedEmail);
+        }
     }, []);
 
     const updateCart = (newCart) => {
@@ -36,7 +45,7 @@ export default function CartPage() {
             // Recalculate special offers
             const calculated = calculateSpecialOfferPricing(newCart);
             setCalculatedCart(calculated);
-            setError(""); // Clear any previous errors
+            setError("");
         } catch (err) {
             console.error("Error updating cart:", err);
             setError("Failed to update cart");
@@ -62,7 +71,7 @@ export default function CartPage() {
         updateCart(newCart);
     };
 
-    const handleCheckout = async () => {
+    const handleStripeCheckout = async () => {
         if (!userId) {
             alert("You must be signed in to checkout.");
             return;
@@ -73,11 +82,10 @@ export default function CartPage() {
             return;
         }
 
-        setIsLoading(true);
+        setCheckoutLoading(true);
         setError("");
 
         try {
-            // Use the calculated cart for checkout (with proper pricing)
             const checkoutCart = calculatedCart.cart;
 
             const res = await fetch("/api/checkout", {
@@ -87,7 +95,8 @@ export default function CartPage() {
                     cart: checkoutCart,
                     userId,
                     calculatedTotal: calculatedCart.total,
-                    calculatedTickets: calculatedCart.totalTickets
+                    calculatedTickets: calculatedCart.totalTickets,
+                    paymentMethod: "stripe"
                 }),
             });
 
@@ -104,9 +113,74 @@ export default function CartPage() {
             }
         } catch (err) {
             console.error("Checkout error:", err);
-            setError(err.message || "Checkout failed. Please try again.");
+            setError(err.message || "Stripe checkout failed. Please try again.");
         } finally {
-            setIsLoading(false);
+            setCheckoutLoading(false);
+        }
+    };
+
+    const handleEtransferSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!userId) {
+            alert("You must be signed in to checkout.");
+            return;
+        }
+
+        if (!calculatedCart || calculatedCart.cart.length === 0) {
+            alert("Your cart is empty.");
+            return;
+        }
+
+        if (!userEmail || !userEmail.includes("@")) {
+            alert("Please enter a valid email address for E-Transfer.");
+            return;
+        }
+
+        setCheckoutLoading(true);
+        setError("");
+
+        try {
+            // Save email for future use
+            localStorage.setItem("dpino-user-email", userEmail);
+
+            const checkoutCart = calculatedCart.cart;
+
+            const res = await fetch("/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    cart: checkoutCart,
+                    userId,
+                    calculatedTotal: calculatedCart.total,
+                    calculatedTickets: calculatedCart.totalTickets,
+                    paymentMethod: "etransfer",
+                    userEmail: userEmail
+                }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "E-Transfer request failed");
+            }
+
+            if (data.success) {
+                // Clear cart on successful E-Transfer request
+                localStorage.removeItem("dpino-cart");
+                setCart([]);
+                setCalculatedCart({ cart: [], total: 0, totalTickets: 0 });
+
+                // Show success message with E-Transfer instructions
+                alert(`✅ E-Transfer request submitted successfully!\n\nPlease send $${calculatedCart.total} to:\n📧 etransfer@darkpino.xyz\n\nInclude your user ID in the message: ${userId}\n\nOnce payment is confirmed, your tickets will be added automatically.`);
+            } else {
+                throw new Error("E-Transfer request failed");
+            }
+        } catch (err) {
+            console.error("E-Transfer error:", err);
+            setError(err.message || "E-Transfer request failed. Please try again.");
+        } finally {
+            setCheckoutLoading(false);
         }
     };
 
@@ -141,7 +215,6 @@ export default function CartPage() {
                                 <div>
                                     <div className="cart-name">{item.name}</div>
 
-                                    {/* Show special offer details */}
                                     {item.specialOffer && item.freeQuantity > 0 && (
                                         <div className="special-offer-info">
                                             <div className="offer-breakdown">
@@ -157,7 +230,6 @@ export default function CartPage() {
                                         ${item.price} × {item.specialOffer ? item.paidQuantity : item.qty} {item.specialOffer ? 'paid items' : 'items'}
                                     </div>
 
-                                    {/* Show tickets for this item */}
                                     <div className="item-tickets">
                                         🎟 Tickets: {item.totalTickets}
                                     </div>
@@ -166,21 +238,21 @@ export default function CartPage() {
                                 <div className="cart-qty">
                                     <button
                                         onClick={() => decreaseQty(item.id)}
-                                        disabled={isLoading}
+                                        disabled={checkoutLoading}
                                     >
                                         -
                                     </button>
                                     <span>{item.originalQuantity}</span>
                                     <button
                                         onClick={() => increaseQty(item.id)}
-                                        disabled={isLoading}
+                                        disabled={checkoutLoading}
                                     >
                                         +
                                     </button>
                                     <button
                                         className="remove-btn"
                                         onClick={() => removeItem(item.id)}
-                                        disabled={isLoading}
+                                        disabled={checkoutLoading}
                                     >
                                         Remove
                                     </button>
@@ -193,13 +265,84 @@ export default function CartPage() {
                         <h2>Total: ${calculatedCart.total.toLocaleString()}</h2>
                         <h3>Tickets Earned: 🎟 {calculatedCart.totalTickets}</h3>
 
-                        <button
-                            className="checkout-btn"
-                            onClick={handleCheckout}
-                            disabled={isLoading || calculatedCart.cart.length === 0}
-                        >
-                            {isLoading ? "Processing..." : "Proceed to Checkout"}
-                        </button>
+                        {/* Payment Method Selection */}
+                        <div className="payment-method-selector">
+                            <h4>Select Payment Method:</h4>
+                            <div className="payment-options">
+                                <label className="payment-option">
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="stripe"
+                                        checked={paymentMethod === "stripe"}
+                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                        disabled={checkoutLoading}
+                                    />
+                                    <span>💳 Credit/Debit Card (Stripe)</span>
+                                </label>
+                                <label className="payment-option">
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="etransfer"
+                                        checked={paymentMethod === "etransfer"}
+                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                        disabled={checkoutLoading}
+                                    />
+                                    <span>📧 E-Transfer (Email Money Transfer)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        {/* E-Transfer Form (shown when selected) */}
+                        {paymentMethod === "etransfer" && (
+                            <div className="etransfer-form">
+                                <div className="etransfer-instructions">
+                                    <p><strong>Instructions:</strong></p>
+                                    <ol>
+                                        <li>Enter your email below</li>
+                                        <li>Complete checkout to receive E-Transfer details</li>
+                                        <li>Send ${calculatedCart.total} to <strong>etransfer@darkpino.xyz</strong></li>
+                                        <li>Include your user ID in the message</li>
+                                        <li>Tickets will be added once payment is confirmed</li>
+                                    </ol>
+                                </div>
+
+                                <form onSubmit={handleEtransferSubmit}>
+                                    <div className="form-group">
+                                        <label htmlFor="userEmail">Your Email Address:</label>
+                                        <input
+                                            type="email"
+                                            id="userEmail"
+                                            value={userEmail}
+                                            onChange={(e) => setUserEmail(e.target.value)}
+                                            placeholder="your.email@example.com"
+                                            required
+                                            disabled={checkoutLoading}
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="checkout-btn etransfer-btn"
+                                        disabled={checkoutLoading || !userEmail || calculatedCart.cart.length === 0}
+                                    >
+                                        {checkoutLoading ? "Processing..." : "Submit E-Transfer Request"}
+                                    </button>
+                                </form>
+                            </div>
+                        )}
+
+                        {/* Stripe Checkout Button (shown when selected) */}
+                        {paymentMethod === "stripe" && (
+                            <button
+                                className="checkout-btn stripe-btn"
+                                onClick={handleStripeCheckout}
+                                disabled={checkoutLoading || calculatedCart.cart.length === 0}
+                            >
+                                {checkoutLoading ? "Processing..." : "Proceed to Secure Checkout"}
+                            </button>
+                        )}
                     </div>
                 </>
             )}

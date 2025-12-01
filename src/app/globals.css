@@ -4045,3 +4045,413 @@ html {
     font-size: 1rem;
   }
 }
+
+/* =========================================
+   CONTACT INFO STYLING FOR FOOTER
+   ========================================= */
+
+/* Contact Info Styling */
+.contact-info {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #ccc;
+}
+
+.contact-item a {
+  color: #ddd;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contact-item a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.contact-item i {
+  font-size: 1rem;
+  color: #aaa;
+}
+
+/* Icon links specific hover colors */
+.icon-links a[href*="whatsapp"]:hover {
+  background: #25D366;
+}
+
+.icon-links a[href^="tel:"]:hover {
+  background: #34C759;
+}
+
+.icon-links a[href^="mailto:"]:hover {
+  background: #EA4335;
+}
+
+.icon-links a[href*="instagram"]:hover {
+  background: #E4405F;
+}
+
+/* Adjust the Connect column for new layout */
+.footer-grid .col:nth-child(3) {
+  text-align: center;
+}
+
+.footer-grid .col:nth-child(3) h3 {
+  margin-bottom: 1rem;
+}
+
+/* Mobile responsiveness for contact info */
+@media (max-width: 768px) {
+  .contact-info {
+    margin-top: 1.5rem;
+  }
+
+  .contact-item {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .contact-item a {
+    font-size: 0.8rem;
+  }
+}
+
+/* =========================================
+   SPECIAL OFFER STYLES FOR CART PAGE
+   ========================================= */
+.special-offer-info {
+  background: rgba(248, 194, 0, 0.1);
+  border: 1px solid rgba(248, 194, 0, 0.3);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 8px 0;
+}
+
+.offer-breakdown {
+  font-weight: 600;
+  color: #F8C200;
+  margin-bottom: 4px;
+}
+
+.offer-savings {
+  font-weight: 600;
+  color: #4CAF50;
+}
+
+.item-tickets {
+  background: rgba(248, 194, 0, 0.15);
+  padding: 6px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-top: 8px;
+  font-weight: 600;
+  color: #F8C200;
+}
+
+/* Error message styling */
+.error-message {
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  color: #dc3545;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* =========================================
+   PAYMENT METHOD STYLES
+   ========================================= */
+.payment-method-selector {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.payment-method-selector h4 {
+  margin-bottom: 0.75rem;
+  color: #ffcc00;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: background 0.2s ease;
+}
+
+.payment-option:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.payment-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #ffcc00;
+}
+
+.payment-option span {
+  font-weight: 500;
+  color: #fff;
+}
+
+/* E-Transfer Form */
+.etransfer-form {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.etransfer-instructions {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(248, 194, 0, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #ffcc00;
+}
+
+.etransfer-instructions p {
+  margin-bottom: 0.5rem;
+  color: #ffcc00;
+  font-weight: 600;
+}
+
+.etransfer-instructions ol {
+  margin-left: 1.5rem;
+  color: #ccc;
+}
+
+.etransfer-instructions li {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ffcc00;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 1rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #ffcc00;
+  box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+}
+
+/* Different button styles for payment methods */
+.stripe-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.etransfer-btn {
+  background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+}
+
+.stripe-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+.etransfer-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #009a87 0%, #87b436 100%);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .payment-option {
+    padding: 0.5rem;
+  }
+
+  .etransfer-form {
+    padding: 1rem;
+  }
+
+  .etransfer-instructions ol {
+    font-size: 0.9rem;
+  }
+}
+
+
+/* Add to your CSS file */
+.admin-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: white;
+  background: black;
+  font-size: 1.5rem;
+}
+
+.admin-dashboard {
+  padding: 20px;
+  color: white;
+  background: black;
+  min-height: 100vh;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #F8C200;
+}
+
+.admin-header h1 {
+  color: #F8C200;
+  margin: 0;
+}
+
+.back-button {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.back-button:hover {
+  background: #444;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.stat-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #F8C200;
+}
+
+.orders-table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #111;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.orders-table th {
+  background: #F8C200;
+  color: black;
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.orders-table td {
+  padding: 15px;
+  border-bottom: 1px solid #333;
+}
+
+.orders-table tr:hover {
+  background: #222;
+}
+
+.status-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.status-confirmed {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.confirm-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.confirm-btn:hover {
+  background: #218838;
+}
+
+@media (max-width: 768px) {
+  .orders-table {
+    font-size: 0.85rem;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 10px;
+  }
+
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+}
