@@ -68,9 +68,6 @@ export async function POST(req) {
 
             console.log(`✅ E-Transfer order created: ${data.id} for user ${userId}`);
 
-            // You could also send an email notification here
-            // await sendEtransferEmail(userEmail, userId, calculatedTotal, data.id);
-
             return NextResponse.json({
                 success: true,
                 orderId: data.id,
@@ -84,7 +81,7 @@ export async function POST(req) {
             });
 
         } else {
-            // Handle Stripe payment (original code)
+            // Handle Stripe payment
             const line_items = cart.map(item => {
                 const imageUrl = item.image.startsWith("http")
                     ? item.image
@@ -122,23 +119,34 @@ export async function POST(req) {
                 };
             });
 
+            // IMPROVED METADATA - includes all necessary info for webhook
             const metadata = {
                 clerk_id: userId,
                 total_tickets: calculatedTickets?.toString() || "0",
                 total_amount: calculatedTotal.toString(),
                 item_count: cart.length.toString(),
                 item_ids: cart.map(item => item.id).join(","),
-                items: cart.map(item => `${item.id}:${item.paidQuantity || item.qty}:${item.freeQuantity || 0}`).join(";"),
+                items: cart.map(item => `${item.id}:${item.paidQuantity || item.qty}:${item.freeQuantity || 0}:${item.totalTickets || 0}`).join(";"),
+                cart_items: JSON.stringify(cart.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.paidQuantity || item.qty,
+                    tickets: item.totalTickets || 0
+                }))),
                 payment_method: "stripe"
             };
 
+            // Check metadata size (Stripe limit is 500 chars for key-value pairs)
             const metadataSize = JSON.stringify(metadata).length;
-            if (metadataSize > 500) {
-                console.warn("Metadata size approaching limit:", metadataSize);
-                metadata.item_ids = cart.map(item => item.id).slice(0, 10).join(",");
+            if (metadataSize > 2000) { // Actually check against ~2000 for safety
+                console.warn("Metadata size large:", metadataSize);
+                // Remove cart_items if too large
+                delete metadata.cart_items;
+                metadata.items = cart.map(item => `${item.id}:${item.paidQuantity || item.qty}`).join(";");
             }
 
-            console.log("Creating Stripe checkout session for user:", userId);
+            console.log("Creating Stripe checkout session for user:", userId, "Total:", calculatedTotal);
 
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ["card"],
@@ -148,10 +156,35 @@ export async function POST(req) {
                 cancel_url: `${origin}/cart`,
                 metadata: metadata,
                 customer_email: userEmail || (userId.includes("@") ? userId : undefined),
-                expires_at: Math.floor(Date.now() / 1000) + (30 * 60),
+                expires_at: Math.floor(Date.now() / 1000) + (30 * 60), // 30 minutes
             });
 
             console.log("Stripe session created:", session.id);
+
+            // OPTIONAL: Create a pending purchase record immediately
+            try {
+                await supabaseAdmin
+                    .from("purchases")
+                    .insert({
+                        clerk_id: userId,
+                        amount_total: calculatedTotal,
+                        tickets_earned: calculatedTickets,
+                        payment_method: "stripe",
+                        stripe_session_id: session.id,
+                        etransfer_order_id: null,
+                        metadata: {
+                            session_id: session.id,
+                            status: "pending",
+                            cart_items: cart
+                        },
+                        purchased_at: new Date().toISOString(),
+                        created_at: new Date().toISOString()
+                    });
+                console.log("📝 Pending purchase recorded for Stripe session:", session.id);
+            } catch (purchaseError) {
+                console.log("⚠️ Could not create pending purchase record:", purchaseError.message);
+                // Non-critical error
+            }
 
             return NextResponse.json({ url: session.url });
         }

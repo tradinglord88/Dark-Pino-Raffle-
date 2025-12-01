@@ -73,16 +73,26 @@ export async function POST(req) {
                 return new Response("Database error", { status: 500 });
             }
 
-            // ✅ NEW: Store purchase history
+            // ✅ Store purchase history - MATCHING YOUR TABLE STRUCTURE
             const { error: purchaseError } = await supabaseAdmin
                 .from("purchases")
                 .insert({
                     clerk_id: clerkId,
-                    stripe_session_id: session.id,
                     amount_total: amountTotal,
                     tickets_earned: ticketsToAdd,
-                    metadata: session.metadata,
-                    purchased_at: new Date().toISOString()
+                    payment_method: "stripe",
+                    stripe_session_id: session.id,
+                    etransfer_order_id: null, // This is a Stripe payment
+                    metadata: {
+                        session_id: session.id,
+                        total_tickets: session.metadata?.total_tickets || "0",
+                        total_amount: session.metadata?.total_amount || "0",
+                        item_count: session.metadata?.item_count || "1",
+                        item_ids: session.metadata?.item_ids || "",
+                        items: session.metadata?.items || ""
+                    },
+                    purchased_at: new Date().toISOString(),
+                    created_at: new Date().toISOString() // ← ADD THIS!
                 });
 
             if (purchaseError) {

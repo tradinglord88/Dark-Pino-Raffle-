@@ -13,7 +13,7 @@ export default function Footer() {
                         className="footer-logo"
                     />
 
-                    <h3>DPino Contests</h3>
+                    <h3>DPino Prizes</h3>
                     <p>Premium raffles, luxury 1 of 1 drops, and life-changing prizes.</p>
                 </div>
 
@@ -75,7 +75,7 @@ export default function Footer() {
             </div>
 
             <div className="footer-copy">
-                © {new Date().getFullYear()} DPino Contests — All Rights Reserved
+                © {new Date().getFullYear()} DPino Prizes — All Rights Reserved
             </div>
         </footer>
     );

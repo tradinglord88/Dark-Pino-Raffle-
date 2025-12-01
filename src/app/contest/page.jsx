@@ -118,7 +118,7 @@ export default function ContestPage() {
             <section className="how-to-enter">
                 <div className="container">
                     <h2 className="title">
-                        Dark Pino <span> Contest</span>
+                        Dark Pino <span> Prizes</span>
                     </h2>
                     <p className="subtitle">
                         Enter for a chance to win luxury art, custom fashion, and
@@ -174,7 +174,7 @@ export default function ContestPage() {
             <section className="how-to-enter">
                 <div className="container">
                     <h2 className="title">
-                        How to Enter the <span>Dark Pino Holiday Contest</span>
+                        How to Enter the <span>Dark Pino Holiday Prizes</span>
                     </h2>
                     <p className="subtitle">
                         Follow these simple steps to earn tickets, enter contests, and win
@@ -367,7 +367,7 @@ export default function ContestPage() {
                         </ul>
 
                         <p style={{ marginTop: "1rem" }}>
-                            By participating, you agree to the Dark Pino Contest Terms,
+                            By participating, you agree to the Dark Pino Prizes Terms,
                             privacy policy, and any additional rules published on this site at
                             the time of entry.
                         </p>

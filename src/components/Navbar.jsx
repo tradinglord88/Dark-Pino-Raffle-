@@ -11,7 +11,7 @@ export default function Navbar() {
             <ul className="nav-links">
                 <li><Link href="/">Home</Link></li>
                 <li><Link href="/prod">Dark Pino 1 of 1s</Link></li>
-                <li><Link href="/contest">Contests</Link></li>
+                <li><Link href="/contest">Prizes</Link></li>
                 <li><Link href="/cart">Cart</Link></li>
 
                 {/* ⭐ Mobile-only My Entries */}
@@ -39,7 +39,7 @@ export default function Navbar() {
             </ul>
 
             {/* CENTER LOGO */}
-            <div className="logo">DPino Contests</div>
+            <div className="logo">DPino Prizes</div>
 
             {/* RIGHT BUTTONS (DESKTOP) */}
             <div className="btns desktop-only">

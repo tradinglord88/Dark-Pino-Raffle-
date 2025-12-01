@@ -1,20 +1,51 @@
-// app/admin/page.js - SIMPLIFIED VERSION
+// app/admin/page.js - FIXED WITH CLIENT-SIDE VERIFICATION
 "use client";
 
 import { useState, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function AdminPage() {
+    const { userId, isLoaded } = useAuth();
     const [loading, setLoading] = useState(true);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [orders, setOrders] = useState([]);
     const router = useRouter();
 
     useEffect(() => {
-        // If middleware is working, we're already authenticated and verified as admin
-        // Just fetch the admin data
-        fetchOrders();
-    }, []);
+        if (!isLoaded) return;
+
+        if (!userId) {
+            // Not signed in at all
+            router.push("/sign-in");
+            return;
+        }
+
+        // CRITICAL: Verify admin status client-side
+        const verifyAdmin = async () => {
+            try {
+                const res = await fetch(`/api/admin/verify?userId=${userId}`);
+                const data = await res.json();
+
+                if (!data.isAdmin) {
+                    console.log("🚫 Client-side check: Not an admin, redirecting");
+                    router.push("/");
+                    return;
+                }
+
+                setIsAdmin(true);
+                fetchOrders();
+            } catch (error) {
+                console.error("Admin verification error:", error);
+                router.push("/");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        verifyAdmin();
+    }, [isLoaded, userId, router]);
 
     const fetchOrders = async () => {
         try {
@@ -23,8 +54,6 @@ export default function AdminPage() {
             setOrders(data);
         } catch (error) {
             console.error("Error fetching orders:", error);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -54,7 +83,16 @@ export default function AdminPage() {
     if (loading) {
         return (
             <div className="admin-loading">
-                <h2>Loading admin dashboard...</h2>
+                <h2>Checking admin permissions...</h2>
+            </div>
+        );
+    }
+
+    if (!isAdmin) {
+        // This will briefly show before redirect happens
+        return (
+            <div className="admin-loading">
+                <h2>Redirecting...</h2>
             </div>
         );
     }
@@ -135,6 +173,11 @@ export default function AdminPage() {
                     </table>
                 </div>
             )}
+
+            <div style={{ marginTop: "40px", textAlign: "center" }}>
+                <p>User ID: {userId}</p>
+                <p>Admin Status: ✅ Verified</p>
+            </div>
         </div>
     );
 }
