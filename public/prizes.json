@@ -214,5 +214,14 @@
         "image": "/img1/27.jpg",
         "description": "Apple MacBook Air 13-inch with the revolutionary M4 chip, featuring 10-core CPU and 10-core GPU. 16GB unified memory with 512GB SSD storage. Lightweight design in stunning Sky Blue with Liquid Retina display, up to 18 hours of battery life, and advanced AI capabilities.",
         "drawTime": "2026-03-31T23:59:59Z"
+    },
+
+    {
+        "id": 28,
+        "name": "Samsung Front-Load Washer (Model WW22K6800AW/A2)",
+        "price": 850,
+        "image": "/img1/28.jpg",
+        "description": "A high-efficiency Samsung front-load washer featuring model number WW22K6800AW/A2 and serial number 0F2HSADMC09037J. Designed for reliable cleaning performance with modern energy-saving technology. Manufactured in China.",
+        "drawTime": "2026-03-31T23:59:59Z"
     }
-]
+        ]
