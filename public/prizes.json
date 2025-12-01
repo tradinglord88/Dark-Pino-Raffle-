@@ -198,5 +198,21 @@
         "image": "/img1/25.jpg",
         "description": "A premium Samsung smart gas dryer featuring Steam Sanitize+ technology, Wi-Fi connectivity, and sensor drying. Offers 10 preset drying cycles and optimal fabric care with 7.5 cubic feet capacity.",
         "drawTime": "2026-01-31T23:59:59Z"
+    },
+    {
+        "id": 26,
+        "name": "Apple iPhone 16 Pro Max (512GB)",
+        "price": 1899,
+        "image": "/img1/26.jpg",
+        "description": "The latest Apple iPhone 16 Pro Max with 6.9-inch Super Retina XDR display, A18 Pro chip, 48MP triple camera system with 5x optical zoom, and all-day battery life. Features Titanium design, Action button, and advanced computational photography.",
+        "drawTime": "2026-03-31T23:59:59Z"
+    },
+    {
+        "id": 27,
+        "name": "Apple MacBook Air 13-inch M4 Chip (16GB RAM, 512GB SSD) - Sky Blue",
+        "price": 2099,
+        "image": "/img1/27.jpg",
+        "description": "Apple MacBook Air 13-inch with the revolutionary M4 chip, featuring 10-core CPU and 10-core GPU. 16GB unified memory with 512GB SSD storage. Lightweight design in stunning Sky Blue with Liquid Retina display, up to 18 hours of battery life, and advanced AI capabilities.",
+        "drawTime": "2026-03-31T23:59:59Z"
     }
 ]
