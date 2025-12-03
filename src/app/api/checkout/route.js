@@ -1,6 +1,5 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { rateLimit, getClientId } from "@/lib/rateLimit";
 import fs from 'fs';
 import path from 'path';
