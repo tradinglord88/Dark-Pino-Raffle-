@@ -2,8 +2,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ProductDetail({ params }) {
+    const router = useRouter();
     const [product, setProduct] = useState(null);
     const [similar, setSimilar] = useState([]);
 
@@ -71,7 +73,34 @@ export default function ProductDetail({ params }) {
         // Save back into storage
         localStorage.setItem("dpino-cart", JSON.stringify(cart));
 
+        // Dispatch event so navbar updates cart count
+        window.dispatchEvent(new Event("cart-updated"));
+
         alert("Added to cart!");
+    };
+
+    const buyNow = () => {
+        // Add to cart first
+        let cart = JSON.parse(localStorage.getItem("dpino-cart")) || [];
+        const existing = cart.find(item => item.id === product.id);
+
+        if (existing) {
+            existing.qty += 1;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                qty: 1
+            });
+        }
+
+        localStorage.setItem("dpino-cart", JSON.stringify(cart));
+        window.dispatchEvent(new Event("cart-updated"));
+
+        // Redirect to cart/checkout
+        router.push("/cart");
     };
 
     return (
@@ -94,6 +123,9 @@ export default function ProductDetail({ params }) {
                     <div className="buttons">
                         <button onClick={addToCart}>
                             Add To Cart
+                        </button>
+                        <button onClick={buyNow} className="buy-now-btn">
+                            Buy Now
                         </button>
                     </div>
 

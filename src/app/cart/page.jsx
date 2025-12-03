@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { calculateSpecialOfferPricing } from "@/utils/specialOffers";
+import StripeProvider from "@/components/StripeProvider";
+import CheckoutForm from "@/components/CheckoutForm";
 
 export default function CartPage() {
     const { userId } = useAuth();
@@ -13,6 +15,12 @@ export default function CartPage() {
     const [error, setError] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("stripe"); // "stripe" or "etransfer"
     const [userEmail, setUserEmail] = useState("");
+
+    // Stripe Elements state
+    const [clientSecret, setClientSecret] = useState("");
+    const [showPaymentForm, setShowPaymentForm] = useState(false);
+    const [paymentAmount, setPaymentAmount] = useState(0);
+    const [paymentTickets, setPaymentTickets] = useState(0);
 
     useEffect(() => {
         const saved = localStorage.getItem("dpino-cart");
@@ -88,35 +96,44 @@ export default function CartPage() {
         try {
             const checkoutCart = calculatedCart.cart;
 
-            const res = await fetch("/api/checkout", {
+            // Create PaymentIntent for Stripe Elements
+            const res = await fetch("/api/create-payment-intent", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     cart: checkoutCart,
                     userId,
-                    calculatedTotal: calculatedCart.total,
-                    calculatedTickets: calculatedCart.totalTickets,
-                    paymentMethod: "stripe"
+                    userEmail: userEmail || undefined
                 }),
             });
 
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.error || "Checkout failed");
+                throw new Error(data.error || "Failed to initialize payment");
             }
 
-            if (data.url) {
-                window.location.href = data.url;
+            if (data.clientSecret) {
+                setClientSecret(data.clientSecret);
+                setPaymentAmount(data.amount);
+                setPaymentTickets(data.tickets);
+                setShowPaymentForm(true);
             } else {
-                throw new Error("No checkout URL received");
+                throw new Error("Payment initialization failed");
             }
         } catch (err) {
             console.error("Checkout error:", err);
-            setError(err.message || "Stripe checkout failed. Please try again.");
+            setError(err.message || "Failed to start checkout. Please try again.");
         } finally {
             setCheckoutLoading(false);
         }
+    };
+
+    const handleCancelPayment = () => {
+        setShowPaymentForm(false);
+        setClientSecret("");
+        setPaymentAmount(0);
+        setPaymentTickets(0);
     };
 
     const handleEtransferSubmit = async (e) => {
@@ -334,14 +351,27 @@ export default function CartPage() {
                         )}
 
                         {/* Stripe Checkout Button (shown when selected) */}
-                        {paymentMethod === "stripe" && (
+                        {paymentMethod === "stripe" && !showPaymentForm && (
                             <button
                                 className="checkout-btn stripe-btn"
                                 onClick={handleStripeCheckout}
                                 disabled={checkoutLoading || calculatedCart.cart.length === 0}
                             >
-                                {checkoutLoading ? "Processing..." : "Proceed to Secure Checkout"}
+                                {checkoutLoading ? "Initializing Payment..." : "Proceed to Secure Checkout"}
                             </button>
+                        )}
+
+                        {/* Embedded Stripe Payment Form */}
+                        {paymentMethod === "stripe" && showPaymentForm && clientSecret && (
+                            <div className="embedded-payment-form">
+                                <StripeProvider clientSecret={clientSecret}>
+                                    <CheckoutForm
+                                        amount={paymentAmount}
+                                        tickets={paymentTickets}
+                                        onCancel={handleCancelPayment}
+                                    />
+                                </StripeProvider>
+                            </div>
                         )}
                     </div>
                 </>

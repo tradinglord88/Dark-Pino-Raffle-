@@ -2,11 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function HomePage() {
+    const router = useRouter();
     const [specialOffers, setSpecialOffers] = useState([]);
     const [featuredProducts, setFeaturedProducts] = useState([]);
+    const [allProducts, setAllProducts] = useState([]);
     const [newArrivals, setNewArrivals] = useState([]);
     const [activeRaffles, setActiveRaffles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,6 +18,7 @@ export default function HomePage() {
         prizesGiven: "$1.2M+",
         activeRaffles: 12
     });
+    const [ticketQuantities, setTicketQuantities] = useState({});
 
     useEffect(() => {
         async function loadData() {
@@ -27,11 +31,14 @@ export default function HomePage() {
                 const offers = data.filter(product => product.specialOffer === true);
                 setSpecialOffers(offers);
 
-                // Featured products (highest priced items)
-                const featured = [...data]
+                // All products for Featured Prizes section (excluding special offers)
+                const allProds = [...data]
                     .filter(p => !p.specialOffer)
-                    .sort((a, b) => b.price - a.price)
-                    .slice(0, 4);
+                    .sort((a, b) => b.price - a.price);
+                setAllProducts(allProds);
+
+                // Featured products (highest priced items) - for backwards compatibility
+                const featured = allProds.slice(0, 4);
                 setFeaturedProducts(featured);
 
                 // New arrivals (latest products by ID - highest IDs = newest)
@@ -69,7 +76,86 @@ export default function HomePage() {
             maximumFractionDigits: 0,
         });
 
-    const calculateTickets = (price) => Math.floor(price / 100) * 10;
+    const calculateTickets = (price) => Math.floor(price / 100);
+
+    // Get ticket quantity for a product (default 1)
+    const getTicketQty = (productId) => ticketQuantities[productId] || 1;
+
+    // Update ticket quantity for a product
+    const updateTicketQty = (productId, delta) => {
+        setTicketQuantities(prev => {
+            const current = prev[productId] || 1;
+            const newQty = Math.max(1, current + delta);
+            return { ...prev, [productId]: newQty };
+        });
+    };
+
+    // Set specific ticket quantity
+    const setTicketQty = (productId, qty) => {
+        const newQty = Math.max(1, parseInt(qty) || 1);
+        setTicketQuantities(prev => ({ ...prev, [productId]: newQty }));
+    };
+
+    // Add tickets to cart for a prize
+    const addTicketsToCart = (product, ticketCount) => {
+        const totalPrice = ticketCount * 100; // $100 per ticket
+        let cart = JSON.parse(localStorage.getItem("dpino-cart")) || [];
+
+        // Create a unique ID for ticket entries
+        const ticketItemId = `ticket-${product.id}`;
+        const existing = cart.find(item => item.id === ticketItemId);
+
+        if (existing) {
+            existing.qty += ticketCount;
+        } else {
+            cart.push({
+                id: ticketItemId,
+                name: `${ticketCount} Ticket${ticketCount > 1 ? 's' : ''} for ${product.name}`,
+                price: 100,
+                image: product.image,
+                qty: ticketCount,
+                isTicket: true,
+                prizeId: product.id,
+                prizeName: product.name
+            });
+        }
+
+        localStorage.setItem("dpino-cart", JSON.stringify(cart));
+        window.dispatchEvent(new Event("cart-updated"));
+
+        // Reset quantity after adding
+        setTicketQuantities(prev => ({ ...prev, [product.id]: 1 }));
+
+        alert(`Added ${ticketCount} ticket${ticketCount > 1 ? 's' : ''} to cart! Total: ${formatUSD(totalPrice)}`);
+    };
+
+    // Buy tickets now (add to cart and go to checkout)
+    const buyTicketsNow = (product, ticketCount) => {
+        const totalPrice = ticketCount * 100;
+        let cart = JSON.parse(localStorage.getItem("dpino-cart")) || [];
+
+        const ticketItemId = `ticket-${product.id}`;
+        const existing = cart.find(item => item.id === ticketItemId);
+
+        if (existing) {
+            existing.qty += ticketCount;
+        } else {
+            cart.push({
+                id: ticketItemId,
+                name: `${ticketCount} Ticket${ticketCount > 1 ? 's' : ''} for ${product.name}`,
+                price: 100,
+                image: product.image,
+                qty: ticketCount,
+                isTicket: true,
+                prizeId: product.id,
+                prizeName: product.name
+            });
+        }
+
+        localStorage.setItem("dpino-cart", JSON.stringify(cart));
+        window.dispatchEvent(new Event("cart-updated"));
+        router.push("/cart");
+    };
 
     const addToCart = (product) => {
         let cart = JSON.parse(localStorage.getItem("dpino-cart")) || [];
@@ -99,6 +185,29 @@ export default function HomePage() {
         } else {
             alert(`Added to cart! Earn ${calculateTickets(product.price)} tickets!`);
         }
+    };
+
+    const buyNow = (product) => {
+        let cart = JSON.parse(localStorage.getItem("dpino-cart")) || [];
+        const existing = cart.find(item => item.id === product.id);
+
+        if (existing) {
+            existing.qty += 1;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                qty: 1,
+                specialOffer: product.specialOffer || false,
+                offerType: product.offerType || null
+            });
+        }
+
+        localStorage.setItem("dpino-cart", JSON.stringify(cart));
+        window.dispatchEvent(new Event("cart-updated"));
+        router.push("/cart");
     };
 
     return (
@@ -228,7 +337,7 @@ export default function HomePage() {
                                 <i className="ri-ticket-2-line"></i>
                             </div>
                             <h3>Earn Tickets</h3>
-                            <p>Every $10 spent earns you 1 ticket. More tickets = more chances to win!</p>
+                            <p>Each ticket costs $100. More tickets = more chances to win!</p>
                         </div>
 
                         <div className="step-card">
@@ -243,45 +352,87 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Featured Prizes */}
+            {/* Featured Prizes - All Products */}
             <section className="featured-prizes">
                 <div className="container">
                     <div className="section-header">
                         <div>
                             <h2 className="section-title">Featured Prizes</h2>
-                            <p className="section-subtitle">This month's hottest items up for grabs</p>
+                            <p className="section-subtitle">Shop now to earn tickets and win amazing prizes</p>
                         </div>
-                        <Link href="/contest" className="view-all-link">
-                            View All Prizes <i className="ri-arrow-right-line"></i>
-                        </Link>
                     </div>
 
-                    <div className="prizes-grid">
-                        {featuredProducts.map((product, index) => (
-                            <div key={product.id} className={`prize-card ${index === 0 ? "featured" : ""}`}>
-                                {index === 0 && (
-                                    <div className="featured-badge">
-                                        <i className="ri-fire-fill"></i> Hot Prize
-                                    </div>
+                    <div className="prizes-grid all-prizes">
+                        {allProducts.map((product, index) => (
+                            <div key={product.id} className="prize-card">
+                                {index < 2 && (
+                                    <div className="new-badge">NEW</div>
                                 )}
-                                <div className="prize-image">
-                                    <img src={product.image} alt={product.name} />
-                                </div>
+                                <Link href={`/detail/${product.id}`}>
+                                    <div className="prize-image">
+                                        <img src={product.image} alt={product.name} />
+                                    </div>
+                                </Link>
                                 <div className="prize-content">
-                                    <h3 className="prize-name">{product.name}</h3>
-                                    <div className="prize-value">
-                                        <span className="value-label">Value</span>
-                                        <span className="value-amount">{formatUSD(product.price)}</span>
-                                    </div>
-                                    <div className="prize-tickets">
-                                        <i className="ri-ticket-2-line"></i>
-                                        {calculateTickets(product.price)} tickets to enter
-                                    </div>
                                     <Link href={`/detail/${product.id}`}>
-                                        <button className="prize-btn">
-                                            View Details <i className="ri-arrow-right-s-line"></i>
-                                        </button>
+                                        <h3 className="prize-name">{product.name}</h3>
                                     </Link>
+                                    <div className="prize-value">
+                                        <span className="prize-price">{formatUSD(product.price)}</span>
+                                        <span className="prize-value-label">Prize Value</span>
+                                    </div>
+
+                                    {/* Ticket Quantity Selector */}
+                                    <div className="ticket-selector">
+                                        <div className="ticket-selector-label">
+                                            <i className="ri-ticket-2-line"></i> Buy Tickets
+                                        </div>
+                                        <div className="ticket-qty-controls">
+                                            <button
+                                                className="qty-btn minus"
+                                                onClick={() => updateTicketQty(product.id, -1)}
+                                                disabled={getTicketQty(product.id) <= 1}
+                                            >
+                                                <i className="ri-subtract-line"></i>
+                                            </button>
+                                            <input
+                                                type="number"
+                                                className="qty-input"
+                                                value={getTicketQty(product.id)}
+                                                onChange={(e) => setTicketQty(product.id, e.target.value)}
+                                                min="1"
+                                            />
+                                            <button
+                                                className="qty-btn plus"
+                                                onClick={() => updateTicketQty(product.id, 1)}
+                                            >
+                                                <i className="ri-add-line"></i>
+                                            </button>
+                                        </div>
+                                        <div className="ticket-total">
+                                            <span className="ticket-total-price">
+                                                {formatUSD(getTicketQty(product.id) * 100)}
+                                            </span>
+                                            <span className="ticket-total-label">
+                                                for {getTicketQty(product.id)} ticket{getTicketQty(product.id) > 1 ? 's' : ''}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="prize-buttons">
+                                        <button
+                                            className="prize-btn add-to-cart-btn"
+                                            onClick={() => addTicketsToCart(product, getTicketQty(product.id))}
+                                        >
+                                            <i className="ri-shopping-cart-line"></i> Add to Cart
+                                        </button>
+                                        <button
+                                            className="prize-btn buy-now-btn"
+                                            onClick={() => buyTicketsNow(product, getTicketQty(product.id))}
+                                        >
+                                            <i className="ri-flashlight-line"></i> Buy Now
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}

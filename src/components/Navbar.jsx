@@ -81,11 +81,6 @@ export default function Navbar() {
                     </Link>
                 </li>
                 <li>
-                    <Link href="/clearance" onClick={closeMobileMenu} className="sale-link">
-                        <i className="ri-percent-line"></i> Sale
-                    </Link>
-                </li>
-                <li>
                     <Link href="/vip" onClick={closeMobileMenu} className="vip-link">
                         <i className="ri-vip-crown-line"></i> VIP
                     </Link>

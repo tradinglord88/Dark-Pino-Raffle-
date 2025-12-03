@@ -5,13 +5,13 @@ import { useUser } from "@clerk/nextjs";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 
-// Quick entry ticket bundles
+// Quick entry ticket bundles - $100 = 1 ticket base rate
 const TICKET_BUNDLES = [
-    { id: 1, tickets: 5, price: 500, popular: false, savings: 0 },
-    { id: 2, tickets: 10, price: 900, popular: false, savings: 100 },
-    { id: 3, tickets: 25, price: 2000, popular: true, savings: 500 },
-    { id: 4, tickets: 50, price: 3500, popular: false, savings: 1500 },
-    { id: 5, tickets: 100, price: 6000, popular: false, savings: 4000 },
+    { id: 1, tickets: 1, price: 100, popular: false, savings: 0, bonus: 0 },
+    { id: 2, tickets: 3, price: 250, popular: false, savings: 50, bonus: 0 },
+    { id: 3, tickets: 5, price: 400, popular: true, savings: 100, bonus: 0 },
+    { id: 4, tickets: 10, price: 750, popular: false, savings: 250, bonus: 0 },
+    { id: 5, tickets: 25, price: 1500, popular: false, savings: 1000, bonus: 5 },
 ];
 
 export default function QuickEntriesPage() {
@@ -152,9 +152,9 @@ export default function QuickEntriesPage() {
                                     <div className="popular-badge">Most Popular</div>
                                 )}
 
-                                {bundle.savings > 0 && (
-                                    <div className="savings-badge">
-                                        Save {formatUSD(bundle.savings)}
+                                {bundle.bonus > 0 && (
+                                    <div className="bonus-badge">
+                                        +{bundle.bonus} Bonus Tickets!
                                     </div>
                                 )}
 
@@ -168,8 +168,14 @@ export default function QuickEntriesPage() {
                                 </div>
 
                                 <div className="price-per-ticket">
-                                    {formatUSD(bundle.price / bundle.tickets)} per ticket
+                                    ${(bundle.price / bundle.tickets).toFixed(2)} per ticket
                                 </div>
+
+                                {bundle.savings > 0 && (
+                                    <div className="savings-text">
+                                        You save {formatUSD(bundle.savings)}!
+                                    </div>
+                                )}
 
                                 <button
                                     className="buy-bundle-btn"
@@ -179,7 +185,9 @@ export default function QuickEntriesPage() {
                                     {purchasing && selectedBundle === bundle.id ? (
                                         <span className="loading-spinner">Processing...</span>
                                     ) : (
-                                        <>Buy Now</>
+                                        <>
+                                            <i className="ri-shopping-cart-line"></i> Buy Now
+                                        </>
                                     )}
                                 </button>
 

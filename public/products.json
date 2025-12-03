@@ -172,5 +172,341 @@
         "description": "Premium 'Give Jeets Nothing' hoodie with custom Dark Pino artwork.",
         "specialOffer": true,
         "offerType": "buy10get2"
+    },
+    {
+        "id": 25,
+        "name": "Louis Vuitton x NBA Basketball Keepall 55 Travel Bag",
+        "price": 3000,
+        "image": "/img1/1.jpg",
+        "description": "The Louis Vuitton x NBA collaboration brings this iconic Keepall 55 travel bag. Crafted with monogram canvas and featuring the NBA logo, it's designed for basketball fans and fashion enthusiasts alike."
+    },
+    {
+        "id": 26,
+        "name": "Louis Vuitton x NBA Monogram Black Windbreaker Parka Jacket",
+        "price": 3000,
+        "image": "/img1/2.jpg",
+        "description": "A stylish windbreaker parka jacket from Louis Vuitton x NBA, featuring a monogram black pattern. The jacket combines comfort and high fashion, perfect for cold weather and sports enthusiasts."
+    },
+    {
+        "id": 27,
+        "name": "Louis Vuitton Timberland 6\" Ankle Boot in Black Monogram Nubuck Calf Leather",
+        "price": 3000,
+        "image": "/img1/3.jpg",
+        "description": "These Timberland ankle boots by Louis Vuitton are crafted from black monogram nubuck calf leather. They combine rugged durability with luxury, making them a unique fashion statement."
+    },
+    {
+        "id": 28,
+        "name": "Burberry Check Folding Umbrella",
+        "price": 600,
+        "image": "/img1/4.jpg",
+        "description": "A Burberry classic: the Check folding umbrella. Known for its iconic check pattern and high-quality craftsmanship, it's a stylish and functional accessory for any rainy day."
+    },
+    {
+        "id": 29,
+        "name": "Louis Vuitton Nano Noé Handbag",
+        "price": 2500,
+        "image": "/img1/5.jpg",
+        "description": "The Louis Vuitton Nano Noé is a miniature version of the iconic Noé handbag, crafted with monogram canvas. A perfect blend of luxury and practicality for carrying your essentials."
+    },
+    {
+        "id": 30,
+        "name": "Louis Vuitton Damier Infini Campus Backpack in White Leather",
+        "price": 2000,
+        "image": "/img1/6.jpg",
+        "description": "The Louis Vuitton Damier Infini Campus backpack is crafted from white leather, offering a sleek and luxurious look. This versatile bag is perfect for both everyday use and travel."
+    },
+    {
+        "id": 31,
+        "name": "Louis Vuitton Home Mirror Trunk",
+        "price": 2500,
+        "image": "/img1/7.jpg",
+        "description": "An elegant Louis Vuitton Home Mirror Trunk that combines the brand's craftsmanship with luxurious design. Perfect as a decorative centerpiece or collectible statement piece."
+    },
+    {
+        "id": 32,
+        "name": "Adidas Originals 3D Trefoil 3-Stripes Track Jacket",
+        "price": 45,
+        "image": "/img1/8.png",
+        "description": "A stylish Adidas Originals track jacket featuring the 3D Trefoil logo and classic 3-Stripes design. Lightweight and comfortable, perfect for casual wear or workouts."
+    },
+    {
+        "id": 33,
+        "name": "Louis Vuitton Ombre Nomade Eau de Parfum",
+        "price": 500,
+        "image": "/img1/9.jpg",
+        "description": "The Louis Vuitton Ombre Nomade Eau de Parfum is a luxurious fragrance with rich, woody, and smoky tones. A deep and mysterious scent that captures the essence of exploration."
+    },
+    {
+        "id": 34,
+        "name": "Gucci Script Nylon Jacket",
+        "price": 1000,
+        "image": "/img1/10.jpg",
+        "description": "The Gucci Script Nylon Jacket offers a blend of sporty comfort and high-end style, featuring the iconic Gucci logo. Perfect for layering during transitional seasons."
+    },
+    {
+        "id": 35,
+        "name": "Louis Vuitton Shorts",
+        "price": 1000,
+        "image": "/img1/11.jpg",
+        "description": "These Louis Vuitton shorts feature a minimal yet luxurious design with premium materials, perfect for casual summer wear with a touch of elegance."
+    },
+    {
+        "id": 36,
+        "name": "'Let Us Run' Sneaker Design Commission for Six Hundred Four Shoes",
+        "price": 2500,
+        "image": "/img1/12.jpg",
+        "description": "A unique art-meets-fashion collaboration sneaker commissioned by Six Hundred Four Shoes, titled 'Let Us Run'. Designed for collectors who value creativity and craftsmanship."
+    },
+    {
+        "id": 37,
+        "name": "Louis Vuitton Monogram Shine Shawl",
+        "price": 1200,
+        "image": "/img1/13.jpg",
+        "description": "The Louis Vuitton Monogram Shine Shawl combines softness with subtle shine, made from a blend of silk and wool. A timeless accessory for every luxury wardrobe."
+    },
+    {
+        "id": 38,
+        "name": "Robosen Elite Optimus Prime Auto-Converting Robot",
+        "price": 900,
+        "image": "/img1/14.jpg",
+        "description": "An advanced Robosen Elite Optimus Prime robot that auto-converts between modes with voice commands. A collector's dream for fans of Transformers and tech enthusiasts."
+    },
+    {
+        "id": 39,
+        "name": "Squid Game 'Young-hee' Doll",
+        "price": 200,
+        "image": "/img1/15.jpg",
+        "description": "A collectible Squid Game 'Young-hee' doll inspired by the hit series. A striking display piece for fans and pop culture collectors."
+    },
+    {
+        "id": 40,
+        "name": "Louis Vuitton Millionaires Joystorm Sunglasses",
+        "price": 1000,
+        "image": "/img1/16.jpg",
+        "description": "Louis Vuitton Millionaires Joystorm sunglasses with bold design and signature detailing. A luxury eyewear statement that blends modern edge with classic LV craftsmanship."
+    },
+    {
+        "id": 41,
+        "name": "Free Breast Implant Surgery",
+        "price": 14000,
+        "image": "/img1/17.jpg",
+        "description": "A full breast implant surgery, performed by a licensed and professional surgeon. A premium, life-changing experience for those looking to enhance their body."
+    },
+    {
+        "id": 42,
+        "name": "Louis Vuitton Multicolor Monogram Skateboard Deck",
+        "price": 1500,
+        "image": "/img1/18.jpg",
+        "description": "A collectible Louis Vuitton skateboard deck featuring the multicolor monogram pattern. A bold fusion of luxury fashion and skate culture."
+    },
+    {
+        "id": 43,
+        "name": "Louis Vuitton x NBA Basketball",
+        "price": 1200,
+        "image": "/img1/19.jpg",
+        "description": "A premium Louis Vuitton x NBA basketball crafted with iconic monogram details. A luxury collector's item for fashion and sports enthusiasts."
+    },
+    {
+        "id": 44,
+        "name": "Louis Vuitton Doudou Re-Addiction Teddy Bear",
+        "price": 1800,
+        "image": "/img1/20.jpg",
+        "description": "An adorable and highly collectible Louis Vuitton Doudou Re-Addiction Teddy Bear crafted with premium materials and signature detailing."
+    },
+    {
+        "id": 45,
+        "name": "Chanel Blue Quilted Lambskin Mini Rectangular Flap",
+        "price": 4500,
+        "image": "/img1/21.jpg",
+        "description": "A luxurious Chanel Mini Rectangular Flap bag crafted from blue quilted lambskin. A timeless fashion statement and collector's favorite."
+    },
+    {
+        "id": 46,
+        "name": "Loona V24 Smart Robot Pet Dog",
+        "price": 500,
+        "image": "/img1/22.jpg",
+        "description": "Loona V24 is an advanced smart robot pet dog powered by AI, featuring gesture recognition, voice commands, and real-time interaction for kids and adults."
+    },
+    {
+        "id": 47,
+        "name": "PlayStation 5 Slim Ghost of Yotei Gold Limited Edition Bundle",
+        "price": 1200,
+        "image": "/img1/23.jpg",
+        "description": "A rare PlayStation 5 Slim Ghost of Yotei Gold Limited Edition bundle, crafted with premium gold detailing. A must-have for gaming collectors."
+    },
+    {
+        "id": 48,
+        "name": "Louis Vuitton Monogram Wool Carry On Cap",
+        "price": 800,
+        "image": "/img1/24.jpg",
+        "description": "A Louis Vuitton Monogram Wool Carry On Cap featuring luxury craftsmanship and signature monogram styling. A perfect fashion accessory for any season."
+    },
+    {
+        "id": 49,
+        "name": "Samsung 7.5 cu. ft. Smart Gas Dryer with Steam Sanitize+",
+        "price": 899,
+        "image": "/img1/25.jpg",
+        "description": "A premium Samsung smart gas dryer featuring Steam Sanitize+ technology, Wi-Fi connectivity, and sensor drying. Offers 10 preset drying cycles and optimal fabric care with 7.5 cubic feet capacity."
+    },
+    {
+        "id": 50,
+        "name": "Apple iPhone 16 Pro Max (512GB)",
+        "price": 1899,
+        "image": "/img1/26.jpg",
+        "description": "The latest Apple iPhone 16 Pro Max with 6.9-inch Super Retina XDR display, A18 Pro chip, 48MP triple camera system with 5x optical zoom, and all-day battery life. Features Titanium design, Action button, and advanced computational photography."
+    },
+    {
+        "id": 51,
+        "name": "Apple MacBook Air 13-inch M4 Chip (16GB RAM, 512GB SSD) - Sky Blue",
+        "price": 2099,
+        "image": "/img1/27.jpg",
+        "description": "Apple MacBook Air 13-inch with the revolutionary M4 chip, featuring 10-core CPU and 10-core GPU. 16GB unified memory with 512GB SSD storage. Lightweight design in stunning Sky Blue with Liquid Retina display, up to 18 hours of battery life, and advanced AI capabilities."
+    },
+    {
+        "id": 52,
+        "name": "Samsung Front-Load Washer (Model WW22K6800AW/A2)",
+        "price": 850,
+        "image": "/img1/28.jpg",
+        "description": "A high-efficiency Samsung front-load washer featuring model number WW22K6800AW/A2 and serial number 0F2HSADMC09037J. Designed for reliable cleaning performance with modern energy-saving technology."
+    },
+    {
+        "id": 53,
+        "name": "Hermès Birkin 25 Togo Leather Gold Hardware",
+        "price": 12000,
+        "image": "/img1/29.jpg",
+        "description": "The iconic Hermès Birkin 25 in supple Togo leather with gleaming gold hardware. Handcrafted by master artisans, this timeless investment piece represents the pinnacle of luxury handbag craftsmanship."
+    },
+    {
+        "id": 54,
+        "name": "Rolex Submariner Date 41mm Oystersteel",
+        "price": 14500,
+        "image": "/img1/30.jpg",
+        "description": "The legendary Rolex Submariner Date in 41mm Oystersteel with black Cerachrom bezel. Water-resistant to 300 meters, featuring the calibre 3235 movement with 70-hour power reserve. The ultimate dive watch."
+    },
+    {
+        "id": 55,
+        "name": "Cartier Love Bracelet 18K Yellow Gold",
+        "price": 7500,
+        "image": "/img1/31.jpg",
+        "description": "The iconic Cartier Love bracelet in 18K yellow gold, featuring the signature screw motif. A symbol of eternal love and commitment, this timeless piece comes with the original screwdriver."
+    },
+    {
+        "id": 56,
+        "name": "Patek Philippe Nautilus 5711/1A",
+        "price": 85000,
+        "image": "/img1/32.jpg",
+        "description": "The legendary Patek Philippe Nautilus 5711/1A with blue gradient dial. This highly coveted timepiece features the iconic porthole design by Gérald Genta, automatic caliber 26-330 S C movement, and exceptional finishing."
+    },
+    {
+        "id": 57,
+        "name": "Hermès Kelly 28 Epsom Leather",
+        "price": 10500,
+        "image": "/img1/33.jpg",
+        "description": "The elegant Hermès Kelly 28 in structured Epsom leather with palladium hardware. Originally designed for Grace Kelly, this sophisticated bag features the iconic turn-lock closure and handstitched craftsmanship."
+    },
+    {
+        "id": 58,
+        "name": "Audemars Piguet Royal Oak 41mm",
+        "price": 32000,
+        "image": "/img1/34.jpg",
+        "description": "The Audemars Piguet Royal Oak 41mm in stainless steel with blue Grande Tapisserie dial. Designed by Gérald Genta, this revolutionary sports watch features the iconic octagonal bezel with visible screws."
+    },
+    {
+        "id": 59,
+        "name": "Van Cleef & Arpels Alhambra Necklace",
+        "price": 5200,
+        "image": "/img1/35.jpg",
+        "description": "The Van Cleef & Arpels Vintage Alhambra necklace in 18K yellow gold with mother-of-pearl motif. Inspired by the quatrefoil, this iconic design symbolizes luck, health, fortune, and love."
+    },
+    {
+        "id": 60,
+        "name": "Dior Lady Dior Medium Lambskin",
+        "price": 5900,
+        "image": "/img1/36.jpg",
+        "description": "The iconic Lady Dior medium bag in supple lambskin with the signature Cannage stitching and gold-tone D.I.O.R. charms. Named after Princess Diana, this elegant piece epitomizes Parisian sophistication."
+    },
+    {
+        "id": 61,
+        "name": "Omega Speedmaster Moonwatch Professional",
+        "price": 7100,
+        "image": "/img1/37.jpg",
+        "description": "The Omega Speedmaster Professional Moonwatch with manual-winding caliber 3861. The only watch worn on the Moon, featuring hesalite crystal, tachymeter bezel, and legendary chronograph functionality."
+    },
+    {
+        "id": 62,
+        "name": "Tiffany & Co. Diamond Tennis Bracelet",
+        "price": 15000,
+        "image": "/img1/38.jpg",
+        "description": "An exquisite Tiffany & Co. diamond tennis bracelet in platinum, featuring round brilliant diamonds totaling over 5 carats. Each stone is hand-selected for exceptional clarity and brilliance."
+    },
+    {
+        "id": 63,
+        "name": "Prada Re-Edition 2005 Saffiano Leather",
+        "price": 2100,
+        "image": "/img1/39.jpg",
+        "description": "The Prada Re-Edition 2005 shoulder bag in durable Saffiano leather with the iconic triangle logo. A modern reinterpretation of the Y2K classic, perfect for everyday luxury."
+    },
+    {
+        "id": 64,
+        "name": "TAG Heuer Monaco Chronograph",
+        "price": 6800,
+        "image": "/img1/40.jpg",
+        "description": "The legendary TAG Heuer Monaco chronograph with iconic square case and blue dial. Made famous by Steve McQueen in Le Mans, this avant-garde timepiece revolutionized watchmaking."
+    },
+    {
+        "id": 65,
+        "name": "Bottega Veneta Cassette Bag Intrecciato",
+        "price": 3200,
+        "image": "/img1/41.jpg",
+        "description": "The Bottega Veneta Cassette bag featuring the signature oversized Intrecciato weave. Crafted in Italy from supple leather, this modern icon represents quiet luxury at its finest."
+    },
+    {
+        "id": 66,
+        "name": "IWC Portugieser Chronograph",
+        "price": 8900,
+        "image": "/img1/42.jpg",
+        "description": "The IWC Portugieser Chronograph with elegant 41mm case and classic blue dial. Featuring the in-house 69355 caliber, this refined timepiece combines Portuguese maritime heritage with Swiss precision."
+    },
+    {
+        "id": 67,
+        "name": "Celine Triomphe Shoulder Bag",
+        "price": 3950,
+        "image": "/img1/43.jpg",
+        "description": "The Celine Triomphe shoulder bag in shiny calfskin with the iconic brass clasp. Designed by Hedi Slimane, this elegant piece embodies understated Parisian chic and timeless sophistication."
+    },
+    {
+        "id": 68,
+        "name": "Breitling Navitimer B01 Chronograph",
+        "price": 9200,
+        "image": "/img1/44.jpg",
+        "description": "The Breitling Navitimer B01 Chronograph 43mm with iconic circular slide rule bezel. Powered by the in-house B01 movement, this aviation legend has been a pilot's companion since 1952."
+    },
+    {
+        "id": 69,
+        "name": "Balenciaga City Bag Classic",
+        "price": 2450,
+        "image": "/img1/45.jpg",
+        "description": "The iconic Balenciaga City bag in soft lambskin with signature hardware and adjustable shoulder strap. Originally designed by Nicolas Ghesquière, this cult classic defined 2000s It-bag culture."
+    },
+    {
+        "id": 70,
+        "name": "Tudor Black Bay Fifty-Eight",
+        "price": 4100,
+        "image": "/img1/46.jpg",
+        "description": "The Tudor Black Bay Fifty-Eight with 39mm case and vintage-inspired gilt dial. Powered by the COSC-certified MT5402 movement, this dive watch offers exceptional value and heritage design."
+    },
+    {
+        "id": 71,
+        "name": "Saint Laurent Loulou Medium",
+        "price": 2990,
+        "image": "/img1/47.jpg",
+        "description": "The Saint Laurent Loulou medium bag in quilted Y leather with antique gold-tone YSL logo. This modern classic features a sliding chain strap and magnetic snap closure."
+    },
+    {
+        "id": 72,
+        "name": "Zenith Chronomaster Sport",
+        "price": 10600,
+        "image": "/img1/48.jpg",
+        "description": "The Zenith Chronomaster Sport with legendary El Primero high-frequency movement measuring 1/10th of a second. This 41mm ceramic bezel chronograph combines precision engineering with sporty elegance."
     }
 ]
