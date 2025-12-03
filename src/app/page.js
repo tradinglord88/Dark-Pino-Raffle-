@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import RouletteWheel from "@/components/RouletteWheel";
 
 export default function HomePage() {
     const router = useRouter();
@@ -261,92 +262,45 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Just Arrived Section */}
-            {newArrivals.length > 0 && (
-                <section className="just-arrived">
-                    <div className="container">
-                        <div className="section-header">
-                            <div>
-                                <h2 className="section-title">
-                                    <i className="ri-sparkle-fill"></i> Just Arrived
-                                </h2>
-                                <p className="section-subtitle">Fresh drops you don't want to miss</p>
-                            </div>
-                            <Link href="/prod" className="view-all-link">
-                                Shop All <i className="ri-arrow-right-line"></i>
-                            </Link>
-                        </div>
-
-                        <div className="arrivals-grid">
-                            {newArrivals.map((product, index) => (
-                                <div key={product.id} className="arrival-card">
-                                    {index < 2 && (
-                                        <div className="new-badge">
-                                            <i className="ri-sparkle-line"></i> NEW
-                                        </div>
-                                    )}
-                                    <Link href={`/detail/${product.id}`}>
-                                        <div className="arrival-image">
-                                            <img src={product.image} alt={product.name} />
-                                        </div>
-                                    </Link>
-                                    <div className="arrival-content">
-                                        <Link href={`/detail/${product.id}`}>
-                                            <h3 className="arrival-name">{product.name}</h3>
-                                        </Link>
-                                        <div className="arrival-meta">
-                                            <span className="arrival-price">{formatUSD(product.price)}</span>
-                                            <span className="arrival-tickets">
-                                                <i className="ri-ticket-2-line"></i>
-                                                {calculateTickets(product.price)} tickets
-                                            </span>
-                                        </div>
-                                        <button
-                                            className="arrival-btn"
-                                            onClick={() => addToCart(product)}
-                                        >
-                                            <i className="ri-shopping-cart-line"></i> Add to Cart
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
+            {/* Spin to Win Roulette Section */}
+            <RouletteWheel />
 
             {/* How It Works */}
             <section className="how-it-works">
                 <div className="container">
-                    <h2 className="section-title">How It Works</h2>
-                    <p className="section-subtitle">Three simple steps to start winning</p>
+                    <h2 className="section-title">How to Enter</h2>
 
-                    <div className="steps-grid">
-                        <div className="step-card">
+                    <div className="steps-grid four-steps">
+                        <div className="step-card simple">
                             <div className="step-number">1</div>
-                            <div className="step-icon">
-                                <i className="ri-shopping-cart-line"></i>
+                            <div className="step-image">
+                                <img src="/Image/step1.png" alt="Purchase an item" />
                             </div>
-                            <h3>Shop Products</h3>
-                            <p>Browse our collection of exclusive custom luxury items and add to cart.</p>
+                            <h3>Purchase an Item</h3>
                         </div>
 
-                        <div className="step-card">
+                        <div className="step-card simple">
                             <div className="step-number">2</div>
-                            <div className="step-icon">
-                                <i className="ri-ticket-2-line"></i>
+                            <div className="step-image">
+                                <img src="/Image/step2.png" alt="Explore prizes" />
                             </div>
-                            <h3>Earn Tickets</h3>
-                            <p>Each ticket costs $100. More tickets = more chances to win!</p>
+                            <h3>Explore Prizes</h3>
                         </div>
 
-                        <div className="step-card">
+                        <div className="step-card simple">
                             <div className="step-number">3</div>
-                            <div className="step-icon">
-                                <i className="ri-trophy-line"></i>
+                            <div className="step-image">
+                                <img src="/Image/BuyTicket.png" alt="Enter contest" />
                             </div>
-                            <h3>Win Prizes</h3>
-                            <p>Enter your tickets into raffles for a chance to win amazing prizes.</p>
+                            <h3>Enter a Contest</h3>
+                        </div>
+
+                        <div className="step-card simple">
+                            <div className="step-number">4</div>
+                            <div className="step-image">
+                                <img src="/Image/winbig.png" alt="Claim your prize" />
+                            </div>
+                            <h3>Claim Your Prize</h3>
                         </div>
                     </div>
                 </div>
