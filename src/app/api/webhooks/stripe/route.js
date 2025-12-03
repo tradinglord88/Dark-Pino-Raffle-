@@ -4,9 +4,11 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// Lazy initialize Stripe to avoid build errors when env vars are missing
+const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
+    const stripe = getStripe();
     const sig = req.headers.get("stripe-signature");
     const rawBody = await req.text();
 

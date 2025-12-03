@@ -4,23 +4,26 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Add validation to catch issues early
-if (!supabaseUrl) {
-    console.error("❌ Missing NEXT_PUBLIC_SUPABASE_URL");
-    throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL");
-}
+// Create a lazy-initialized client that doesn't throw during build
+let _supabaseAdmin = null;
 
-if (!supabaseServiceKey) {
-    console.error("❌ Missing SUPABASE_SERVICE_ROLE_KEY");
-    throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY");
-}
+export const getSupabaseAdmin = () => {
+    if (_supabaseAdmin) return _supabaseAdmin;
 
-console.log("✅ Supabase Admin Client Initialized");
-
-export const supabaseAdmin = createClient(
-    supabaseUrl,
-    supabaseServiceKey,
-    {
-        auth: { persistSession: false }
+    if (!supabaseUrl || !supabaseServiceKey) {
+        console.error("❌ Missing Supabase environment variables");
+        return null;
     }
-);
+
+    _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+        auth: { persistSession: false }
+    });
+
+    console.log("✅ Supabase Admin Client Initialized");
+    return _supabaseAdmin;
+};
+
+// For backward compatibility - will be null if env vars missing
+export const supabaseAdmin = (supabaseUrl && supabaseServiceKey)
+    ? createClient(supabaseUrl, supabaseServiceKey, { auth: { persistSession: false } })
+    : null;
