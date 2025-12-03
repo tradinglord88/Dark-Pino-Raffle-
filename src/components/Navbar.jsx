@@ -41,6 +41,8 @@ export default function Navbar() {
                     </div>
                 </li>
 
+                <li><Link href="/clearance" onClick={closeMobileMenu} className="sale-link">Sale</Link></li>
+                <li><Link href="/vip" onClick={closeMobileMenu} className="vip-link">VIP</Link></li>
                 <li><Link href="/cart" onClick={closeMobileMenu}>Cart</Link></li>
 
                 {/* Mobile-only Quick Links */}
