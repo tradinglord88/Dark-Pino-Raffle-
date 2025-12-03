@@ -24,13 +24,11 @@ export async function GET(request) {
 
         const isAdmin = ADMIN_USER_IDS.includes(userId);
 
+        // SECURITY: Only return minimal information - no admin IDs exposed
         const response = {
             isAdmin,
             userId,
-            timestamp: new Date().toISOString(),
-            adminCount: ADMIN_USER_IDS.length,
-            adminUsers: ADMIN_USER_IDS,
-            currentUserInList: ADMIN_USER_IDS.includes(userId)
+            timestamp: new Date().toISOString()
         };
 
         console.log(`🔍 Admin check for ${userId}: ${isAdmin ? '✅ ADMIN' : '❌ NOT ADMIN'}`);

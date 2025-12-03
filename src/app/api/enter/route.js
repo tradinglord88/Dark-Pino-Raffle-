@@ -1,11 +1,24 @@
-// app/api/enter/route.js
+// app/api/enter/route.js - SECURED VERSION
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { rateLimit, getClientId } from "@/lib/rateLimit";
 import { readFile } from 'fs/promises';
 import path from 'path';
 
 export async function POST(req) {
     try {
-        console.log("🎫 ENTER API CALLED - NEW LOGIC");
+        // RATE LIMITING: 10 entry attempts per minute per client
+        const clientId = getClientId(req);
+        const rateLimitResult = rateLimit(`enter:${clientId}`, 10, 60000);
+
+        if (!rateLimitResult.success) {
+            console.warn(`⚠️ Rate limit exceeded for entries: ${clientId}`);
+            return Response.json(
+                { success: false, error: "Too many entry attempts. Please wait a minute." },
+                { status: 429 }
+            );
+        }
+
+        console.log("🎫 ENTER API CALLED");
 
         // Parse request body
         let body = {};
@@ -93,19 +106,25 @@ export async function POST(req) {
 
         const newCount = userData.tickets - tickets;
 
-        // Start transaction-like operations
-        // 1. Deduct tickets from user
-        const { error: updateError } = await supabaseAdmin
+        // FIXED: Use atomic update with a condition to prevent race conditions
+        // This ensures we only deduct if balance is still sufficient
+        const { data: updatedUser, error: updateError } = await supabaseAdmin
             .from("users")
             .update({ tickets: newCount })
-            .eq("clerk_id", userIdentifier);
+            .eq("clerk_id", userIdentifier)
+            .gte("tickets", tickets) // Only update if tickets >= requested amount (atomic check)
+            .select("tickets")
+            .single();
 
-        if (updateError) {
-            console.error("❌ Failed to update tickets:", updateError);
-            return Response.json({ success: false, error: "Failed to deduct tickets" }, { status: 500 });
+        if (updateError || !updatedUser) {
+            console.error("❌ Failed to update tickets (race condition prevented):", updateError);
+            return Response.json({
+                success: false,
+                error: "Failed to deduct tickets - balance may have changed"
+            }, { status: 409 }); // 409 Conflict
         }
 
-        // 2. Create entry record
+        // Create entry record
         const { data: entry, error: entryError } = await supabaseAdmin
             .from("entries")
             .insert({
@@ -119,7 +138,7 @@ export async function POST(req) {
         if (entryError) {
             console.error("❌ Failed to create entry:", entryError);
 
-            // Rollback ticket deduction
+            // Rollback ticket deduction - add tickets back
             await supabaseAdmin
                 .from("users")
                 .update({ tickets: userData.tickets })

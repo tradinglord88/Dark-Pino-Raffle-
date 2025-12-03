@@ -1,14 +1,46 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { rateLimit, getClientId } from "@/lib/rateLimit";
+import fs from 'fs';
+import path from 'path';
 
 export const runtime = "nodejs";
 
+// Load products from JSON file for server-side price validation
+function getServerProducts() {
+    try {
+        const productsPath = path.join(process.cwd(), 'public', 'products.json');
+        const productsData = fs.readFileSync(productsPath, 'utf-8');
+        return JSON.parse(productsData);
+    } catch (error) {
+        console.error("Error loading products:", error);
+        return null;
+    }
+}
+
+// SECURITY: Calculate tickets based on server-side prices
+function calculateTickets(price) {
+    return Math.floor((Number(price) || 0) / 100);
+}
+
 export async function POST(req) {
     try {
+        // RATE LIMITING: 5 checkout attempts per minute per client
+        const clientId = getClientId(req);
+        const rateLimitResult = rateLimit(`checkout:${clientId}`, 5, 60000);
+
+        if (!rateLimitResult.success) {
+            console.warn(`⚠️ Rate limit exceeded for checkout: ${clientId}`);
+            return NextResponse.json(
+                { error: "Too many checkout attempts. Please wait a minute." },
+                { status: 429 }
+            );
+        }
+
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
         const body = await req.json();
-        const { cart, userId, calculatedTotal, calculatedTickets, paymentMethod, userEmail } = body;
+        const { cart, userId, paymentMethod, userEmail } = body;
 
         // Validation
         if (!cart || !Array.isArray(cart) || cart.length === 0) {
@@ -19,9 +51,62 @@ export async function POST(req) {
             return NextResponse.json({ error: "User authentication required" }, { status: 401 });
         }
 
-        if (!calculatedTotal || calculatedTotal <= 0) {
+        // SECURITY: Load server-side product prices for validation
+        const serverProducts = getServerProducts();
+        if (!serverProducts) {
+            return NextResponse.json({ error: "Unable to validate prices" }, { status: 500 });
+        }
+
+        // SECURITY: Create a price lookup map
+        const priceMap = {};
+        serverProducts.forEach(p => {
+            priceMap[p.id] = { price: p.price, name: p.name, specialOffer: p.specialOffer };
+        });
+
+        // SECURITY: Validate and recalculate cart with server-side prices
+        let serverTotal = 0;
+        let serverTickets = 0;
+        const validatedCart = [];
+
+        for (const item of cart) {
+            const serverProduct = priceMap[item.id];
+            if (!serverProduct) {
+                return NextResponse.json({
+                    error: `Invalid product ID: ${item.id}`
+                }, { status: 400 });
+            }
+
+            // Use SERVER price, not client price
+            const serverPrice = serverProduct.price;
+            const quantity = item.paidQuantity || item.qty || 1;
+
+            if (quantity <= 0 || quantity > 100) {
+                return NextResponse.json({
+                    error: `Invalid quantity for ${serverProduct.name}`
+                }, { status: 400 });
+            }
+
+            // Calculate with server prices
+            const itemTotal = serverPrice * quantity;
+            serverTotal += itemTotal;
+            serverTickets += calculateTickets(itemTotal);
+
+            validatedCart.push({
+                ...item,
+                price: serverPrice, // Override with server price
+                name: serverProduct.name
+            });
+        }
+
+        console.log(`🔒 Server-side validation: Total=$${serverTotal}, Tickets=${serverTickets}`);
+
+        if (serverTotal <= 0) {
             return NextResponse.json({ error: "Invalid total amount" }, { status: 400 });
         }
+
+        // Use server-calculated values
+        const calculatedTotal = serverTotal;
+        const calculatedTickets = serverTickets;
 
         const origin = req.headers.get("origin") || "http://localhost:3000";
 
@@ -36,16 +121,16 @@ export async function POST(req) {
             const orderData = {
                 clerk_id: userId,
                 user_email: userEmail,
-                cart_items: cart,
+                cart_items: validatedCart,
                 total_amount: calculatedTotal,
                 total_tickets: calculatedTickets,
                 payment_method: "etransfer",
                 status: "pending",
                 created_at: new Date().toISOString(),
                 metadata: {
-                    item_ids: cart.map(item => item.id).join(","),
-                    items: cart.map(item => `${item.name}:${item.paidQuantity || item.qty}`).join(";"),
-                    special_offers: cart.filter(item => item.specialOffer).map(item => ({
+                    item_ids: validatedCart.map(item => item.id).join(","),
+                    items: validatedCart.map(item => `${item.name}:${item.paidQuantity || item.qty}`).join(";"),
+                    special_offers: validatedCart.filter(item => item.specialOffer).map(item => ({
                         id: item.id,
                         name: item.name,
                         paid: item.paidQuantity,
@@ -81,8 +166,8 @@ export async function POST(req) {
             });
 
         } else {
-            // Handle Stripe payment
-            const line_items = cart.map(item => {
+            // Handle Stripe payment - use validatedCart with server prices
+            const line_items = validatedCart.map(item => {
                 const imageUrl = item.image.startsWith("http")
                     ? item.image
                     : `${origin}${item.image}`;
@@ -124,10 +209,10 @@ export async function POST(req) {
                 clerk_id: userId,
                 total_tickets: calculatedTickets?.toString() || "0",
                 total_amount: calculatedTotal.toString(),
-                item_count: cart.length.toString(),
-                item_ids: cart.map(item => item.id).join(","),
-                items: cart.map(item => `${item.id}:${item.paidQuantity || item.qty}:${item.freeQuantity || 0}:${item.totalTickets || 0}`).join(";"),
-                cart_items: JSON.stringify(cart.map(item => ({
+                item_count: validatedCart.length.toString(),
+                item_ids: validatedCart.map(item => item.id).join(","),
+                items: validatedCart.map(item => `${item.id}:${item.paidQuantity || item.qty}:${item.freeQuantity || 0}:${item.totalTickets || 0}`).join(";"),
+                cart_items: JSON.stringify(validatedCart.map(item => ({
                     id: item.id,
                     name: item.name,
                     price: item.price,
@@ -143,7 +228,7 @@ export async function POST(req) {
                 console.warn("Metadata size large:", metadataSize);
                 // Remove cart_items if too large
                 delete metadata.cart_items;
-                metadata.items = cart.map(item => `${item.id}:${item.paidQuantity || item.qty}`).join(";");
+                metadata.items = validatedCart.map(item => `${item.id}:${item.paidQuantity || item.qty}`).join(";");
             }
 
             console.log("Creating Stripe checkout session for user:", userId, "Total:", calculatedTotal);
@@ -175,7 +260,7 @@ export async function POST(req) {
                         metadata: {
                             session_id: session.id,
                             status: "pending",
-                            cart_items: cart
+                            cart_items: validatedCart
                         },
                         purchased_at: new Date().toISOString(),
                         created_at: new Date().toISOString()

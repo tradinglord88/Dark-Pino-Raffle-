@@ -1,82 +1,76 @@
-// app/admin/pending-orders/page.js
+// app/admin/pending-orders/page.js - SECURED VERSION
+// Uses API routes instead of direct database access
 "use client";
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export default function PendingOrdersPage() {
-    const { userId } = useAuth();
+    const { userId, isLoaded } = useAuth();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        checkAdminStatus();
-        fetchOrders();
-    }, []);
+        if (isLoaded && userId) {
+            checkAdminAndFetchOrders();
+        }
+    }, [isLoaded, userId]);
 
-    const checkAdminStatus = async () => {
-        // Check if user is admin (you can store admin IDs in environment variables)
-        const adminIds = process.env.NEXT_PUBLIC_ADMIN_IDS?.split(",") || [];
-        setIsAdmin(adminIds.includes(userId));
-    };
-
-    const fetchOrders = async () => {
+    const checkAdminAndFetchOrders = async () => {
         try {
-            const { data, error } = await supabaseAdmin
-                .from("pending_orders")
-                .select("*")
-                .order("created_at", { ascending: false });
+            // Check admin status via secure API
+            const verifyRes = await fetch('/api/admin/verify');
+            const verifyData = await verifyRes.json();
 
-            if (error) throw error;
-            setOrders(data || []);
-        } catch (error) {
-            console.error("Error fetching orders:", error);
+            if (!verifyData.isAdmin) {
+                setIsAdmin(false);
+                setLoading(false);
+                return;
+            }
+
+            setIsAdmin(true);
+
+            // Fetch orders via secure API (now protected with auth)
+            const ordersRes = await fetch('/api/admin/orders');
+
+            if (!ordersRes.ok) {
+                throw new Error('Failed to fetch orders');
+            }
+
+            const ordersData = await ordersRes.json();
+            setOrders(ordersData || []);
+        } catch (err) {
+            console.error("Error:", err);
+            setError(err.message);
         } finally {
             setLoading(false);
         }
     };
 
-    const confirmOrder = async (orderId) => {
+    const confirmOrder = async (orderId, clerkId, tickets) => {
         if (!confirm("Mark this order as paid and add tickets to user?")) return;
 
         try {
-            const { data: order } = await supabaseAdmin
-                .from("pending_orders")
-                .select("*")
-                .eq("id", orderId)
-                .single();
+            // Use secured API route instead of direct database access
+            const res = await fetch('/api/admin/confirm-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderId, clerkId, tickets })
+            });
 
-            // Add tickets to user
-            const { data: user } = await supabaseAdmin
-                .from("users")
-                .select("tickets")
-                .eq("clerk_id", order.clerk_id)
-                .single();
+            const data = await res.json();
 
-            const newTickets = (user?.tickets || 0) + order.total_tickets;
+            if (!res.ok) {
+                throw new Error(data.error || 'Failed to confirm order');
+            }
 
-            await supabaseAdmin
-                .from("users")
-                .update({ tickets: newTickets })
-                .eq("clerk_id", order.clerk_id);
-
-            // Update order status
-            await supabaseAdmin
-                .from("pending_orders")
-                .update({
-                    status: "confirmed",
-                    confirmed_at: new Date().toISOString(),
-                    confirmed_by: userId
-                })
-                .eq("id", orderId);
-
-            alert(`✅ Order confirmed! ${order.total_tickets} tickets added to user.`);
-            fetchOrders(); // Refresh list
-        } catch (error) {
-            console.error("Error confirming order:", error);
-            alert("Failed to confirm order");
+            alert(`✅ ${data.message}`);
+            checkAdminAndFetchOrders(); // Refresh list
+        } catch (err) {
+            console.error("Error confirming order:", err);
+            alert(`Failed to confirm order: ${err.message}`);
         }
     };
 
@@ -84,24 +78,36 @@ export default function PendingOrdersPage() {
         if (!confirm("Cancel this pending order?")) return;
 
         try {
-            await supabaseAdmin
-                .from("pending_orders")
-                .update({ status: "cancelled" })
-                .eq("id", orderId);
+            // Use secured API route
+            const res = await fetch('/api/admin/cancel-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderId })
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to cancel order');
+            }
 
             alert("Order cancelled");
-            fetchOrders();
-        } catch (error) {
-            console.error("Error cancelling order:", error);
-            alert("Failed to cancel order");
+            checkAdminAndFetchOrders();
+        } catch (err) {
+            console.error("Error cancelling order:", err);
+            alert(`Failed to cancel order: ${err.message}`);
         }
     };
 
-    if (!isAdmin) {
-        return <div className="container">Access denied.</div>;
+    if (!isLoaded || loading) {
+        return <div className="container">Loading...</div>;
     }
 
-    if (loading) return <div className="container">Loading...</div>;
+    if (!isAdmin) {
+        return <div className="container">Access denied. Admin privileges required.</div>;
+    }
+
+    if (error) {
+        return <div className="container">Error: {error}</div>;
+    }
 
     return (
         <div className="container">
@@ -112,7 +118,7 @@ export default function PendingOrdersPage() {
                 {orders.map((order) => (
                     <div key={order.id} className="order-card">
                         <h3>Order #{order.id.slice(0, 8)}</h3>
-                        <p><strong>User:</strong> {order.clerk_id}</p>
+                        <p><strong>User:</strong> {order.clerk_id?.slice(0, 12)}...</p>
                         <p><strong>Email:</strong> {order.user_email}</p>
                         <p><strong>Amount:</strong> ${order.total_amount}</p>
                         <p><strong>Tickets:</strong> {order.total_tickets}</p>
@@ -122,7 +128,7 @@ export default function PendingOrdersPage() {
                         <div className="order-actions">
                             {order.status === "pending" && (
                                 <>
-                                    <button onClick={() => confirmOrder(order.id)}>
+                                    <button onClick={() => confirmOrder(order.id, order.clerk_id, order.total_tickets)}>
                                         Confirm Payment
                                     </button>
                                     <button onClick={() => cancelOrder(order.id)} className="cancel">

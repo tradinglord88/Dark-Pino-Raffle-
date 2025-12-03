@@ -2,44 +2,83 @@
 
 import Link from "next/link";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { useState } from "react";
 
 export default function Navbar() {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!mobileMenuOpen);
+    };
+
+    const closeMobileMenu = () => {
+        setMobileMenuOpen(false);
+    };
+
     return (
         <nav className="dp-nav">
 
             {/* LEFT SIDE MENU */}
-            <ul className="nav-links">
-                <li><Link href="/">Home</Link></li>
-                <li><Link href="/prod">Dark Pino 1 of 1s</Link></li>
-                <li><Link href="/contest">Prizes</Link></li>
-                <li><Link href="/cart">Cart</Link></li>
+            <ul className={`nav-links ${mobileMenuOpen ? "open" : ""}`}>
+                <li><Link href="/" onClick={closeMobileMenu}>Home</Link></li>
+                <li><Link href="/prod" onClick={closeMobileMenu}>Shop</Link></li>
 
-                {/* ⭐ Mobile-only My Entries */}
+                {/* Prizes Dropdown */}
+                <li className="nav-dropdown">
+                    <Link href="/contest" onClick={closeMobileMenu}>
+                        Prizes <i className="ri-arrow-down-s-line"></i>
+                    </Link>
+                    <div className="dropdown-menu">
+                        <Link href="/contest" onClick={closeMobileMenu}>
+                            <i className="ri-gift-line"></i> All Prizes
+                        </Link>
+                        <Link href="/quick-entries" onClick={closeMobileMenu}>
+                            <i className="ri-ticket-2-line"></i> Quick Entries
+                        </Link>
+                        <Link href="/past-winners" onClick={closeMobileMenu}>
+                            <i className="ri-trophy-line"></i> Past Winners
+                        </Link>
+                    </div>
+                </li>
+
+                <li><Link href="/cart" onClick={closeMobileMenu}>Cart</Link></li>
+
+                {/* Mobile-only Quick Links */}
+                <li className="mobile-only">
+                    <Link href="/quick-entries" onClick={closeMobileMenu}>Quick Entries</Link>
+                </li>
+                <li className="mobile-only">
+                    <Link href="/past-winners" onClick={closeMobileMenu}>Past Winners</Link>
+                </li>
+
+                {/* Mobile-only My Entries */}
                 <SignedIn>
                     <li className="mobile-only">
-                        <Link href="/my-entries">My Entries</Link>
+                        <Link href="/my-entries" onClick={closeMobileMenu}>My Entries</Link>
                     </li>
                 </SignedIn>
 
                 {/* Mobile-only Auth */}
                 <SignedOut>
                     <li className="mobile-only">
-                        <Link href="/sign-in">Sign In</Link>
+                        <Link href="/sign-in" onClick={closeMobileMenu}>Sign In</Link>
                     </li>
                     <li className="mobile-only">
-                        <Link href="/sign-up">Sign Up</Link>
+                        <Link href="/sign-up" onClick={closeMobileMenu}>Sign Up</Link>
                     </li>
                 </SignedOut>
 
                 <SignedIn>
-                    <li className="mobile-only">
+                    <li className="mobile-only user-btn-mobile">
                         <UserButton afterSignOutUrl="/" />
                     </li>
                 </SignedIn>
             </ul>
 
             {/* CENTER LOGO */}
-            <div className="logo">DPino Prizes</div>
+            <Link href="/" className="logo-link">
+                <div className="logo">DPino Prizes</div>
+            </Link>
 
             {/* RIGHT BUTTONS (DESKTOP) */}
             <div className="btns desktop-only">
@@ -64,11 +103,8 @@ export default function Navbar() {
 
             {/* HAMBURGER MENU */}
             <div
-                className="hamburger"
-                onClick={() => {
-                    document.querySelector(".nav-links")?.classList.toggle("open");
-                    document.querySelector(".hamburger")?.classList.toggle("active");
-                }}
+                className={`hamburger ${mobileMenuOpen ? "active" : ""}`}
+                onClick={toggleMobileMenu}
             >
                 <span></span>
                 <span></span>

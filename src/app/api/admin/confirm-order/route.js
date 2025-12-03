@@ -1,9 +1,42 @@
-// src/app/api/admin/confirm-order/route.js - FINAL CORRECTED VERSION
+// src/app/api/admin/confirm-order/route.js - SECURED VERSION
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { NextResponse } from 'next/server';
+import { getAuth } from '@clerk/nextjs/server';
+
+// Helper function to verify admin status
+async function verifyAdmin(request) {
+    const { userId } = getAuth(request);
+
+    if (!userId) {
+        return { isAdmin: false, error: 'Not authenticated', userId: null };
+    }
+
+    // Get admin IDs from environment (server-side only, not NEXT_PUBLIC_)
+    const adminIdsFromEnv = process.env.ADMIN_USER_IDS || '';
+    const ADMIN_USER_IDS = adminIdsFromEnv
+        .split(',')
+        .map(id => id.trim())
+        .filter(id => id.length > 0);
+
+    const isAdmin = ADMIN_USER_IDS.includes(userId);
+
+    return { isAdmin, userId, error: null };
+}
 
 export async function POST(req) {
     try {
+        // SECURITY: Verify admin status before proceeding
+        const { isAdmin, userId: adminUserId, error: authError } = await verifyAdmin(req);
+
+        if (!adminUserId) {
+            return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+        }
+
+        if (!isAdmin) {
+            console.warn(`⚠️ Unauthorized order confirmation attempt by user: ${adminUserId}`);
+            return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+        }
+
         const { orderId, clerkId, tickets } = await req.json();
 
         if (!orderId || !clerkId || !tickets) {
@@ -84,3 +117,5 @@ export async function POST(req) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
+
+export const dynamic = 'force-dynamic';

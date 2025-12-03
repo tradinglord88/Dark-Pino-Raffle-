@@ -5,6 +5,7 @@ import UserSync from "./UserSync";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GlobalBubbles from "@/components/GlobalBubbles";
+import { ToastProvider } from "@/components/Toast";
 import "./globals.css";
 
 export const metadata = {
@@ -34,13 +35,15 @@ export default function RootLayout({ children }) {
           }}
           publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
         >
-          <UserSync />
-          <Navbar />
+          <ToastProvider>
+            <UserSync />
+            <Navbar />
 
-          {/* PAGE CONTENT */}
-          {children}
+            {/* PAGE CONTENT */}
+            {children}
 
-          <Footer />
+            <Footer />
+          </ToastProvider>
         </ClerkProvider>
 
       </body>

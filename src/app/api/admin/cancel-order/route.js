@@ -1,4 +1,4 @@
-// src/app/api/admin/orders/route.js - SECURED VERSION
+// src/app/api/admin/cancel-order/route.js - SECURED
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { NextResponse } from 'next/server';
 import { getAuth } from '@clerk/nextjs/server';
@@ -11,7 +11,6 @@ async function verifyAdmin(request) {
         return { isAdmin: false, error: 'Not authenticated', userId: null };
     }
 
-    // Get admin IDs from environment (server-side only, not NEXT_PUBLIC_)
     const adminIdsFromEnv = process.env.ADMIN_USER_IDS || '';
     const ADMIN_USER_IDS = adminIdsFromEnv
         .split(',')
@@ -23,32 +22,47 @@ async function verifyAdmin(request) {
     return { isAdmin, userId, error: null };
 }
 
-export async function GET(request) {
+export async function POST(req) {
     try {
         // SECURITY: Verify admin status before proceeding
-        const { isAdmin, userId, error: authError } = await verifyAdmin(request);
+        const { isAdmin, userId: adminUserId, error: authError } = await verifyAdmin(req);
 
-        if (!userId) {
+        if (!adminUserId) {
             return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
         }
 
         if (!isAdmin) {
-            console.warn(`⚠️ Unauthorized admin access attempt by user: ${userId}`);
+            console.warn(`⚠️ Unauthorized cancel attempt by user: ${adminUserId}`);
             return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
         }
 
-        console.log(`✅ Admin ${userId} accessing orders`);
+        const { orderId } = await req.json();
 
-        const { data, error } = await supabaseAdmin
+        if (!orderId) {
+            return NextResponse.json({ error: "Missing orderId" }, { status: 400 });
+        }
+
+        // Update order status
+        const { error: updateError } = await supabaseAdmin
             .from("pending_orders")
-            .select("*")
-            .order("created_at", { ascending: false });
+            .update({
+                status: "cancelled",
+                cancelled_at: new Date().toISOString(),
+                cancelled_by: adminUserId
+            })
+            .eq("id", orderId);
 
-        if (error) throw error;
+        if (updateError) throw updateError;
 
-        return NextResponse.json(data || []);
+        console.log(`❌ Order ${orderId} cancelled by admin ${adminUserId}`);
+
+        return NextResponse.json({
+            success: true,
+            message: "Order cancelled successfully"
+        });
+
     } catch (error) {
-        console.error("Error fetching orders:", error);
+        console.error("Error cancelling order:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

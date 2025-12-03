@@ -32,6 +32,19 @@ export async function POST(req) {
             return new Response("Missing metadata", { status: 400 });
         }
 
+        // IDEMPOTENCY CHECK: Prevent duplicate processing
+        const { data: existingPurchase } = await supabaseAdmin
+            .from("purchases")
+            .select("id")
+            .eq("stripe_session_id", session.id)
+            .eq("metadata->>status", "completed")
+            .single();
+
+        if (existingPurchase) {
+            console.log(`⚠️ Session ${session.id} already processed, skipping`);
+            return new Response("Already processed", { status: 200 });
+        }
+
         // Use the calculated tickets from your cart system (more accurate)
         const metadataTickets = parseInt(session.metadata.total_tickets) || 0;
         const amountTotal = session.amount_total / 100;
@@ -57,7 +70,9 @@ export async function POST(req) {
 
             if (userError || !user) {
                 console.error("❌ Supabase user missing:", clerkId, userError);
-                return new Response("User not found", { status: 200 });
+                // FIXED: Return 404 so Stripe will retry the webhook
+                // This ensures payments aren't lost if user sync hasn't happened yet
+                return new Response("User not found - will retry", { status: 404 });
             }
 
             const newTickets = user.tickets + ticketsToAdd;
@@ -73,31 +88,66 @@ export async function POST(req) {
                 return new Response("Database error", { status: 500 });
             }
 
-            // ✅ Store purchase history - MATCHING YOUR TABLE STRUCTURE
-            const { error: purchaseError } = await supabaseAdmin
+            // ✅ Store purchase history OR update existing pending record
+            // First try to update existing pending purchase
+            const { data: existingPending } = await supabaseAdmin
                 .from("purchases")
-                .insert({
-                    clerk_id: clerkId,
-                    amount_total: amountTotal,
-                    tickets_earned: ticketsToAdd,
-                    payment_method: "stripe",
-                    stripe_session_id: session.id,
-                    etransfer_order_id: null, // This is a Stripe payment
-                    metadata: {
-                        session_id: session.id,
-                        total_tickets: session.metadata?.total_tickets || "0",
-                        total_amount: session.metadata?.total_amount || "0",
-                        item_count: session.metadata?.item_count || "1",
-                        item_ids: session.metadata?.item_ids || "",
-                        items: session.metadata?.items || ""
-                    },
-                    purchased_at: new Date().toISOString(),
-                    created_at: new Date().toISOString() // ← ADD THIS!
-                });
+                .select("id")
+                .eq("stripe_session_id", session.id)
+                .eq("metadata->>status", "pending")
+                .single();
+
+            let purchaseError;
+
+            if (existingPending) {
+                // Update existing pending record
+                const { error } = await supabaseAdmin
+                    .from("purchases")
+                    .update({
+                        tickets_earned: ticketsToAdd,
+                        metadata: {
+                            session_id: session.id,
+                            status: "completed",
+                            total_tickets: session.metadata?.total_tickets || "0",
+                            total_amount: session.metadata?.total_amount || "0",
+                            item_count: session.metadata?.item_count || "1",
+                            item_ids: session.metadata?.item_ids || "",
+                            items: session.metadata?.items || ""
+                        },
+                        purchased_at: new Date().toISOString()
+                    })
+                    .eq("id", existingPending.id);
+                purchaseError = error;
+            } else {
+                // Create new purchase record
+                const { error } = await supabaseAdmin
+                    .from("purchases")
+                    .insert({
+                        clerk_id: clerkId,
+                        amount_total: amountTotal,
+                        tickets_earned: ticketsToAdd,
+                        payment_method: "stripe",
+                        stripe_session_id: session.id,
+                        etransfer_order_id: null,
+                        metadata: {
+                            session_id: session.id,
+                            status: "completed",
+                            total_tickets: session.metadata?.total_tickets || "0",
+                            total_amount: session.metadata?.total_amount || "0",
+                            item_count: session.metadata?.item_count || "1",
+                            item_ids: session.metadata?.item_ids || "",
+                            items: session.metadata?.items || ""
+                        },
+                        purchased_at: new Date().toISOString(),
+                        created_at: new Date().toISOString()
+                    });
+                purchaseError = error;
+            }
 
             if (purchaseError) {
                 console.error("❌ Failed to save purchase history:", purchaseError);
-                // Don't fail the whole webhook for this
+                // FIXED: Return error so Stripe retries - purchase history is important
+                return new Response("Failed to save purchase - will retry", { status: 500 });
             }
 
             console.log(`✅ Updated tickets for ${clerkId}: ${user.tickets} → ${newTickets} (added ${ticketsToAdd})`);
