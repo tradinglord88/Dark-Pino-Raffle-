@@ -107,10 +107,6 @@ export default function HomePage() {
             <section className="home-hero">
                 <div className="hero-overlay"></div>
                 <div className="hero-content">
-                    <div className="hero-badge">
-                        <i className="ri-vip-crown-fill"></i>
-                        Win Luxury Items
-                    </div>
                     <h1 className="hero-title">
                         Dark Pino <span>Prizes</span>
                     </h1>
