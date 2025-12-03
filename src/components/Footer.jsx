@@ -1,81 +1,89 @@
+"use client";
+
+import Link from "next/link";
+
 export default function Footer() {
+    const currentYear = new Date().getFullYear();
+
     return (
-        <footer className="footer">
-            <div id="bubble-anchor"></div>
+        <footer className="site-footer">
+            {/* Gold accent line at top */}
+            <div className="footer-accent"></div>
 
-            {/* === GRID CONTENT === */}
-            <div className="footer-grid">
+            <div className="footer-content">
+                <div className="footer-grid">
+                    {/* Column 1: Company */}
+                    <div className="footer-column">
+                        <h4 className="footer-heading">COMPANY</h4>
+                        <ul className="footer-links">
+                            <li><Link href="/contact">Contact Us</Link></li>
+                            <li><Link href="/terms">Terms of Service</Link></li>
+                            <li><Link href="/careers">Careers</Link></li>
+                        </ul>
+                    </div>
 
-                <div className="col footer-brand">
-                    <img
-                        src="/Image/logo.png"   // ⬅️ replace with your actual logo path
-                        alt="DPino Logo"
-                        className="footer-logo"
-                    />
+                    {/* Column 2: Business Info */}
+                    <div className="footer-column">
+                        <h4 className="footer-heading">DARK PINO®, LLC</h4>
+                        <div className="footer-info">
+                            <p>123 Luxury Lane, Suite #1</p>
+                            <p>Los Angeles, CA 90001</p>
+                        </div>
+                        <div className="footer-hours">
+                            <p className="hours-label">Business Hours:</p>
+                            <p>Mon - Fri / 9:00AM - 5:00PM</p>
+                        </div>
+                    </div>
 
-                    <h3>DPino Prizes</h3>
-                    <p>Premium raffles, luxury 1 of 1 drops, and life-changing prizes.</p>
-                </div>
+                    {/* Column 3: My Account */}
+                    <div className="footer-column">
+                        <h4 className="footer-heading">MY ACCOUNT</h4>
+                        <ul className="footer-links">
+                            <li><Link href="/my-entries">My Account</Link></li>
+                            <li><Link href="/shipping">Shipping and Deliveries</Link></li>
+                            <li><Link href="/faq">FAQ / Help</Link></li>
+                            <li><Link href="/returns">Return and Exchanges</Link></li>
+                            <li><Link href="/privacy">Privacy Policy</Link></li>
+                            <li><Link href="/accessibility">Report Accessibility Issue</Link></li>
+                        </ul>
+                    </div>
 
-                <div className="col">
-                    <h3>Navigation</h3>
-                    <div className="icon-links">
-                        <a href="/"><i className="ri-home-4-line"></i></a>
-                        <a href="/prod"><i className="ri-store-2-line"></i></a>
-                        <a href="/contest"><i className="ri-trophy-line"></i></a>
-                        <a href="/cart"><i className="ri-shopping-cart-2-line"></i></a>
-                        <a href="/my-entries"><i className="ri-user-line"></i></a>
+                    {/* Column 4: Legal / Giveaway Rules */}
+                    <div className="footer-column footer-legal">
+                        <h4 className="footer-heading">DARK PINO® PRIZE GIVEAWAY®</h4>
+                        <p className="legal-text">
+                            * NO PURCHASE NECESSARY TO ENTER OR WIN. A PURCHASE WILL NOT INCREASE YOUR CHANCES OF WINNING.
+                            Open to legal residents of the 50 United States, the District of Columbia and Canada. Void in
+                            Puerto Rico and US territories and where prohibited by law. Must be age of majority in state/province
+                            of residence and licensed driver as of {currentYear}. Skill-testing question required if a Canadian
+                            resident is selected as potential winner. Odds of winning depend upon the number of eligible purchase
+                            and non-purchase entries received. See <Link href="/rules" className="legal-link">Official Rules</Link> for
+                            details including how to enter without making a purchase. Sponsor: Dark Pino® LLC, 123 Luxury Lane,
+                            Suite #1, Los Angeles, CA 90001.
+                        </p>
                     </div>
                 </div>
 
-                <div className="col">
-                    <h3>Contact & Connect</h3>
-                    <div className="icon-links">
-                        {/* WhatsApp */}
-                        <a
-                            href="https://wa.me/17787155559"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Contact us on WhatsApp"
-                        >
-                            <i className="ri-whatsapp-line"></i>
-                        </a>
-
-                        {/* Phone */}
-                        <a
-                            href="tel:+17787155559"
-                            title="Call us at 778-715-5559"
-                        >
-                            <i className="ri-phone-line"></i>
-                        </a>
-
-                        {/* Email - Contest Inquiries */}
-                        <a
-                            href="mailto:contest@darkpino.xyz"
-                            title="Email for contest inquiries"
-                        >
-                            <i className="ri-mail-line"></i>
-                        </a>
-
-                        {/* Instagram */}
-                        <a
-                            href="#"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Follow us on Instagram"
-                        >
+                {/* Bottom Bar */}
+                <div className="footer-bottom">
+                    <p className="copyright">
+                        © {currentYear} Dark Pino Prizes. All rights reserved.
+                    </p>
+                    <div className="footer-social">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                             <i className="ri-instagram-line"></i>
                         </a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                            <i className="ri-twitter-x-line"></i>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <i className="ri-facebook-fill"></i>
+                        </a>
+                        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                            <i className="ri-tiktok-fill"></i>
+                        </a>
                     </div>
-
-                    {/* Contact Info Text */}
-
                 </div>
-
-            </div>
-
-            <div className="footer-copy">
-                © {new Date().getFullYear()} DPino Prizes — All Rights Reserved
             </div>
         </footer>
     );

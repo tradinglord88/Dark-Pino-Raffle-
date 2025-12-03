@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
 
     const toggleMobileMenu = () => {
         setMobileMenuOpen(!mobileMenuOpen);
@@ -15,52 +16,79 @@ export default function Navbar() {
         setMobileMenuOpen(false);
     };
 
+    // Track cart count
+    useEffect(() => {
+        const updateCartCount = () => {
+            const cart = JSON.parse(localStorage.getItem("dpino-cart")) || [];
+            const count = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+            setCartCount(count);
+        };
+
+        updateCartCount();
+        window.addEventListener("cart-updated", updateCartCount);
+        return () => window.removeEventListener("cart-updated", updateCartCount);
+    }, []);
+
     return (
         <nav className="dp-nav">
+            {/* LEFT: Logo + Brand */}
+            <Link href="/" className="logo-link">
+                <img src="/images/pepe-mascot.png" alt="Dark Pino" className="logo-img" />
+                <div className="logo-text">
+                    <span className="logo-name">DARK PINO</span>
+                    <span className="logo-sub">PRIZES</span>
+                </div>
+            </Link>
 
-            {/* LEFT SIDE MENU */}
+            <div className="nav-divider"></div>
+            <span className="nav-tagline">LUXURY PRIZE RAFFLES</span>
+
+            {/* CENTER: Nav Links */}
             <ul className={`nav-links ${mobileMenuOpen ? "open" : ""}`}>
-                <li><Link href="/" onClick={closeMobileMenu}>Home</Link></li>
-                <li><Link href="/prod" onClick={closeMobileMenu}>Shop</Link></li>
-
-                {/* Prizes Dropdown */}
-                <li className="nav-dropdown">
-                    <Link href="/contest" onClick={closeMobileMenu}>
-                        Prizes <i className="ri-arrow-down-s-line"></i>
+                <li>
+                    <Link href="/" onClick={closeMobileMenu}>
+                        <i className="ri-home-4-line"></i> Home
                     </Link>
-                    <div className="dropdown-menu">
-                        <Link href="/contest" onClick={closeMobileMenu}>
-                            <i className="ri-gift-line"></i> All Prizes
-                        </Link>
-                        <Link href="/quick-entries" onClick={closeMobileMenu}>
-                            <i className="ri-ticket-2-line"></i> Quick Entries
-                        </Link>
-                        <Link href="/past-winners" onClick={closeMobileMenu}>
-                            <i className="ri-trophy-line"></i> Past Winners
-                        </Link>
-                    </div>
+                </li>
+                <li>
+                    <Link href="/prod" onClick={closeMobileMenu}>
+                        <i className="ri-shopping-bag-line"></i> Shop
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/contest" onClick={closeMobileMenu}>
+                        <i className="ri-gift-line"></i> Prizes
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/quick-entries" onClick={closeMobileMenu}>
+                        <i className="ri-ticket-2-line"></i> Tickets
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/clearance" onClick={closeMobileMenu} className="sale-link">
+                        <i className="ri-percent-line"></i> Sale
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/vip" onClick={closeMobileMenu} className="vip-link">
+                        <i className="ri-vip-crown-line"></i> VIP
+                    </Link>
                 </li>
 
-                <li><Link href="/clearance" onClick={closeMobileMenu} className="sale-link">Sale</Link></li>
-                <li><Link href="/vip" onClick={closeMobileMenu} className="vip-link">VIP</Link></li>
-                <li><Link href="/cart" onClick={closeMobileMenu}>Cart</Link></li>
-
-                {/* Mobile-only Quick Links */}
+                {/* Mobile-only links */}
                 <li className="mobile-only">
-                    <Link href="/quick-entries" onClick={closeMobileMenu}>Quick Entries</Link>
+                    <Link href="/past-winners" onClick={closeMobileMenu}>
+                        <i className="ri-trophy-line"></i> Winners
+                    </Link>
                 </li>
-                <li className="mobile-only">
-                    <Link href="/past-winners" onClick={closeMobileMenu}>Past Winners</Link>
-                </li>
-
-                {/* Mobile-only My Entries */}
                 <SignedIn>
                     <li className="mobile-only">
-                        <Link href="/my-entries" onClick={closeMobileMenu}>My Entries</Link>
+                        <Link href="/my-entries" onClick={closeMobileMenu}>
+                            <i className="ri-user-line"></i> My Entries
+                        </Link>
                     </li>
                 </SignedIn>
-
-                {/* Mobile-only Auth */}
                 <SignedOut>
                     <li className="mobile-only">
                         <Link href="/sign-in" onClick={closeMobileMenu}>Sign In</Link>
@@ -69,7 +97,6 @@ export default function Navbar() {
                         <Link href="/sign-up" onClick={closeMobileMenu}>Sign Up</Link>
                     </li>
                 </SignedOut>
-
                 <SignedIn>
                     <li className="mobile-only user-btn-mobile">
                         <UserButton afterSignOutUrl="/" />
@@ -77,30 +104,25 @@ export default function Navbar() {
                 </SignedIn>
             </ul>
 
-            {/* CENTER LOGO */}
-            <Link href="/" className="logo-link">
-                <div className="logo">DPino Prizes</div>
-            </Link>
-
-            {/* RIGHT BUTTONS (DESKTOP) */}
-            <div className="btns desktop-only">
-
+            {/* RIGHT: Buttons */}
+            <div className="nav-btns">
                 <SignedIn>
-                    <Link href="/my-entries">
-                        <button className="btn entries-btn">My Entries</button>
+                    <Link href="/my-entries" className="nav-btn entries-btn">
+                        <i className="ri-user-line"></i> My Entries
                     </Link>
                     <UserButton afterSignOutUrl="/" />
                 </SignedIn>
 
                 <SignedOut>
-                    <Link href="/sign-in">
-                        <button className="btn">Sign In</button>
-                    </Link>
-                    <Link href="/sign-up">
-                        <button className="btn">Sign Up</button>
+                    <Link href="/sign-in" className="nav-btn signin-btn">
+                        <i className="ri-login-box-line"></i> Sign In
                     </Link>
                 </SignedOut>
 
+                <Link href="/cart" className="nav-btn cart-btn">
+                    <i className="ri-shopping-cart-line"></i> Cart
+                    {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+                </Link>
             </div>
 
             {/* HAMBURGER MENU */}
@@ -112,7 +134,6 @@ export default function Navbar() {
                 <span></span>
                 <span></span>
             </div>
-
         </nav>
     );
 }
