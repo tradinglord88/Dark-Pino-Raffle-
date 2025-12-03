@@ -110,6 +110,11 @@ export default function HomePage() {
                     <h1 className="hero-title">
                         Dark Pino <span>Prizes</span>
                     </h1>
+                    <img
+                        src="/images/hero-mascot.png"
+                        alt="Dark Pino Mascot"
+                        className="hero-mascot"
+                    />
                     <p className="hero-subtitle">
                         Shop exclusive custom luxury items and earn tickets to win incredible prizes.
                         Every purchase gets you closer to winning.

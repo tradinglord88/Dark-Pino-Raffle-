@@ -4,8 +4,16 @@ import { useEffect } from "react";
 
 export default function GlobalBubbles() {
     useEffect(() => {
+        // Skip if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReducedMotion) return;
+
         const anchor = document.getElementById("bubble-anchor");
         if (!anchor) return;
+
+        // Determine bubble count based on device
+        const isMobile = window.innerWidth <= 768;
+        const bubbleCount = isMobile ? 8 : 20;
 
         // Create container
         const container = document.createElement("div");
@@ -32,8 +40,8 @@ export default function GlobalBubbles() {
         `;
         container.appendChild(svg);
 
-        // Create bubbles
-        for (let i = 0; i < 20; i++) {
+        // Create bubbles - fewer on mobile for performance
+        for (let i = 0; i < bubbleCount; i++) {
             const bubble = document.createElement("div");
             bubble.className = "bubble";
 

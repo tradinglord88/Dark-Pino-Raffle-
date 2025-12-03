@@ -9,12 +9,27 @@ export default function Navbar() {
     const [cartCount, setCartCount] = useState(0);
 
     const toggleMobileMenu = () => {
-        setMobileMenuOpen(!mobileMenuOpen);
+        const newState = !mobileMenuOpen;
+        setMobileMenuOpen(newState);
+        // Lock/unlock body scroll
+        if (newState) {
+            document.body.classList.add("menu-open");
+        } else {
+            document.body.classList.remove("menu-open");
+        }
     };
 
     const closeMobileMenu = () => {
         setMobileMenuOpen(false);
+        document.body.classList.remove("menu-open");
     };
+
+    // Cleanup scroll lock on unmount
+    useEffect(() => {
+        return () => {
+            document.body.classList.remove("menu-open");
+        };
+    }, []);
 
     // Track cart count
     useEffect(() => {
