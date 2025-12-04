@@ -1,56 +1,7 @@
-// src/app/api/admin/orders/route.js - SECURED VERSION
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { NextResponse } from 'next/server';
-import { getAuth } from '@clerk/nextjs/server';
-
-// Helper function to verify admin status
-async function verifyAdmin(request) {
-    const { userId } = getAuth(request);
-
-    if (!userId) {
-        return { isAdmin: false, error: 'Not authenticated', userId: null };
-    }
-
-    // Get admin IDs from environment (server-side only, not NEXT_PUBLIC_)
-    const adminIdsFromEnv = process.env.ADMIN_USER_IDS || '';
-    const ADMIN_USER_IDS = adminIdsFromEnv
-        .split(',')
-        .map(id => id.trim())
-        .filter(id => id.length > 0);
-
-    const isAdmin = ADMIN_USER_IDS.includes(userId);
-
-    return { isAdmin, userId, error: null };
-}
 
 export async function GET(request) {
-    try {
-        // SECURITY: Verify admin status before proceeding
-        const { isAdmin, userId, error: authError } = await verifyAdmin(request);
-
-        if (!userId) {
-            return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-        }
-
-        if (!isAdmin) {
-            console.warn(`⚠️ Unauthorized admin access attempt by user: ${userId}`);
-            return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
-        }
-
-        console.log(`✅ Admin ${userId} accessing orders`);
-
-        const { data, error } = await supabaseAdmin
-            .from("pending_orders")
-            .select("*")
-            .order("created_at", { ascending: false });
-
-        if (error) throw error;
-
-        return NextResponse.json(data || []);
-    } catch (error) {
-        console.error("Error fetching orders:", error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    return NextResponse.json({ error: 'Auth disabled' }, { status: 503 });
 }
 
 export const dynamic = 'force-dynamic';

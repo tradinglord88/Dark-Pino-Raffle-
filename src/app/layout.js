@@ -1,7 +1,3 @@
-import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
-
-import UserSync from "./UserSync";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GlobalBubbles from "@/components/GlobalBubbles";
@@ -28,31 +24,7 @@ export const viewport = {
   themeColor: "#000000",
 };
 
-// Conditional wrapper - renders without Clerk if key is missing
-function ConditionalClerkProvider({ children }) {
-  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-  if (!publishableKey) {
-    // No Clerk key - render without auth (site still works)
-    return <>{children}</>;
-  }
-
-  return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: dark,
-        variables: { colorPrimary: "#F8C200" }
-      }}
-      publishableKey={publishableKey}
-    >
-      {children}
-    </ClerkProvider>
-  );
-}
-
 export default function RootLayout({ children }) {
-  const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
   return (
     <html lang="en">
       <head>
@@ -66,17 +38,14 @@ export default function RootLayout({ children }) {
         {/* GLOBAL BUBBLES */}
         <GlobalBubbles />
 
-        <ConditionalClerkProvider>
-          <ToastProvider>
-            {hasClerk && <UserSync />}
-            <Navbar />
+        <ToastProvider>
+          <Navbar />
 
-            {/* PAGE CONTENT */}
-            {children}
+          {/* PAGE CONTENT */}
+          {children}
 
-            <Footer />
-          </ToastProvider>
-        </ConditionalClerkProvider>
+          <Footer />
+        </ToastProvider>
       </body>
     </html>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
 // Prize segments for the wheel - Dark/black alternating style
@@ -21,7 +20,6 @@ const WHEEL_SEGMENTS = [
 ];
 
 export default function RouletteWheel() {
-    const { user, isLoaded } = useUser();
     const router = useRouter();
     const [isSpinning, setIsSpinning] = useState(false);
     const [rotation, setRotation] = useState(0);
@@ -29,14 +27,8 @@ export default function RouletteWheel() {
     const [showResult, setShowResult] = useState(false);
     const wheelRef = useRef(null);
 
-    // Handle collect/redeem - requires sign in
     const handleCollect = () => {
-        if (!user) {
-            router.push("/sign-in");
-            return;
-        }
-        // User is signed in, close the popup
-        setShowResult(false);
+        router.push("/sign-in");
     };
 
     const spinWheel = () => {
@@ -46,7 +38,6 @@ export default function RouletteWheel() {
         setShowResult(false);
         setResult(null);
 
-        // Random number of full rotations (6-10) plus random segment
         const fullRotations = 6 + Math.floor(Math.random() * 5);
         const segmentAngle = 360 / WHEEL_SEGMENTS.length;
         const randomSegment = Math.floor(Math.random() * WHEEL_SEGMENTS.length);
@@ -55,7 +46,6 @@ export default function RouletteWheel() {
         const newRotation = rotation + (fullRotations * 360) + extraAngle;
         setRotation(newRotation);
 
-        // Show result after spin completes
         setTimeout(() => {
             const winningIndex = (WHEEL_SEGMENTS.length - randomSegment - 1) % WHEEL_SEGMENTS.length;
             setResult(WHEEL_SEGMENTS[winningIndex]);
@@ -69,7 +59,6 @@ export default function RouletteWheel() {
     return (
         <section className="roulette-section casino-style">
             <div className="container">
-                {/* Header */}
                 <div className="roulette-header">
                     <h2 className="section-title casino-title">
                         SPIN TO WIN
@@ -80,8 +69,6 @@ export default function RouletteWheel() {
                 </div>
 
                 <div className="roulette-container casino-container">
-
-                    {/* Wheel pointer - Casino style */}
                     <div className="wheel-pointer casino-pointer">
                         <svg viewBox="0 0 60 80" fill="none">
                             <defs>
@@ -104,7 +91,6 @@ export default function RouletteWheel() {
                         </svg>
                     </div>
 
-                    {/* The wheel */}
                     <div
                         className="roulette-wheel casino-wheel"
                         ref={wheelRef}
@@ -114,7 +100,6 @@ export default function RouletteWheel() {
                         }}
                     >
                         <svg viewBox="0 0 400 400" className="wheel-svg">
-                            {/* Outer wheel border */}
                             <circle cx="200" cy="200" r="198" fill="none" stroke="#8B4513" strokeWidth="4" />
                             <circle cx="200" cy="200" r="195" fill="#1a1a1a" stroke="#D4AF37" strokeWidth="2" />
 
@@ -129,13 +114,11 @@ export default function RouletteWheel() {
                                 const y2 = 200 + 190 * Math.sin(endRad);
                                 const largeArc = segmentAngle > 180 ? 1 : 0;
 
-                                // Text position
                                 const textAngle = startAngle + segmentAngle / 2;
                                 const textRad = (textAngle * Math.PI) / 180;
                                 const textX = 200 + 130 * Math.cos(textRad);
                                 const textY = 200 + 130 * Math.sin(textRad);
 
-                                // Pin positions at segment boundaries
                                 const pinX = 200 + 185 * Math.cos(startRad);
                                 const pinY = 200 + 185 * Math.sin(startRad);
 
@@ -147,7 +130,6 @@ export default function RouletteWheel() {
                                             stroke="#D4AF37"
                                             strokeWidth="1"
                                         />
-                                        {/* Segment divider pins */}
                                         <circle cx={pinX} cy={pinY} r="4" fill="#D4AF37" />
                                         <circle cx={pinX} cy={pinY} r="2" fill="#FFE4B5" />
 
@@ -168,12 +150,10 @@ export default function RouletteWheel() {
                                 );
                             })}
 
-                            {/* Inner decorative rings */}
                             <circle cx="200" cy="200" r="60" fill="#0a0a0a" stroke="#D4AF37" strokeWidth="3" />
                             <circle cx="200" cy="200" r="50" fill="url(#centerGold)" />
                             <circle cx="200" cy="200" r="35" fill="#0a0a0a" stroke="#D4AF37" strokeWidth="2" />
 
-                            {/* Center logo */}
                             <text x="200" y="195" fill="#FFD700" fontSize="12" fontWeight="900" textAnchor="middle" dominantBaseline="middle">
                                 DARK
                             </text>
@@ -191,7 +171,6 @@ export default function RouletteWheel() {
                         </svg>
                     </div>
 
-                    {/* Spin button - Casino style */}
                     <button
                         className={`spin-button casino-spin-btn ${isSpinning ? 'spinning' : ''}`}
                         onClick={spinWheel}
@@ -211,7 +190,6 @@ export default function RouletteWheel() {
                         )}
                     </button>
 
-                    {/* Result popup - Casino style */}
                     {showResult && result && (
                         <div className="result-popup casino-result">
                             <div className="result-confetti"></div>
@@ -253,7 +231,7 @@ export default function RouletteWheel() {
                                     className="result-close casino-close-btn"
                                     onClick={result.isFree ? () => setShowResult(false) : handleCollect}
                                 >
-                                    {result.isFree ? 'SPIN AGAIN' : (user ? 'COLLECT' : 'SIGN IN TO COLLECT')}
+                                    {result.isFree ? 'SPIN AGAIN' : 'SIGN IN TO COLLECT'}
                                 </button>
                             </div>
                         </div>

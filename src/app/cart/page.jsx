@@ -1,14 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@clerk/nextjs";
 import { calculateSpecialOfferPricing } from "@/utils/specialOffers";
 
 export default function CartPage() {
-    const { userId } = useAuth();
     const [cart, setCart] = useState([]);
     const [calculatedCart, setCalculatedCart] = useState(null);
-    const [checkoutLoading, setCheckoutLoading] = useState(false);
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -59,45 +56,7 @@ export default function CartPage() {
     };
 
     const handleCheckout = async () => {
-        if (!userId) {
-            alert("You must be signed in to checkout.");
-            return;
-        }
-
-        if (!calculatedCart || calculatedCart.cart.length === 0) {
-            alert("Your cart is empty.");
-            return;
-        }
-
-        setCheckoutLoading(true);
-        setError("");
-
-        try {
-            const res = await fetch("/api/checkout", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    cart: calculatedCart.cart,
-                    userId,
-                }),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.error || "Checkout failed");
-            }
-
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                throw new Error("No checkout URL received");
-            }
-        } catch (err) {
-            console.error("Checkout error:", err);
-            setError(err.message || "Failed to start checkout. Please try again.");
-            setCheckoutLoading(false);
-        }
+        alert("Checkout is being set up. Please check back soon!");
     };
 
     if (!calculatedCart) {
@@ -152,24 +111,10 @@ export default function CartPage() {
                                 </div>
 
                                 <div className="cart-qty">
-                                    <button
-                                        onClick={() => decreaseQty(item.id)}
-                                        disabled={checkoutLoading}
-                                    >
-                                        -
-                                    </button>
+                                    <button onClick={() => decreaseQty(item.id)}>-</button>
                                     <span>{item.originalQuantity}</span>
-                                    <button
-                                        onClick={() => increaseQty(item.id)}
-                                        disabled={checkoutLoading}
-                                    >
-                                        +
-                                    </button>
-                                    <button
-                                        className="remove-btn"
-                                        onClick={() => removeItem(item.id)}
-                                        disabled={checkoutLoading}
-                                    >
+                                    <button onClick={() => increaseQty(item.id)}>+</button>
+                                    <button className="remove-btn" onClick={() => removeItem(item.id)}>
                                         Remove
                                     </button>
                                 </div>
@@ -184,9 +129,9 @@ export default function CartPage() {
                         <button
                             className="checkout-btn"
                             onClick={handleCheckout}
-                            disabled={checkoutLoading || calculatedCart.cart.length === 0}
+                            disabled={calculatedCart.cart.length === 0}
                         >
-                            {checkoutLoading ? "Redirecting to checkout..." : "Checkout"}
+                            Checkout
                         </button>
                     </div>
                 </>

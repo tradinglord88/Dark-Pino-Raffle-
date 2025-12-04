@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
-import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 
-// Quick entry ticket bundles - $100 = 1 ticket base rate
+// Quick entry ticket bundles
 const TICKET_BUNDLES = [
     { id: 1, tickets: 1, price: 100, popular: false, savings: 0, bonus: 0 },
     { id: 2, tickets: 3, price: 250, popular: false, savings: 50, bonus: 0 },
@@ -14,95 +11,16 @@ const TICKET_BUNDLES = [
     { id: 5, tickets: 25, price: 1500, popular: false, savings: 1000, bonus: 5 },
 ];
 
+const formatUSD = (n) =>
+    Number(n || 0).toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+    });
+
 export default function QuickEntriesPage() {
-    const { user, isLoaded } = useUser();
-    const [ticketBalance, setTicketBalance] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [purchasing, setPurchasing] = useState(false);
-    const [selectedBundle, setSelectedBundle] = useState(null);
-
-    const formatUSD = (n) =>
-        Number(n || 0).toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-            maximumFractionDigits: 0,
-        });
-
-    // Load user ticket balance
-    useEffect(() => {
-        if (!isLoaded) return;
-
-        async function loadBalance() {
-            if (!user) {
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const { data, error } = await supabase
-                    .from("users")
-                    .select("tickets")
-                    .eq("clerk_id", user.id)
-                    .single();
-
-                if (!error && data) {
-                    setTicketBalance(data.tickets || 0);
-                }
-            } catch (err) {
-                console.error("Error loading balance:", err);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        loadBalance();
-    }, [user, isLoaded]);
-
-    // Handle bundle purchase
-    const handlePurchase = async (bundle) => {
-        if (!user) {
-            window.location.href = "/sign-in";
-            return;
-        }
-
-        setSelectedBundle(bundle.id);
-        setPurchasing(true);
-
-        try {
-            // Create checkout session for quick entry bundle
-            const response = await fetch("/api/checkout", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    cart: [{
-                        id: `quick-entry-${bundle.id}`,
-                        name: `${bundle.tickets} Quick Entry Tickets`,
-                        price: bundle.price,
-                        image: "/Image/BuyTicket.png",
-                        qty: 1,
-                        paidQuantity: 1,
-                        totalTickets: bundle.tickets
-                    }],
-                    userId: user.id,
-                    userEmail: user.primaryEmailAddress?.emailAddress,
-                    paymentMethod: "stripe"
-                }),
-            });
-
-            const data = await response.json();
-
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                alert(data.error || "Failed to create checkout session");
-            }
-        } catch (err) {
-            console.error("Purchase error:", err);
-            alert("Something went wrong. Please try again.");
-        } finally {
-            setPurchasing(false);
-            setSelectedBundle(null);
-        }
+    const handlePurchase = () => {
+        alert("Sign in required. Authentication is being set up.");
     };
 
     return (
@@ -117,20 +35,6 @@ export default function QuickEntriesPage() {
                         Get more chances to win with bulk ticket bundles.
                         The more tickets you have, the better your odds!
                     </p>
-
-                    {/* Ticket Balance Display */}
-                    {isLoaded && user && (
-                        <div className="ticket-balance-card">
-                            <div className="balance-icon">🎟</div>
-                            <div className="balance-info">
-                                <span className="balance-label">Your Current Balance</span>
-                                <span className="balance-value">{ticketBalance} Tickets</span>
-                            </div>
-                            <Link href="/contest" className="use-tickets-btn">
-                                Use Tickets →
-                            </Link>
-                        </div>
-                    )}
                 </div>
             </section>
 
@@ -179,16 +83,9 @@ export default function QuickEntriesPage() {
 
                                 <button
                                     className="buy-bundle-btn"
-                                    onClick={() => handlePurchase(bundle)}
-                                    disabled={purchasing}
+                                    onClick={handlePurchase}
                                 >
-                                    {purchasing && selectedBundle === bundle.id ? (
-                                        <span className="loading-spinner">Processing...</span>
-                                    ) : (
-                                        <>
-                                            <i className="ri-shopping-cart-line"></i> Buy Now
-                                        </>
-                                    )}
+                                    <i className="ri-shopping-cart-line"></i> Buy Now
                                 </button>
 
                                 <div className="bundle-features">
@@ -267,22 +164,20 @@ export default function QuickEntriesPage() {
             </section>
 
             {/* CTA Section */}
-            {!user && isLoaded && (
-                <section className="quick-entries-cta">
-                    <div className="container">
-                        <h2>Ready to Start Winning?</h2>
-                        <p>Sign up now to purchase tickets and enter our exclusive prize drawings.</p>
-                        <div className="cta-buttons">
-                            <Link href="/sign-up">
-                                <button className="cta-btn primary">Create Account</button>
-                            </Link>
-                            <Link href="/sign-in">
-                                <button className="cta-btn secondary">Sign In</button>
-                            </Link>
-                        </div>
+            <section className="quick-entries-cta">
+                <div className="container">
+                    <h2>Ready to Start Winning?</h2>
+                    <p>Sign up now to purchase tickets and enter our exclusive prize drawings.</p>
+                    <div className="cta-buttons">
+                        <Link href="/sign-up">
+                            <button className="cta-btn primary">Create Account</button>
+                        </Link>
+                        <Link href="/sign-in">
+                            <button className="cta-btn secondary">Sign In</button>
+                        </Link>
                     </div>
-                </section>
-            )}
+                </div>
+            </section>
         </main>
     );
 }

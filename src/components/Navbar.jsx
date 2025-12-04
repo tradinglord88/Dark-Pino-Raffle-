@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
 
 export default function Navbar() {
@@ -11,7 +10,6 @@ export default function Navbar() {
     const toggleMobileMenu = () => {
         const newState = !mobileMenuOpen;
         setMobileMenuOpen(newState);
-        // Lock/unlock body scroll
         if (newState) {
             document.body.classList.add("menu-open");
         } else {
@@ -24,14 +22,12 @@ export default function Navbar() {
         document.body.classList.remove("menu-open");
     };
 
-    // Cleanup scroll lock on unmount
     useEffect(() => {
         return () => {
             document.body.classList.remove("menu-open");
         };
     }, []);
 
-    // Track cart count
     useEffect(() => {
         const updateCartCount = () => {
             const cart = JSON.parse(localStorage.getItem("dpino-cart")) || [];
@@ -92,42 +88,25 @@ export default function Navbar() {
                         <i className="ri-trophy-line"></i> Winners
                     </Link>
                 </li>
-                <SignedIn>
-                    <li className="mobile-only">
-                        <Link href="/my-entries" onClick={closeMobileMenu}>
-                            <i className="ri-user-line"></i> My Entries
-                        </Link>
-                    </li>
-                </SignedIn>
-                <SignedOut>
-                    <li className="mobile-only">
-                        <Link href="/sign-in" onClick={closeMobileMenu}>Sign In</Link>
-                    </li>
-                    <li className="mobile-only">
-                        <Link href="/sign-up" onClick={closeMobileMenu}>Sign Up</Link>
-                    </li>
-                </SignedOut>
-                <SignedIn>
-                    <li className="mobile-only user-btn-mobile">
-                        <UserButton afterSignOutUrl="/" />
-                    </li>
-                </SignedIn>
+                <li className="mobile-only">
+                    <Link href="/my-entries" onClick={closeMobileMenu}>
+                        <i className="ri-user-line"></i> My Entries
+                    </Link>
+                </li>
+                <li className="mobile-only">
+                    <Link href="/sign-in" onClick={closeMobileMenu}>Sign In</Link>
+                </li>
             </ul>
 
             {/* RIGHT: Buttons */}
             <div className="nav-btns">
-                <SignedIn>
-                    <Link href="/my-entries" className="nav-btn entries-btn">
-                        <i className="ri-user-line"></i> My Entries
-                    </Link>
-                    <UserButton afterSignOutUrl="/" />
-                </SignedIn>
+                <Link href="/my-entries" className="nav-btn entries-btn">
+                    <i className="ri-user-line"></i> My Entries
+                </Link>
 
-                <SignedOut>
-                    <Link href="/sign-in" className="nav-btn signin-btn">
-                        <i className="ri-login-box-line"></i> Sign In
-                    </Link>
-                </SignedOut>
+                <Link href="/sign-in" className="nav-btn signin-btn">
+                    <i className="ri-login-box-line"></i> Sign In
+                </Link>
 
                 <Link href="/cart" className="nav-btn cart-btn">
                     <i className="ri-shopping-cart-line"></i> Cart
