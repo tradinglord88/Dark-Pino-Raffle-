@@ -23,6 +23,14 @@ function calculateTickets(price) {
     return Math.floor((Number(price) || 0) / 100);
 }
 
+// Lazy initialize Stripe to avoid build errors when env vars are missing
+const getStripe = () => {
+    if (!process.env.STRIPE_SECRET_KEY) {
+        return null;
+    }
+    return new Stripe(process.env.STRIPE_SECRET_KEY);
+};
+
 export async function POST(req) {
     try {
         // Rate limiting: 5 checkout attempts per minute
@@ -36,7 +44,13 @@ export async function POST(req) {
             );
         }
 
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+        const stripe = getStripe();
+        if (!stripe) {
+            return NextResponse.json(
+                { error: "Payments are not configured yet. Please try again later." },
+                { status: 503 }
+            );
+        }
         const body = await req.json();
         const { cart, userId, userEmail } = body;
 
