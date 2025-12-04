@@ -131,8 +131,8 @@ nav {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  width: 25px;
-  height: 18px;
+  width: 30px;
+  height: 24px;
   cursor: pointer;
   z-index: 2000;
 }
@@ -364,6 +364,10 @@ nav {
 
 /* Mobile view */
 @media (max-width: 768px) {
+  .logo-img {
+    height: 60px;
+  }
+
   .nav-links {
     position: absolute;
     top: 100%;
@@ -862,8 +866,8 @@ nav {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  width: 25px;
-  height: 18px;
+  width: 30px;
+  height: 24px;
   cursor: pointer;
   z-index: 2000;
 }
