@@ -12,7 +12,6 @@ export const metadata = {
   title: "DPino Contests",
   description: "Dark Pino raffles & entries",
   manifest: "/manifest.json",
-  themeColor: "#000000",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -26,9 +25,34 @@ export const viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
+  themeColor: "#000000",
 };
 
+// Conditional wrapper - renders without Clerk if key is missing
+function ConditionalClerkProvider({ children }) {
+  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+  if (!publishableKey) {
+    // No Clerk key - render without auth (site still works)
+    return <>{children}</>;
+  }
+
+  return (
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: { colorPrimary: "#F8C200" }
+      }}
+      publishableKey={publishableKey}
+    >
+      {children}
+    </ClerkProvider>
+  );
+}
+
 export default function RootLayout({ children }) {
+  const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
   return (
     <html lang="en">
       <head>
@@ -39,19 +63,12 @@ export default function RootLayout({ children }) {
       </head>
 
       <body>
-
         {/* GLOBAL BUBBLES */}
         <GlobalBubbles />
 
-        <ClerkProvider
-          appearance={{
-            baseTheme: dark,
-            variables: { colorPrimary: "#F8C200" }
-          }}
-          publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-        >
+        <ConditionalClerkProvider>
           <ToastProvider>
-            <UserSync />
+            {hasClerk && <UserSync />}
             <Navbar />
 
             {/* PAGE CONTENT */}
@@ -59,8 +76,7 @@ export default function RootLayout({ children }) {
 
             <Footer />
           </ToastProvider>
-        </ClerkProvider>
-
+        </ConditionalClerkProvider>
       </body>
     </html>
   );
