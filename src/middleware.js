@@ -1,55 +1,53 @@
-// src/middleware.js - FIXED VERSION
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+// src/middleware.js - Conditional Clerk middleware
 import { NextResponse } from 'next/server';
 
-// Define protected routes that require authentication
-const isProtectedRoute = createRouteMatcher([
-    '/contest(.*)',
-    '/my-entries(.*)',
-    '/prize-detail(.*)',
-    '/cart(.*)',
-    '/admin(.*)',
-]);
+// Check for Clerk key at module level
+const hasClerkKey = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-// Admin-specific routes
-const isAdminRoute = createRouteMatcher([
-    '/admin(.*)',
-]);
+// Define protected routes
+const protectedPaths = ['/contest', '/my-entries', '/prize-detail', '/cart', '/admin'];
+const adminPaths = ['/admin'];
 
-export default clerkMiddleware(async (auth, req) => {
-    const url = req.nextUrl.clone();
+function isProtectedRoute(pathname) {
+    return protectedPaths.some(path => pathname.startsWith(path));
+}
 
-    // Check if this is a protected route
-    if (isProtectedRoute(req)) {
-        try {
-            // Protect the route - this will redirect to sign-in if not authenticated
-            await auth.protect();
+function isAdminRoute(pathname) {
+    return adminPaths.some(path => pathname.startsWith(path));
+}
 
-            // Get the authenticated user properly with await
-            const authObj = await auth();
-            const userId = authObj.userId;
+export default async function middleware(req) {
+    // If no Clerk key, pass through all requests (site works without auth)
+    if (!hasClerkKey) {
+        return NextResponse.next();
+    }
 
-            if (!userId) {
-                console.log('🚫 No user ID found, redirecting to home');
-                const homeUrl = new URL('/', url.origin);
-                return NextResponse.redirect(homeUrl);
-            }
+    // Dynamically import Clerk to avoid build-time validation
+    const { clerkMiddleware, createRouteMatcher } = await import('@clerk/nextjs/server');
 
-            console.log('🔄 Middleware: User authenticated, ID:', userId);
+    // Create the Clerk middleware handler
+    const clerkHandler = clerkMiddleware(async (auth, request) => {
+        const url = request.nextUrl.clone();
+        const pathname = url.pathname;
 
-            // ADMIN ROUTE CHECK
-            if (isAdminRoute(req)) {
-                console.log('🔒 Admin route access attempt by:', userId);
+        // Check if this is a protected route
+        if (isProtectedRoute(pathname)) {
+            try {
+                // Protect the route
+                await auth.protect();
 
-                try {
-                    // Get the session claims which include user metadata
-                    const sessionClaims = await auth();
-                    const session = sessionClaims.sessionClaims;
+                const authObj = await auth();
+                const userId = authObj.userId;
 
-                    // Check admin role from session claims or use environment variable fallback
+                if (!userId) {
+                    return NextResponse.redirect(new URL('/', url.origin));
+                }
+
+                // ADMIN ROUTE CHECK
+                if (isAdminRoute(pathname)) {
                     let isAdmin = false;
 
-                    // Method 1: Check environment variable (backup method)
+                    // Check environment variable
                     const adminIdsFromEnv = process.env.ADMIN_USER_IDS || '';
                     const ADMIN_USER_IDS = adminIdsFromEnv
                         .split(',')
@@ -57,42 +55,28 @@ export default clerkMiddleware(async (auth, req) => {
                         .filter(id => id.length > 0);
 
                     if (ADMIN_USER_IDS.includes(userId)) {
-                        console.log('✅ Admin access via environment variable for:', userId);
                         isAdmin = true;
-                    }
-                    // Method 2: Check session metadata (if available)
-                    else if (session && session.metadata) {
-                        isAdmin = session.metadata.role === 'admin';
-                        console.log('✅ Admin check via session metadata:', { userId, role: session.metadata.role, isAdmin });
-                    }
-                    // Method 3: Check private metadata via auth().userPublicMetadata
-                    else {
+                    } else {
+                        // Check public metadata
                         const userPublicMetadata = authObj.userPublicMetadata || {};
                         isAdmin = userPublicMetadata.role === 'admin';
-                        console.log('✅ Admin check via public metadata:', { userId, role: userPublicMetadata.role, isAdmin });
                     }
 
                     if (!isAdmin) {
-                        console.log('🚫 Non-admin attempted to access admin area:', userId);
-                        const homeUrl = new URL('/', url.origin);
-                        return NextResponse.redirect(homeUrl);
+                        return NextResponse.redirect(new URL('/', url.origin));
                     }
-
-                    console.log('✅ Admin access granted to:', userId);
-                } catch (error) {
-                    console.error('❌ Admin check failed:', error);
-                    const homeUrl = new URL('/', url.origin);
-                    return NextResponse.redirect(homeUrl);
                 }
+            } catch (error) {
+                console.error('Middleware auth error:', error);
             }
-        } catch (error) {
-            console.error('❌ Middleware auth error:', error);
-            // Clerk will handle redirect to sign-in
         }
-    }
 
-    return NextResponse.next();
-});
+        return NextResponse.next();
+    });
+
+    // Run the Clerk middleware
+    return clerkHandler(req, { request: req });
+}
 
 export const config = {
     matcher: [
